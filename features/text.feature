@@ -1,6 +1,7 @@
 Feature: Text
     Scenario Outline: Text alignment
-        Given a set of cartesian axes
+        Given a default canvas
+        And a set of cartesian axes
         And text with <phrase>
         Then the generated figure will match <reference>
 
@@ -25,15 +26,18 @@ Feature: Text
           | angled baseline shift        | text-baseline-shift-angled         |
 
     Scenario: Unknown text-anchor value
-        Given a set of cartesian axes
+        Given a default canvas
+        And a set of cartesian axes
         When text is aligned with an unknown text-anchor value, an exception is raised.
 
     Scenario: Unknown alignment-baseline value
-        Given a set of cartesian axes
+        Given a default canvas
+        And a set of cartesian axes
         When text is aligned with an unknown alignment-baseline value, an exception is raised.
 
     Scenario Outline: Rich Text
-        Given a set of cartesian axes
+        Given a default canvas
+        And a set of cartesian axes
         And rich text <markup>
         Then the generated figure will match <reference>
 
