@@ -3516,6 +3516,8 @@ class Table(object):
 
     def _finalize(self):
         if self._finalized is None:
+            top, bottom, left, right = self._region_bounds(4)
+
             # Collect explicit row heights, column widths, and gaps.
             row_heights = numpy.zeros(len(self._row_heights) + len(self._row_gaps))
             row_heights[0::2] = self._row_heights
@@ -3526,18 +3528,18 @@ class Table(object):
             column_widths[1::2] = self._column_gaps
 
             # Compute implicit heights and widths for the remaining rows and columns.
-            table_height = self._ymax_range - self._ymin_range
-            available_height = table_height - numpy.sum(row_heights)
-            default_height = available_height / numpy.count_nonzero(row_heights[0::2] == 0)
+            body_height = self._ymax_range - self._ymin_range
+            available_height = body_height - numpy.sum(row_heights[top*2:bottom*2])
+            default_height = available_height / numpy.count_nonzero(row_heights[top*2:bottom*2:2] == 0)
             row_heights[0::2][row_heights[0::2] == 0] = default_height
 
-            table_width = self._xmax_range - self._xmin_range
-            available_width = table_width - numpy.sum(column_widths)
-            default_width = available_width / numpy.count_nonzero(column_widths[0::2] == 0)
+            body_width = self._xmax_range - self._xmin_range
+            available_width = body_width - numpy.sum(column_widths[left*2:right*2])
+            default_width = available_width / numpy.count_nonzero(column_widths[left*2:right*2:2] == 0)
             column_widths[0::2][column_widths[0::2] == 0] = default_width
 
-            row_boundaries = self._ymin_range + numpy.cumsum(numpy.concatenate(([0], row_heights)))
-            column_boundaries = self._xmin_range + numpy.cumsum(numpy.concatenate(([0], column_widths)))
+            row_boundaries = self._ymin_range - numpy.sum(row_heights[0:top*2]) + numpy.cumsum(numpy.concatenate(([0], row_heights)))
+            column_boundaries = self._xmin_range - numpy.sum(column_widths[0:left*2]) + numpy.cumsum(numpy.concatenate(([0], column_widths)))
 
             # Compute cell boundaries.
             self._cell_top = row_boundaries[0::2]
