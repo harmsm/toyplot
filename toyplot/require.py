@@ -35,7 +35,7 @@ def style(value, allowed):
 
     for key in value:
         if key not in allowed:
-            raise ValueError("Not an allowed CSS style: %s" % key) # pragma: no cover
+            raise ValueError("Not an allowed CSS style: %s. Use one of: %s" % (key, ", ".join(allowed))) # pragma: no cover
 
     return value
 
