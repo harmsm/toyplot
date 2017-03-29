@@ -1506,7 +1506,7 @@ def _render(canvas, axes, context): # pylint: disable=unused-argument
         root=axes_xml,
         text=axes._label._text,
         x=(axes._xmin_range + axes._xmax_range) * 0.5,
-        y=axes._ymin_range,
+        y=axes._cell_top[0],
         style=axes._label._style,
         )
 
