@@ -1707,7 +1707,8 @@ class Cartesian(object):
             rect=None,
             corner=None,
             grid=None,
-            gutter=50,
+            gutter=None,
+            margin=50,
             style=None,
             label_style=None,
         ):
@@ -1745,7 +1746,7 @@ class Cartesian(object):
           left-ot-right, top-to-bottom order), a pair of i, j cell coordinates, or
           a set of i, column-span, j, row-span coordinates so the legend can cover
           more than one cell.
-        gutter: size of the gutter around grid cells, optional
+        margin: size of the margin around grid cells, optional
           Specifies the amount of empty space to leave between grid cells When using the
           `grid` parameter to position the legend.
         style: dict, optional
@@ -1754,12 +1755,11 @@ class Cartesian(object):
         -------
         legend: :class:`toyplot.mark.Legend`
         """
-        gutter = toyplot.require.scalar(gutter)
         style = toyplot.require.style(style, allowed=set())
         label_style = toyplot.require.style(label_style, allowed=toyplot.require.style.text)
 
         xmin, xmax, ymin, ymax = toyplot.layout.region(
-            self._xmin_range, self._xmax_range, self._ymin_range, self._ymax_range, bounds=bounds, rect=rect, corner=corner, grid=grid, gutter=gutter)
+            self._xmin_range, self._xmax_range, self._ymin_range, self._ymax_range, bounds=bounds, rect=rect, corner=corner, grid=grid, gutter=gutter, margin=margin)
         self._children.append(
             toyplot.mark.Legend(
                 xmin,
