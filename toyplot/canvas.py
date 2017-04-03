@@ -625,9 +625,9 @@ class Canvas(object):
         if colorshow:
             self.color_scale(
                 colormap=colormap,
-                x1=xmax_range,
+                x1=xmax_range + 15,
                 y1=ymax_range,
-                x2=xmax_range,
+                x2=xmax_range + 15,
                 y2=ymin_range,
                 width=10,
                 padding=10,
