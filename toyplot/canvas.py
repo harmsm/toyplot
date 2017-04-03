@@ -529,48 +529,15 @@ class Canvas(object):
         xmin_range, xmax_range, ymin_range, ymax_range = toyplot.layout.region(
             0, self._width, 0, self._height, bounds=bounds, rect=rect, corner=corner, grid=grid, gutter=gutter, margin=margin)
 
-        if tshow is None:
-            tshow = True
-        if lshow is None:
-            lshow = True
-        if rshow is None and rlocator is not None:
-            rshow = True
-        if bshow is None and blocator is not None:
-            bshow = True
-
-        trows = 0
-        if tshow:
-            trows += 1
-        if tlabel is not None:
-            trows += 1
-
-        lcolumns = 0
-        if lshow:
-            lcolumns += 1
-        if llabel is not None:
-            lcolumns += 1
-
-        rcolumns = 0
-        if rshow:
-            rcolumns += 1
-        if rlabel is not None:
-            rcolumns += 1
-
-        brows = 0
-        if bshow:
-            brows += 1
-        if blabel is not None:
-            brows += 1
-
         table = toyplot.coordinates.Table(
             xmin_range,
             xmax_range,
             ymin_range,
             ymax_range,
-            trows=trows,
-            brows=brows,
-            lcolumns=lcolumns,
-            rcolumns=rcolumns,
+            trows=2,
+            brows=2,
+            lcolumns=2,
+            rcolumns=2,
             rows=matrix.shape[0],
             columns=matrix.shape[1],
             label=label,
@@ -578,53 +545,56 @@ class Canvas(object):
             filename=filename,
             )
 
-        table.top.row[:].height = 20
-        table.bottom.row[:].height = 20
-        table.left.column[:].width = 20
-        table.right.column[:].width = 20
+        table.top.row[[0, 1]].height = 20
+        table.bottom.row[[0, 1]].height = 20
+        table.left.column[[0, 1]].width = 20
+        table.right.column[[0, 1]].width = 20
 
-        if lshow:
-            table.left.column[-1].align = "right"
-        if rshow:
-            table.right.column[0].align = "left"
+        table.left.column[1].align = "right"
+        table.right.column[0].align = "left"
+
+        table.cells.column[[0, -1]].lstyle = {"font-weight":"bold"}
+        table.cells.row[[0, -1]].lstyle = {"font-weight":"bold"}
 
         # pylint: disable=redefined-variable-type
         if tlabel is not None:
             cell = table.top.row[0].merge()
             cell.data = tlabel
-            cell.lstyle = {"font-weight":"bold"}
 
         if llabel is not None:
             cell = table.left.column[0].merge()
             cell.data = llabel
-            cell.lstyle = {"font-weight":"bold"}
             cell.angle = 90
 
         if rlabel is not None:
-            cell = table.right.column[-1].merge()
+            cell = table.right.column[1].merge()
             cell.data = rlabel
             cell.angle = 90
-            cell.lstyle = {"font-weight":"bold"}
 
         if blabel is not None:
-            cell = table.bottom.row[-1].merge()
+            cell = table.bottom.row[1].merge()
             cell.data = blabel
-            cell.lstyle = {"font-weight":"bold"}
 
+        if tshow is None:
+            tshow = True
         if tshow:
             if tlocator is None:
                 tlocator = toyplot.locator.Integer(step=step)
             for j, label, title in zip(*tlocator.ticks(0, matrix.shape[1] - 1)): # pylint: disable=unused-variable
-                table.top.cell[-1, j].data = label
+                table.top.cell[1, j].data = label
                 #table.top.cell[1, j].title = title
 
+        if lshow is None:
+            lshow = True
         if lshow:
             if llocator is None:
                 llocator = toyplot.locator.Integer(step=step)
             for i, label, title in zip(*llocator.ticks(0, matrix.shape[0] - 1)): # pylint: disable=unused-variable
-                table.left.cell[i, -1].data = label
+                table.left.cell[i, 1].data = label
                 #table.left.cell[i, 1].title = title
 
+        if rshow is None and rlocator is not None:
+            rshow = True
         if rshow:
             if rlocator is None:
                 rlocator = toyplot.locator.Integer(step=step)
@@ -632,6 +602,8 @@ class Canvas(object):
                 table.right.cell[i, 0].data = label
                 #table.right.cell[i, 0].title = title
 
+        if bshow is None and blocator is not None:
+            bshow = True
         if bshow:
             if blocator is None:
                 blocator = toyplot.locator.Integer(step=step)
