@@ -188,7 +188,7 @@ class Extended(TickLocator):
       Format string used to generate labels from tick locations.
     """
 
-    def __init__(self, count=5, steps=None, weights=None, only_inside=False, format="{0:.{digits}f}"): # pylint: disable=redefined-builtin
+    def __init__(self, count=5, steps=None, weights=None, only_inside=True, format="{0:.{digits}f}"): # pylint: disable=redefined-builtin
 
         self._count = count
         self._steps = steps if steps is not None else [1, 5, 2, 2.5, 4, 3]
