@@ -143,7 +143,7 @@ class Canvas(object):
         self.autorender(autorender, autoformat)
 
     def _repr_html_(self):
-        from . import html # pylint: disable=unused-variable
+        from . import html
         import xml.etree.ElementTree as xml
         return toyplot.compatibility.unicode_type(
             xml.tostring(
@@ -153,7 +153,7 @@ class Canvas(object):
             encoding="utf-8")
 
     def _repr_png_(self):
-        from . import png # pylint: disable=unused-variable
+        from . import png
         return toyplot.png.render(self)
 
     @property
@@ -170,7 +170,7 @@ class Canvas(object):
     def style(self, value):
         self._style = toyplot.style.combine(
             self._style,
-            toyplot.require.style(value, allowed=set(["background-color", "border"])),
+            toyplot.style.require(value, allowed=set(["background-color", "border"])),
             )
 
     @property
@@ -417,8 +417,10 @@ class Canvas(object):
             grid=None,
             gutter=None,
             margin=50,
+            label=None,
             style=None,
-            label_style=None):
+            label_style=None,
+            ):
         """Add a legend to the canvas.
 
         Parameters
@@ -461,23 +463,53 @@ class Canvas(object):
 
         Returns
         -------
-        legend: :class:`toyplot.mark.Legend`
+        legend: :class:`toyplot.coordinates.Table`
         """
-        style = toyplot.require.style(style, allowed=toyplot.require.style.fill)
-        label_style = toyplot.require.style(label_style, allowed=toyplot.require.style.text)
+        if style is not None:
+            toyplot.log.warning("The style parameter is deprecated and ignored, use the table API to alter legend appearance instead.")
+        if label_style is not None:
+            toyplot.log.warning("The label_style parameter is deprecated and ignored, use the table API to alter legend appearance instead.")
 
         xmin, xmax, ymin, ymax = toyplot.layout.region(
             0, self._width, 0, self._height, bounds=bounds, rect=rect, corner=corner, grid=grid, gutter=gutter, margin=margin)
-        self._children.append(
-            toyplot.mark.Legend(
-                xmin,
-                xmax,
-                ymin,
-                ymax,
-                entries,
-                style,
-                label_style))
-        return self._children[-1]
+
+        table = toyplot.coordinates.Table(
+            xmin,
+            xmax,
+            ymin,
+            ymax,
+            rows=len(entries),
+            columns=2,
+            trows=0,
+            brows=0,
+            lcolumns=0,
+            rcolumns=0,
+            label=label,
+            parent=self,
+            annotation=True,
+            filename=None,
+            )
+
+        table.cells.column[0].align = "right"
+        table.cells.column[1].align = "left"
+
+        for index, (label, spec) in enumerate(entries):
+            if isinstance(spec, toyplot.mark.Mark):
+                markers = spec.markers
+            else:
+                markers = [toyplot.marker.convert(spec)]
+            text = ""
+            for marker in markers:
+                if text:
+                    text = text + " "
+                text = text + marker
+
+            table.cells.cell[index, 0].data = text
+            table.cells.cell[index, 1].data = label
+
+        self._children.append(table)
+
+        return table
 
     def matrix(
             self,
@@ -542,6 +574,7 @@ class Canvas(object):
             columns=matrix.shape[1],
             label=label,
             parent=self,
+            annotation=False,
             filename=filename,
             )
 
@@ -580,8 +613,8 @@ class Canvas(object):
         if tshow:
             if tlocator is None:
                 tlocator = toyplot.locator.Integer(step=step)
-            for j, label, title in zip(*tlocator.ticks(0, matrix.shape[1] - 1)): # pylint: disable=unused-variable
-                table.top.cell[1, j].data = label
+            for j, label, title in zip(*tlocator.ticks(0, matrix.shape[1] - 1)):
+                table.top.cell[1, int(j)].data = label
                 #table.top.cell[1, j].title = title
 
         if lshow is None:
@@ -589,8 +622,8 @@ class Canvas(object):
         if lshow:
             if llocator is None:
                 llocator = toyplot.locator.Integer(step=step)
-            for i, label, title in zip(*llocator.ticks(0, matrix.shape[0] - 1)): # pylint: disable=unused-variable
-                table.left.cell[i, 1].data = label
+            for i, label, title in zip(*llocator.ticks(0, matrix.shape[0] - 1)):
+                table.left.cell[int(i), 1].data = label
                 #table.left.cell[i, 1].title = title
 
         if rshow is None and rlocator is not None:
@@ -598,8 +631,8 @@ class Canvas(object):
         if rshow:
             if rlocator is None:
                 rlocator = toyplot.locator.Integer(step=step)
-            for i, label, title in zip(*rlocator.ticks(0, matrix.shape[0] - 1)): # pylint: disable=unused-variable
-                table.right.cell[i, 0].data = label
+            for i, label, title in zip(*rlocator.ticks(0, matrix.shape[0] - 1)):
+                table.right.cell[int(i), 0].data = label
                 #table.right.cell[i, 0].title = title
 
         if bshow is None and blocator is not None:
@@ -607,8 +640,8 @@ class Canvas(object):
         if bshow:
             if blocator is None:
                 blocator = toyplot.locator.Integer(step=step)
-            for j, label, title in zip(*blocator.ticks(0, matrix.shape[1] - 1)): # pylint: disable=unused-variable
-                table.bottom.cell[0, j].data = label
+            for j, label, title in zip(*blocator.ticks(0, matrix.shape[1] - 1)):
+                table.bottom.cell[0, int(j)].data = label
                 #table.bottom.cell[0, j].title = title
 
         table.body.cells.data = matrix
@@ -654,8 +687,8 @@ class Canvas(object):
             grid=None,
             gutter=None,
             margin=50,
-            min=None, # pylint: disable=redefined-builtin
-            max=None, # pylint: disable=redefined-builtin
+            min=None,
+            max=None,
             show=True,
             label=None,
             ticklocator=None,
@@ -728,8 +761,8 @@ class Canvas(object):
             grid=None,
             gutter=None,
             margin=50,
-            min=None, # pylint: disable=redefined-builtin
-            max=None, # pylint: disable=redefined-builtin
+            min=None,
+            max=None,
             show=True,
             label=None,
             ticklocator=None,
@@ -836,6 +869,7 @@ class Canvas(object):
             grid=None,
             gutter=None,
             margin=50,
+            annotation=False,
             filename=None,
         ):
         """Add a set of table axes to the canvas.
@@ -880,6 +914,7 @@ class Canvas(object):
             lcolumns=lcolumns,
             rcolumns=rcolumns,
             parent=self,
+            annotation=annotation,
             filename=filename,
             )
 
@@ -1021,7 +1056,7 @@ class Canvas(object):
             )
         table["opacity"] = toyplot.broadcast.scalar(opacity, table.shape[0])
         table["title"] = toyplot.broadcast.pyobject(title, table.shape[0])
-        style = toyplot.require.style(style, allowed=toyplot.require.style.text)
+        style = toyplot.style.require(style, allowed=toyplot.style.allowed.text)
 
         self._children.append(
             toyplot.mark.Text(

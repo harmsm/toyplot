@@ -19,12 +19,14 @@ Contents:
    toyplot.config.rst
    toyplot.data.rst
    toyplot.docs.rst
+   toyplot.font.rst
    toyplot.format.rst
    toyplot.generate.rst
    toyplot.html.rst
    toyplot.layout.rst
    toyplot.locator.rst
    toyplot.mark.rst
+   toyplot.marker.rst
    toyplot.mp4.rst
    toyplot.pdf.rst
    toyplot.png.rst

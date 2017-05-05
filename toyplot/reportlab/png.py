@@ -10,10 +10,7 @@ from __future__ import division
 
 import distutils.version
 import io
-import itertools
-import os.path
 import subprocess
-import sys
 
 import reportlab.pdfgen.canvas
 
@@ -98,7 +95,7 @@ def render(canvas, fobj=None, width=None, height=None, scale=None):
         stdin=subprocess.PIPE,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
-    stdout, stderr = gs.communicate(pdf.getvalue()) # pylint: disable=unused-variable
+    stdout, stderr = gs.communicate(pdf.getvalue())
 
     if fobj is None:
         return stdout
@@ -142,7 +139,7 @@ def render_frames(canvas, width=None, height=None, scale=None):
     svg, svg_animation = toyplot.svg.render(canvas, animation=True)
     scale = canvas._point_scale(width=width, height=height, scale=scale)
 
-    for time, changes in sorted(svg_animation.items()): # pylint: disable=unused-variable
+    for time, changes in sorted(svg_animation.items()):
         toyplot.svg.apply_changes(svg, changes)
 
         pdf = io.BytesIO()
@@ -171,5 +168,5 @@ def render_frames(canvas, width=None, height=None, scale=None):
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE)
-        stdout, stderr = gs.communicate(pdf.getvalue()) # pylint: disable=unused-variable
+        stdout, stderr = gs.communicate(pdf.getvalue())
         yield stdout

@@ -9,8 +9,8 @@ import itertools
 import numpy
 
 import toyplot.color
+import toyplot.marker
 import toyplot.require
-
 
 ##########################################################################
 # Basic Toyplot marks
@@ -35,7 +35,7 @@ class Mark(object):
     def _finalize(self):
         return self
 
-    def domain(self, axis): # pylint: disable=unused-argument,no-self-use
+    def domain(self, axis): # pylint: disable=no-self-use
         """Return minimum and maximum domain values for the mark along the given axis.
 
         Parameters
@@ -65,6 +65,16 @@ class Mark(object):
         """
         empty = numpy.array([])
         return tuple([empty] * len(axes)), tuple([empty] * 4)
+
+    @property
+    def markers(self): # pylint: disable=no-self-use
+        """Return an ordered set of in-use markers for this mark.
+
+        Returns
+        -------
+        markers: list of :class:`toyplot.marker.Marker` objects.
+        """
+        return []
 
 class AxisLines(Mark):
 
@@ -100,7 +110,7 @@ class AxisLines(Mark):
         # 1 title column
         self._title = toyplot.require.table_keys(table, title, length=1)
         # Line style
-        self._style = toyplot.require.style(style, allowed=toyplot.require.style.line)
+        self._style = toyplot.style.require(style, allowed=toyplot.style.allowed.line)
 
     def domain(self, axis):
         if axis == self._coordinate_axes:
@@ -149,7 +159,7 @@ class BarBoundaries(Mark):
         # N-1 title columns
         self._title = toyplot.require.table_keys(table, title, length=len(boundaries) - 1)
         # Bar style
-        self._style = toyplot.require.style(style, allowed=toyplot.require.style.fill)
+        self._style = toyplot.style.require(style, allowed=toyplot.style.allowed.fill)
         # Export filename
         self._filename = toyplot.require.filename(filename)
 
@@ -158,6 +168,25 @@ class BarBoundaries(Mark):
             return toyplot.data.minimax([self._table[self._left[0]], self._table[self._right[0]]])
         if axis == self._coordinate_axes[1]:
             return toyplot.data.minimax([self._table[key] for key in self._boundaries])
+
+    @property
+    def markers(self):
+        result = []
+
+        for fill, opacity in zip(
+                [self._table[key] for key in self._fill],
+                [self._table[key] for key in self._opacity],
+            ):
+            result.append(toyplot.marker.create(shape="s", mstyle=toyplot.style.combine(
+                {
+                    "fill": toyplot.color.to_css(fill[0]),
+                    "fill-opacity": opacity[0],
+                },
+                self._style,
+                ),
+            ))
+
+        return result
 
 
 class BarMagnitudes(Mark):
@@ -203,7 +232,7 @@ class BarMagnitudes(Mark):
         # N title columns
         self._title = toyplot.require.table_keys(table, title, length=len(magnitudes))
         # Bar style
-        self._style = toyplot.require.style(style, allowed=toyplot.require.style.fill)
+        self._style = toyplot.style.require(style, allowed=toyplot.style.allowed.fill)
         # Export filename
         self._filename = toyplot.require.filename(filename)
 
@@ -215,6 +244,25 @@ class BarMagnitudes(Mark):
             boundaries = numpy.column_stack((self._table[self._baseline[0]], boundaries))
             boundaries = numpy.cumsum(boundaries, axis=1)
             return toyplot.data.minimax([boundaries])
+
+    @property
+    def markers(self):
+        result = []
+
+        for fill, opacity in zip(
+                [self._table[key] for key in self._fill],
+                [self._table[key] for key in self._opacity],
+            ):
+            result.append(toyplot.marker.create(shape="s", mstyle=toyplot.style.combine(
+                {
+                    "fill": toyplot.color.to_css(fill[0]),
+                    "fill-opacity": opacity[0],
+                },
+                self._style,
+                ),
+            ))
+
+        return result
 
 
 class FillBoundaries(Mark):
@@ -256,7 +304,7 @@ class FillBoundaries(Mark):
         #self._title = toyplot.require.object_vector(title, length=len(boundaries) - 1)
         self._title = title
         # Fill style
-        self._style = toyplot.require.style(style, allowed=toyplot.require.style.fill)
+        self._style = toyplot.style.require(style, allowed=toyplot.style.allowed.fill)
         # Export filename
         self._filename = toyplot.require.filename(filename)
 
@@ -265,6 +313,27 @@ class FillBoundaries(Mark):
             return toyplot.data.minimax([self._table[self._position[0]]])
         if axis == self._coordinate_axes[1]:
             return toyplot.data.minimax([self._table[key] for key in self._boundaries])
+
+    @property
+    def markers(self):
+        result = []
+
+        for fill, opacity in zip(
+                self._fill,
+                self._opacity,
+            ):
+
+            result.append(toyplot.marker.create(shape="s", mstyle=toyplot.style.combine(
+                    {
+                        "fill": toyplot.color.to_css(fill),
+                        "fill-opacity": opacity,
+                    },
+                    self._style,
+                ),
+            ))
+
+        return result
+
 
 class FillMagnitudes(Mark):
 
@@ -309,7 +378,7 @@ class FillMagnitudes(Mark):
         #self._title = toyplot.require.object_vector(title, length=len(magnitudes))
         self._title = title
         # Fill style
-        self._style = toyplot.require.style(style, allowed=toyplot.require.style.fill)
+        self._style = toyplot.style.require(style, allowed=toyplot.style.allowed.fill)
         # Export filename
         self._filename = toyplot.require.filename(filename)
 
@@ -321,6 +390,26 @@ class FillMagnitudes(Mark):
             boundaries = numpy.column_stack((self._table[self._baseline[0]], boundaries))
             boundaries = numpy.cumsum(boundaries, axis=1)
             return toyplot.data.minimax([boundaries])
+
+    @property
+    def markers(self):
+        result = []
+
+        for fill, opacity in zip(
+                self._fill,
+                self._opacity,
+            ):
+
+            result.append(toyplot.marker.create(shape="s", mstyle=toyplot.style.combine(
+                    {
+                        "fill": toyplot.color.to_css(fill),
+                        "fill-opacity": opacity,
+                    },
+                    self._style,
+                ),
+            ))
+
+        return result
 
 
 class Graph(Mark): # pragma: no cover
@@ -379,9 +468,9 @@ class Graph(Mark): # pragma: no cover
         # 1 vertex titles column
         self._vtitle = toyplot.require.table_keys(vtable, vtitle, length=1)
         # Vertex marker style
-        self._vstyle = toyplot.require.style(vstyle, allowed=toyplot.require.style.marker)
+        self._vstyle = toyplot.style.require(vstyle, allowed=toyplot.style.allowed.marker)
         # Vertex marker label style
-        self._vlstyle = toyplot.require.style(vlstyle, allowed=toyplot.require.style.text)
+        self._vlstyle = toyplot.style.require(vlstyle, allowed=toyplot.style.allowed.text)
         # Draw vertex labels
         self._vlshow = vlshow
 
@@ -417,7 +506,7 @@ class Graph(Mark): # pragma: no cover
         # 1 edge opacity column
         self._eopacity = toyplot.require.table_keys(etable, eopacity, length=1)
         # Edge style
-        self._estyle = toyplot.require.style(estyle, allowed=toyplot.require.style.line)
+        self._estyle = toyplot.style.require(estyle, allowed=toyplot.style.allowed.line)
 
     def domain(self, axis):
         index = numpy.flatnonzero(self._coordinate_axes == axis)[0]
@@ -594,11 +683,11 @@ class Plot(Mark):
         # N marker title columns
         self._mtitle = toyplot.require.table_keys(table, mtitle, length=len(series))
         # Line style
-        self._style = toyplot.require.style(style, allowed=toyplot.require.style.line)
+        self._style = toyplot.style.require(style, allowed=toyplot.style.allowed.line)
         # Marker style
-        self._mstyle = toyplot.require.style(mstyle, allowed=toyplot.require.style.marker)
+        self._mstyle = toyplot.style.require(mstyle, allowed=toyplot.style.allowed.marker)
         # Marker label style
-        self._mlstyle = toyplot.require.style(mlstyle, allowed=toyplot.require.style.text)
+        self._mlstyle = toyplot.style.require(mlstyle, allowed=toyplot.style.allowed.text)
         # Export filename
         self._filename = toyplot.require.filename(filename)
 
@@ -607,6 +696,24 @@ class Plot(Mark):
             return toyplot.data.minimax([self._table[self._coordinates[0]]])
         if axis == self._coordinate_axes[1]:
             return toyplot.data.minimax([self._table[key] for key in self._series])
+
+    @property
+    def markers(self):
+        result = []
+
+        for stroke, stroke_width, stroke_opacity in zip(self._stroke.T, self._stroke_width.T, self._stroke_opacity.T):
+            result.append(toyplot.marker.create(shape="/", mstyle=toyplot.style.combine(
+                    {
+                        "fill": toyplot.color.to_css(stroke),
+                        "stroke": toyplot.color.to_css(stroke),
+                        "stroke-width": stroke_width,
+                        "stroke-opacity": stroke_opacity,
+                    },
+                    self._style,
+                ),
+            ))
+
+        return result
 
 
 class Rect(Mark):
@@ -653,7 +760,7 @@ class Rect(Mark):
         # 1 title column
         self._title = toyplot.require.table_keys(table, title, length=1)
         # Rectangle style
-        self._style = toyplot.require.style(style, allowed=toyplot.require.style.fill)
+        self._style = toyplot.style.require(style, allowed=toyplot.style.allowed.fill)
         # Export filename
         self._filename = toyplot.require.filename(filename)
 
@@ -714,17 +821,45 @@ class Scatterplot(Mark):
         # N marker title columns
         self._mtitle = toyplot.require.table_keys(table, mtitle, length=N)
         # Global style
-        self._style = toyplot.require.style(style, allowed=set())
+        self._style = toyplot.style.require(style, allowed=set())
         # Marker style
-        self._mstyle = toyplot.require.style(mstyle, allowed=toyplot.require.style.marker)
+        self._mstyle = toyplot.style.require(mstyle, allowed=toyplot.style.allowed.marker)
         # Marker label style
-        self._mlstyle = toyplot.require.style(mlstyle, allowed=toyplot.require.style.text)
+        self._mlstyle = toyplot.style.require(mlstyle, allowed=toyplot.style.allowed.text)
         # Export filename
         self._filename = toyplot.require.filename(filename)
 
     def domain(self, axis):
         columns = [coordinate_column for coordinate_axis, coordinate_column in zip(itertools.cycle(self._coordinate_axes), self._coordinates) if coordinate_axis == axis]
         return toyplot.data.minimax([self._table[column] for column in columns])
+
+    @property
+    def markers(self):
+        result = []
+
+        for marker, mfill, mstroke, mopacity in zip(
+                [self._table[key] for key in self._marker],
+                [self._table[key] for key in self._mfill],
+                [self._table[key] for key in self._mstroke],
+                [self._table[key] for key in self._mopacity],
+            ):
+
+            for dmarker, dfill, dstroke, dopacity in zip(marker, mfill, mstroke, mopacity):
+                mstyle = toyplot.style.combine(
+                {
+                    "fill": toyplot.color.to_css(dfill),
+                    "stroke": toyplot.color.to_css(dstroke),
+                    "opacity": dopacity,
+                },
+                self._mstyle
+                )
+
+                dmarker = toyplot.marker.create(mstyle=mstyle, lstyle=self._mlstyle) + toyplot.marker.convert(dmarker)
+
+                result.append(dmarker)
+                break
+
+        return result
 
 
 class Text(Mark):
@@ -770,13 +905,14 @@ class Text(Mark):
         # Text style
         self._style = toyplot.style.combine(
             {
-                "alignment-baseline": "middle",
+                "-toyplot-vertical-align": "middle",
+                "font-family": "helvetica",
                 "font-size": "12px",
                 "font-weight": "normal",
                 "stroke": "none",
                 "text-anchor": "middle",
             },
-            toyplot.require.style(style, allowed=toyplot.require.style.text),
+            toyplot.style.require(style, allowed=toyplot.style.allowed.text),
             )
         # Export filename
         self._filename = toyplot.require.filename(filename)
@@ -791,41 +927,3 @@ class Text(Mark):
         coordinates = tuple([self._table[self._coordinates[axis_map[axis]]] for axis in axes])
         extents = toyplot.text.extents(self._table[self._text[0]], self._table[self._angle[0]], self._style)
         return coordinates, extents
-
-
-##########################################################################
-# More specialized marks
-
-class Legend(Mark):
-
-    """Render a figure legend (a collection of markers and labels).
-
-    Do not create Legend instances directly.  Use factory methods such as
-    :meth:`toyplot.canvas.Canvas.legend` or :meth:`toyplot.coordinates.Cartesian.legend` instead.
-    """
-
-    def __init__(self, xmin, xmax, ymin, ymax, entries, style, lstyle):
-        Mark.__init__(self)
-        self._xmin = xmin
-        self._xmax = xmax
-        self._ymin = ymin
-        self._ymax = ymax
-        self._gutter = 10
-        self._entries = entries
-        # Styles the box surrounding the legend
-        self._style = toyplot.style.combine(
-            {
-                "fill": "none",
-                "stroke": "none",
-            },
-            toyplot.require.style(style, allowed=toyplot.require.style.fill),
-            )
-        # Styles the legend labels
-        self._lstyle = toyplot.style.combine(
-            {
-                "alignment-baseline": "middle",
-                "font-size":"12px",
-                "stroke":"none",
-            },
-            toyplot.require.style(lstyle, allowed=toyplot.require.style.text),
-            )

@@ -70,7 +70,7 @@ def _create_line_style_property():
     def setter(self, value):
         self._style = toyplot.style.combine(
             self._style,
-            toyplot.require.style(value, allowed=toyplot.require.style.line),
+            toyplot.style.require(value, allowed=toyplot.style.allowed.line),
             )
 
     return property(getter, setter)
@@ -174,7 +174,7 @@ def _create_text_style_property():
     def setter(self, value):
         self._style = toyplot.style.combine(
             self._style,
-            toyplot.require.style(value, allowed=toyplot.require.style.text),
+            toyplot.style.require(value, allowed=toyplot.style.allowed.text),
             )
 
     return property(getter, setter)
@@ -358,7 +358,7 @@ class Axis(object):
             def style(self, value):
                 self._tick["style"] = toyplot.style.combine(
                     self._tick.get("style"),
-                    toyplot.require.style(value, allowed=self._allowed),
+                    toyplot.style.require(value, allowed=self._allowed),
                     )
 
         def __init__(self, allowed):
@@ -393,7 +393,7 @@ class Axis(object):
             self._near = None
             self._show = False
             self._style = {}
-            self._tick = Axis.PerTickHelper(toyplot.require.style.line)
+            self._tick = Axis.PerTickHelper(toyplot.style.allowed.line)
 
         far = _create_far_property()
         location = _create_location_property()
@@ -426,7 +426,7 @@ class Axis(object):
     class TickLabelsHelper(object):
         def __init__(self, angle):
             self._angle = angle
-            self._label = Axis.PerTickHelper(toyplot.require.style.text)
+            self._label = Axis.PerTickHelper(toyplot.style.allowed.text)
             self._offset = None
             self._show = True
             self._style = {
@@ -617,17 +617,19 @@ class Cartesian(object):
             self._text = None
 
             self.style = {
-                "baseline-shift": "100%",
                 "font-size": "14px",
                 "font-weight": "bold",
                 "stroke": "none",
                 "text-anchor":"middle",
+                "-toyplot-vertical-align":"bottom",
                 }
             self.style = style
             self.text = text
+            self.offset = 8
 
         style = _create_text_style_property()
         text = _create_text_property()
+        offset = _create_offset_property()
 
     def __init__(
             self,
@@ -1127,7 +1129,7 @@ class Cartesian(object):
                 title, (series.shape[0], series.shape[1] - 1))
             style = toyplot.style.combine(
                 {"stroke": "white", "stroke-width": 1.0},
-                toyplot.require.style(style, allowed=toyplot.require.style.fill),
+                toyplot.style.require(style, allowed=toyplot.style.allowed.fill),
                 )
 
             if along == "x":
@@ -1219,7 +1221,7 @@ class Cartesian(object):
             title = toyplot.broadcast.pyobject(title, series.shape)
             style = toyplot.style.combine(
                 {"stroke": "white", "stroke-width": 1.0},
-                toyplot.require.style(style, allowed=toyplot.require.style.fill),
+                toyplot.style.require(style, allowed=toyplot.style.allowed.fill),
                 )
 
             if isinstance(baseline, toyplot.compatibility.string_type):
@@ -1400,7 +1402,7 @@ class Cartesian(object):
             title = toyplot.broadcast.pyobject(title, series.shape[1] - 1)
             style = toyplot.style.combine(
                 {"stroke": "none"},
-                toyplot.require.style(style, allowed=toyplot.require.style.fill),
+                toyplot.style.require(style, allowed=toyplot.style.allowed.fill),
                 )
 
             if along == "x":
@@ -1458,7 +1460,7 @@ class Cartesian(object):
             title = toyplot.broadcast.pyobject(title, series.shape[1])
             style = toyplot.style.combine(
                 {"stroke": "none"},
-                toyplot.require.style(style, allowed=toyplot.require.style.fill),
+                toyplot.style.require(style, allowed=toyplot.style.allowed.fill),
                 )
 
             if isinstance(baseline, toyplot.compatibility.string_type):
@@ -1569,16 +1571,16 @@ class Cartesian(object):
 
         vopacity = toyplot.broadcast.scalar(vopacity, layout.vcount)
         vtitle = toyplot.broadcast.pyobject(vtitle, layout.vcount)
-        vstyle = toyplot.require.style(vstyle, allowed=toyplot.require.style.marker)
+        vstyle = toyplot.style.require(vstyle, allowed=toyplot.style.allowed.marker)
         vlstyle = toyplot.style.combine(
             {
                 "font-size": "12px",
                 "font-weight": "normal",
                 "stroke": "none",
                 "text-anchor": "middle",
-                "alignment-baseline": "middle",
+                "-toyplot-vertical-align": "middle",
             },
-            toyplot.require.style(vlstyle, allowed=toyplot.require.style.text),
+            toyplot.style.require(vlstyle, allowed=toyplot.style.allowed.text),
             )
 
         ecolor = toyplot.color.broadcast(
@@ -1588,7 +1590,7 @@ class Cartesian(object):
             )
         ewidth = toyplot.broadcast.scalar(ewidth, layout.ecount)
         eopacity = toyplot.broadcast.scalar(eopacity, layout.ecount)
-        estyle = toyplot.require.style(estyle, allowed=toyplot.require.style.line)
+        estyle = toyplot.style.require(estyle, allowed=toyplot.style.allowed.line)
 
         if along == "x":
             coordinate_axes = ["x", "y"]
@@ -1685,7 +1687,7 @@ class Cartesian(object):
         table["color"] = color[:, 0]
         table["opacity"] = toyplot.broadcast.scalar(opacity, table.shape[0])
         table["title"] = toyplot.broadcast.pyobject(title, table.shape[0])
-        style = toyplot.require.style(style, allowed=toyplot.require.style.line)
+        style = toyplot.style.require(style, allowed=toyplot.style.allowed.line)
 
         self._children.append(
             toyplot.mark.AxisLines(
@@ -1711,65 +1713,8 @@ class Cartesian(object):
             margin=50,
             style=None,
             label_style=None,
-        ):
-        """Add a legend to the axes.
-
-        Parameters
-        ----------
-        entries: sequence of entries to add to the legend Each entry to be
-            displayed in the legend must be either a (label, mark) tuple or a
-            (label, marker) tuple.  Labels are human-readable text, markers are
-            specified using the syntax described in :ref:`markers`, and marks can
-            be any instance of :class:`toyplot.mark.Mark`.
-        bounds: (xmin, xmax, ymin, ymax) tuple, optional
-          Use the bounds property to position / size the legend by specifying the
-          position of each of its boundaries.  The boundaries may be specified in
-          absolute drawing units, or as a percentage of the axes width / height
-          using strings that end with "%".
-        rect: (x, y, width, height) tuple, optional
-          Use the rect property to position / size the legend by specifying its
-          upper-left-hand corner, width, and height.  Each parameter may be specified
-          in absolute drawing units, or as a percentage of the axes width / height
-          using strings that end with "%".
-        corner: (corner, width, height, inset) tuple, optional
-          Use the corner property to position / size the legend by specifying its
-          width and height, plus an inset from a corner of the axes.  Allowed
-          corner values are "top-left", "top", "top-right", "right",
-          "bottom-right", "bottom", "bottom-left", and "left".  The width and
-          height may be specified in absolute drawing units, or as a percentage of
-          the axes width / height using strings that end with "%".  The inset is
-          specified in absolute drawing units.
-        grid: (rows, columns, index) tuple, or (rows, columns, i, j) tuple, or (rows, columns, i, rowspan, j, columnspan) tuple, optional
-          Use the grid property to position / size the legend using a collection of
-          grid cells filling the axes.  Specify the number of rows and columns in
-          the grid, then specify either a zero-based cell index (which runs in
-          left-ot-right, top-to-bottom order), a pair of i, j cell coordinates, or
-          a set of i, column-span, j, row-span coordinates so the legend can cover
-          more than one cell.
-        margin: size of the margin around grid cells, optional
-          Specifies the amount of empty space to leave between grid cells When using the
-          `grid` parameter to position the legend.
-        style: dict, optional
-
-        Returns
-        -------
-        legend: :class:`toyplot.mark.Legend`
-        """
-        style = toyplot.require.style(style, allowed=set())
-        label_style = toyplot.require.style(label_style, allowed=toyplot.require.style.text)
-
-        xmin, xmax, ymin, ymax = toyplot.layout.region(
-            self._xmin_range, self._xmax_range, self._ymin_range, self._ymax_range, bounds=bounds, rect=rect, corner=corner, grid=grid, gutter=gutter, margin=margin)
-        self._children.append(
-            toyplot.mark.Legend(
-                xmin,
-                xmax,
-                ymin,
-                ymax,
-                entries,
-                style,
-                label_style))
-        return self._children[-1]
+        ): # pylint: disable=no-self-use
+        toyplot.log.warning("toyplot.coordinates.Cartesian.legend() is deprecated and ignored, use toyplot.canvas.legend() instead.")
 
     def plot(
             self,
@@ -1859,7 +1804,7 @@ class Cartesian(object):
                 series = a
                 position = numpy.ma.arange(series.shape[0])
 
-        default_color = [next(self._plot_colors) for i in range(series.shape[1])] # pylint: disable=unused-variable
+        default_color = [next(self._plot_colors) for i in range(series.shape[1])]
         stroke = toyplot.color.broadcast(
             colors=color,
             shape=(series.shape[1],),
@@ -1889,9 +1834,9 @@ class Cartesian(object):
         mstroke = toyplot.color.broadcast(colors=mfill, shape=series.shape)
         mopacity = toyplot.broadcast.scalar(mopacity, series.shape)
         mtitle = toyplot.broadcast.pyobject(mtitle, series.shape)
-        style = toyplot.require.style(style, allowed=toyplot.require.style.line)
-        mstyle = toyplot.require.style(mstyle, allowed=toyplot.require.style.marker)
-        mlstyle = toyplot.require.style(mlstyle, allowed=toyplot.require.style.text)
+        style = toyplot.style.require(style, allowed=toyplot.style.allowed.line)
+        mstyle = toyplot.style.require(mstyle, allowed=toyplot.style.allowed.marker)
+        mlstyle = toyplot.style.require(mlstyle, allowed=toyplot.style.allowed.text)
 
         if along == "x":
             coordinate_axes = ["x", "y"]
@@ -1972,7 +1917,7 @@ class Cartesian(object):
         table["title"] = toyplot.broadcast.pyobject(title, table.shape[0])
         style = toyplot.style.combine(
             {"stroke": "none"},
-            toyplot.require.style(style, allowed=toyplot.require.style.fill),
+            toyplot.style.require(style, allowed=toyplot.style.allowed.fill),
             )
 
         default_color = [next(self._rect_colors)]
@@ -2058,7 +2003,7 @@ class Cartesian(object):
                 series = a
                 position = numpy.ma.arange(series.shape[0])
 
-        default_color = [next(self._scatterplot_colors) for i in range(series.shape[1])] # pylint: disable=unused-variable
+        default_color = [next(self._scatterplot_colors) for i in range(series.shape[1])]
         mfill = toyplot.color.broadcast(
             colors=color,
             shape=series.shape,
@@ -2079,9 +2024,9 @@ class Cartesian(object):
         mstroke = toyplot.color.broadcast(colors=mfill, shape=series.shape)
         mopacity = toyplot.broadcast.scalar(opacity, series.shape)
         mtitle = toyplot.broadcast.pyobject(title, series.shape)
-        style = toyplot.require.style(style, allowed=set())
-        mstyle = toyplot.require.style(mstyle, allowed=toyplot.require.style.marker)
-        mlstyle = toyplot.require.style(mlstyle, allowed=toyplot.require.style.text)
+        style = toyplot.style.require(style, allowed=set())
+        mstyle = toyplot.style.require(mstyle, allowed=toyplot.style.allowed.marker)
+        mlstyle = toyplot.style.require(mlstyle, allowed=toyplot.style.allowed.text)
 
         if along == "x":
             coordinate_axes = ["x", "y"]
@@ -2245,16 +2190,7 @@ class Cartesian(object):
         table["angle"] = toyplot.broadcast.scalar(angle, table.shape[0])
         table["opacity"] = toyplot.broadcast.scalar(opacity, table.shape[0])
         table["title"] = toyplot.broadcast.pyobject(title, table.shape[0])
-        style = toyplot.style.combine(
-            {
-                "alignment-baseline": "middle",
-                "font-size": "12px",
-                "font-weight": "normal",
-                "stroke": "none",
-                "text-anchor": "middle",
-            },
-            toyplot.require.style(style, allowed=toyplot.require.style.text),
-            )
+        style = toyplot.style.require(style, allowed=toyplot.style.allowed.text)
 
         default_color = [next(self._text_colors)]
 
@@ -2322,7 +2258,7 @@ class Cartesian(object):
         table["color"] = color[:, 0]
         table["opacity"] = toyplot.broadcast.scalar(opacity, table.shape[0])
         table["title"] = toyplot.broadcast.pyobject(title, table.shape[0])
-        style = toyplot.require.style(style, allowed=toyplot.require.style.line)
+        style = toyplot.style.require(style, allowed=toyplot.style.allowed.line)
 
         self._children.append(
             toyplot.mark.AxisLines(
@@ -2355,8 +2291,8 @@ class Numberline(object):
             y2,
             padding,
             spacing,
-            min, # pylint: disable=redefined-builtin
-            max, # pylint: disable=redefined-builtin
+            min,
+            max,
             show,
             label,
             ticklocator,
@@ -2492,7 +2428,7 @@ class Numberline(object):
         elif coordinates.ndim == 2:
             pass
 
-        default_color = [next(self._scatterplot_colors) for i in range(coordinates.shape[1])] # pylint: disable=unused-variable
+        default_color = [next(self._scatterplot_colors) for i in range(coordinates.shape[1])]
         mfill = toyplot.color.broadcast(
             colors=color,
             shape=coordinates.shape,
@@ -2513,9 +2449,9 @@ class Numberline(object):
         mstroke = toyplot.color.broadcast(colors=mfill, shape=coordinates.shape)
         mopacity = toyplot.broadcast.scalar(opacity, coordinates.shape)
         mtitle = toyplot.broadcast.pyobject(title, coordinates.shape)
-        style = toyplot.require.style(style, allowed=set())
-        mstyle = toyplot.require.style(mstyle, allowed=toyplot.require.style.marker)
-        mlstyle = toyplot.require.style(mlstyle, allowed=toyplot.require.style.text)
+        style = toyplot.style.require(style, allowed=set())
+        mstyle = toyplot.style.require(mstyle, allowed=toyplot.style.allowed.marker)
+        mlstyle = toyplot.style.require(mlstyle, allowed=toyplot.style.allowed.text)
 
         self._update_domain(coordinates)
         coordinate_axes = ["x"]
@@ -2653,9 +2589,6 @@ class Table(object):
 
             self.style = {
                 "font-weight": "bold",
-                "stroke": "none",
-                "text-anchor": "middle",
-                "alignment-baseline": "middle",
                 }
             self.style = style
 
@@ -2978,12 +2911,12 @@ class Table(object):
         format = property(fset=_set_format)
 
         def _set_height(self, value):
-            row_indices, column_indices = self._table._selection_coordinates(self._selection) # pylint: disable=unused-variable
+            row_indices, column_indices = self._table._selection_coordinates(self._selection)
             self._table._row_heights[row_indices] = toyplot.units.convert(value, "px", "px")
         height = property(fset=_set_height)
 
         def _set_lstyle(self, value):
-            value = toyplot.require.style(value, allowed=toyplot.require.style.text)
+            value = toyplot.style.require(value, allowed=toyplot.style.allowed.text)
             value = [toyplot.style.combine(style, value) for style in self._table._cell_lstyle[self._selection]]
             self._table._cell_lstyle[self._selection] = value
         lstyle = property(fset=_set_lstyle)
@@ -2993,7 +2926,7 @@ class Table(object):
         show = property(fset=_set_show)
 
         def _set_style(self, value):
-            value = toyplot.require.style(value, allowed=toyplot.require.style.fill)
+            value = toyplot.style.require(value, allowed=toyplot.style.allowed.fill)
             value = [toyplot.style.combine(style, value) for style in self._table._cell_style[self._selection]]
             self._table._cell_style[self._selection] = value
         style = property(fset=_set_style)
@@ -3007,7 +2940,7 @@ class Table(object):
         link = property(fset=_set_link)
 
         def _set_width(self, value):
-            row_indices, column_indices = self._table._selection_coordinates(self._selection) # pylint: disable=unused-variable
+            row_indices, column_indices = self._table._selection_coordinates(self._selection)
             self._table._column_widths[column_indices] = toyplot.units.convert(value, "px", "px")
         width = property(fset=_set_width)
 
@@ -3113,7 +3046,7 @@ class Table(object):
             Table.CellReference.__init__(self, table, selection)
 
         def delete(self):
-            row_indices, column_indices = self._table._selection_coordinates(self._selection) # pylint: disable=unused-variable
+            row_indices, column_indices = self._table._selection_coordinates(self._selection)
             self._table._delete_cells(column_indices, axis=1)
 
     class RowCellReference(CellReference):
@@ -3121,7 +3054,7 @@ class Table(object):
             Table.CellReference.__init__(self, table, selection)
 
         def delete(self):
-            row_indices, column_indices = self._table._selection_coordinates(self._selection) # pylint: disable=unused-variable
+            row_indices, column_indices = self._table._selection_coordinates(self._selection)
             self._table._delete_cells(row_indices, axis=0)
 
     class DistanceArrayReference(object):
@@ -3177,7 +3110,7 @@ class Table(object):
         def style(self, value):
             self._table._gstyle = toyplot.style.combine(
                 self._table._gstyle,
-                toyplot.require.style(value, toyplot.require.style.line),
+                toyplot.style.require(value, toyplot.style.allowed.line),
                 )
 
     class Region(object):
@@ -3196,12 +3129,12 @@ class Table(object):
                 if before is not None:
                     table, region = self._region._selection()
                     region[Ellipsis, before] = True
-                    rows, columns = numpy.nonzero(table) # pylint: disable=unused-variable
+                    rows, columns = numpy.nonzero(table)
                     before = numpy.unique(columns)
                 if after is not None:
                     table, region = self._region._selection()
                     region[Ellipsis, after] = True
-                    rows, columns = numpy.nonzero(table) # pylint: disable=unused-variable
+                    rows, columns = numpy.nonzero(table)
                     after = numpy.unique(columns)
                 self._region._table._insert_cells(before=before, after=after, axis=1)
 
@@ -3220,12 +3153,12 @@ class Table(object):
                 if before is not None:
                     table, region = self._region._selection()
                     region[before, Ellipsis] = True
-                    rows, columns = numpy.nonzero(table) # pylint: disable=unused-variable
+                    rows, columns = numpy.nonzero(table)
                     before = numpy.unique(rows)
                 if after is not None:
                     table, region = self._region._selection()
                     region[after, Ellipsis] = True
-                    rows, columns = numpy.nonzero(table) # pylint: disable=unused-variable
+                    rows, columns = numpy.nonzero(table)
                     after = numpy.unique(rows)
                 self._region._table._insert_cells(before=before, after=after, axis=0)
 
@@ -3298,6 +3231,7 @@ class Table(object):
             rcolumns,
             label,
             parent,
+            annotation,
             filename,
         ):
         self._finalized = None
@@ -3307,6 +3241,8 @@ class Table(object):
         self._ymin_range = ymin_range
         self._ymax_range = ymax_range
         self._parent = parent
+        self._annotation = False
+        self.annotation = annotation
         self._filename = toyplot.require.filename(filename)
 
         self._shape = (trows + rows + brows, lcolumns + columns + rcolumns)
@@ -3355,13 +3291,17 @@ class Table(object):
         self._gstyle = {"stroke": toyplot.color.near_black, "stroke-width": 0.5}
 
         lstyle = {
-            "font-size": "12px",
-            "stroke": "none",
-            "fill": toyplot.color.near_black,
-            "alignment-baseline": "middle",
             }
         self._cell_lstyle[...] = lstyle
         self._cell_align[...] = "center"
+
+    @property
+    def annotation(self):
+        return self._annotation
+
+    @annotation.setter
+    def annotation(self, value):
+        self._annotation = True if value else False
 
     def _region_bounds(self, region):
         rows, columns = numpy.nonzero(self._cell_region == region)
