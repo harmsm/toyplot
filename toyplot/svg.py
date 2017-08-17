@@ -7,9 +7,11 @@
 
 from __future__ import division
 
-import toyplot.html
-import toyplot.compatibility
 import xml.etree.ElementTree as xml
+
+import toyplot.compatibility
+import toyplot.html
+import toyplot.require
 
 
 def apply_changes(svg, changes):
@@ -44,6 +46,7 @@ def render(canvas, fobj=None, animation=False):
       JSON-compatible representation of the animated changes to `canvas`.
     """
 
+    canvas = toyplot.require.instance(canvas, toyplot.canvas.Canvas)
     html, html_animation = toyplot.html.render(canvas, animation=True)
     svg = html.find("svg")
 

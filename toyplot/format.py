@@ -5,10 +5,10 @@
 from __future__ import division
 
 import numpy
+import toyplot.compatibility
 
 
 class Formatter(object):
-
     """Base class for formatters - objects that compute text representations from data."""
 
     def format(self, value):
@@ -30,22 +30,40 @@ class Formatter(object):
         raise NotImplementedError() # pragma: no cover
 
 
-class DefaultFormatter(Formatter):
+class NullFormatter(Formatter):
+    """Do-nothing formatter that returns empty strings."""
+    def format(self, value):
+        return "", "", ""
 
+
+class DefaultFormatter(Formatter):
+    """Formats data using its default string representation."""
     def format(self, value):
         return "%s" % value, "", ""
 
 
 class FloatFormatter(Formatter):
+    """Formats floating-point values with aligned decimal points.
 
-    def __init__(self, format="{:.6g}"):
+    Parameters
+    ----------
+    format: format string, optional
+        Uses standard Python Format String Syntax.
+    nanshow: bool, optional
+        Set to `False` to hide NaN values.
+    """
+    def __init__(self, format="{:.6g}", nanshow=True):
         self._format = format
+        self._nanshow = nanshow
 
     def format(self, value):
-        try:
-            formatted = self._format.format(value).split(".")
-            if len(formatted) == 1:
-                return formatted[0], "", ""
-            return formatted[0], ".", formatted[1]
-        except:
-            return str(value), "", ""
+        if isinstance(value, toyplot.compatibility.string_type):
+            return value, "", ""
+
+        if numpy.isnan(value) and not self._nanshow:
+            return "", "", ""
+
+        formatted = self._format.format(value).split(".")
+        if len(formatted) == 1:
+            return formatted[0], "", ""
+        return formatted[0], ".", formatted[1]

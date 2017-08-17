@@ -75,10 +75,10 @@ def step_impl(context):
 @then(u'the cartesian axes can be rendered with sized x ticks')
 def step_impl(context):
     context.axes.x.ticks.show = True
-    context.axes.x.ticks.above = 10
-    context.axes.x.ticks.below = 3
-    nose.tools.assert_equal(context.axes.x.ticks.above, 10)
-    nose.tools.assert_equal(context.axes.x.ticks.below, 3)
+    context.axes.x.ticks.far = 10
+    context.axes.x.ticks.near = 3
+    nose.tools.assert_equal(context.axes.x.ticks.far, 10)
+    nose.tools.assert_equal(context.axes.x.ticks.near, 3)
 
 
 @then(u'the cartesian axes can be rendered with styled x ticks')
@@ -92,7 +92,7 @@ def step_impl(context):
     u'the cartesian axes can be rendered with x ticks controlled by a locator')
 def step_impl(context):
     context.axes.x.ticks.show = True
-    locator = toyplot.locator.Basic(count=11)
+    locator = toyplot.locator.Uniform(count=11)
     context.axes.x.ticks.locator = locator
     nose.tools.assert_is(context.axes.x.ticks.locator, locator)
 
@@ -218,10 +218,10 @@ def step_impl(context):
 @then(u'the cartesian axes can be rendered with sized y ticks')
 def step_impl(context):
     context.axes.y.ticks.show = True
-    context.axes.y.ticks.above = 3
-    context.axes.y.ticks.below = 10
-    nose.tools.assert_equal(context.axes.y.ticks.above, 3)
-    nose.tools.assert_equal(context.axes.y.ticks.below, 10)
+    context.axes.y.ticks.near = 3
+    context.axes.y.ticks.far = 10
+    nose.tools.assert_equal(context.axes.y.ticks.near, 3)
+    nose.tools.assert_equal(context.axes.y.ticks.far, 10)
 
 
 @then(u'the cartesian axes can be rendered with styled y ticks')
@@ -235,7 +235,7 @@ def step_impl(context):
     u'the cartesian axes can be rendered with y ticks controlled by a locator')
 def step_impl(context):
     context.axes.y.ticks.show = True
-    locator = toyplot.locator.Basic(count=5)
+    locator = toyplot.locator.Uniform(count=5)
     context.axes.y.ticks.locator = locator
     nose.tools.assert_is(context.axes.y.ticks.locator, locator)
 
@@ -318,154 +318,6 @@ def step_impl(context):
 @given(u'a shared axis')
 def step_impl(context):
     context.shared_axes = context.axes.share("x")
-
-
-@given(u'values from -1000 to -1')
-def step_impl(context):
-    context.x = numpy.linspace(-1000, -1, 100)
-
-
-@given(u'log 10 axes on x and y')
-def step_impl(context):
-    context.canvas = toyplot.Canvas()
-    context.axes = context.canvas.axes(xscale="log10", yscale="log10")
-
-
-@given(u'plotting x, x with markers')
-def step_impl(context):
-    context.axes.plot(context.x, context.x, marker="o")
-
-
-@then(u'the result should be a log-log plot from -1000 to -1')
-def step_impl(context):
-    toyplot.testing.assert_canvas_equal(
-        context.canvas, "axes-log-scale-negative-1000-negative-1")
-
-
-@given(u'values from -1000 to -0.01')
-def step_impl(context):
-    context.x = numpy.linspace(-1000, -0.01, 100)
-
-
-@then(u'the result should be a log-log plot from -1000 to -0.01')
-def step_impl(context):
-    toyplot.testing.assert_canvas_equal(
-        context.canvas, "axes-log-scale-negative-1000-negative-0.01")
-
-
-@given(u'values from -1000 to 0')
-def step_impl(context):
-    context.x = numpy.linspace(-1000, 0, 100)
-
-
-@then(u'the result should be a log-log plot from -1000 to 0')
-def step_impl(context):
-    toyplot.testing.assert_canvas_equal(
-        context.canvas, "axes-log-scale-negative-1000-zero")
-
-
-@given(u'values from 0 to 1000')
-def step_impl(context):
-    context.x = numpy.linspace(0, 1000, 100)
-
-
-@then(u'the result should be a log-log plot from 0 to 1000')
-def step_impl(context):
-    toyplot.testing.assert_canvas_equal(
-        context.canvas, "axes-log-scale-zero-1000")
-
-
-@given(u'values from 0.01 to 1000')
-def step_impl(context):
-    context.x = numpy.linspace(0.01, 1000, 100)
-
-
-@then(u'the result should be a log-log plot from 0.01 to 1000')
-def step_impl(context):
-    toyplot.testing.assert_canvas_equal(
-        context.canvas, "axes-log-scale-0.01-1000")
-
-
-@given(u'values from 1 to 1000')
-def step_impl(context):
-    context.x = numpy.linspace(1, 1000, 100)
-
-
-@then(u'the result should be a log-log plot from 1 to 1000')
-def step_impl(context):
-    toyplot.testing.assert_canvas_equal(
-        context.canvas, "axes-log-scale-1-1000")
-
-
-@given(u'values from -1000 to 0.5')
-def step_impl(context):
-    context.x = numpy.linspace(-1000, 0.5, 100)
-
-
-@then(u'the result should be a log-log plot from -1000 to 0.5')
-def step_impl(context):
-    toyplot.testing.assert_canvas_equal(
-        context.canvas, "axes-log-scale-negative-1000-0.5")
-
-
-@given(u'values from -0.5 to 1000')
-def step_impl(context):
-    context.x = numpy.linspace(-0.5, 1000, 100)
-
-
-@then(u'the result should be a log-log plot from -0.5 to 1000')
-def step_impl(context):
-    toyplot.testing.assert_canvas_equal(
-        context.canvas, "axes-log-scale-negative-0.5-1000")
-
-
-@given(u'values from -1000 to 1000')
-def step_impl(context):
-    context.x = numpy.linspace(-1000, 1000, 100)
-
-
-@then(u'the result should be a log-log plot from -1000 to 1000')
-def step_impl(context):
-    toyplot.testing.assert_canvas_equal(
-        context.canvas, "axes-log-scale-negative-1000-1000")
-
-
-@given(u'log 2 axes on x and y')
-def step_impl(context):
-    context.canvas = toyplot.Canvas()
-    context.axes = context.canvas.axes(xscale="log2", yscale="log2")
-
-
-@then(u'the result should be a base 2 log-log plot from -1000 to -1')
-def step_impl(context):
-    toyplot.testing.assert_canvas_equal(
-        context.canvas, "axes-log-2-scale-negative-1000-negative-1")
-
-
-@then(u'the result should be a base 2 log-log plot from 1 to 1000')
-def step_impl(context):
-    toyplot.testing.assert_canvas_equal(
-        context.canvas, "axes-log-2-scale-1-1000")
-
-
-@then(u'the result should be a base 2 log-log plot from -1000 to 1000')
-def step_impl(context):
-    toyplot.testing.assert_canvas_equal(
-        context.canvas, "axes-log-2-scale-negative-1000-1000")
-
-
-@given(u'log 10 axes on x and y with custom format')
-def step_impl(context):
-    context.canvas = toyplot.Canvas()
-    context.axes = context.canvas.axes(xscale="log10", yscale="log10")
-    context.axes.x.ticks.locator = toyplot.locator.Log(base=10, format="{base}^{exponent}")
-    context.axes.y.ticks.locator = toyplot.locator.Log(base=10, format="{base}^{exponent}")
-
-
-@then(u'the result should be a log-log plot from -1000 to 1000 with custom labels')
-def step_impl(context):
-    toyplot.testing.assert_canvas_equal(
-        context.canvas, "axes-log-10-scale-negative-1000-1000-custom-format")
 
 
 @given(u'position and boundary data')
@@ -681,7 +533,7 @@ def step_impl(context):
 @when(u'adding default line marks to axes')
 def step_impl(context):
     context.canvas = toyplot.Canvas()
-    axes = context.canvas.axes()
+    axes = context.canvas.cartesian()
     axes.hlines(numpy.linspace(0, 0.6), style={"stroke":"steelblue", "opacity":0.4})
     axes.vlines(numpy.linspace(0, 1), style={"stroke":"steelblue", "opacity":0.4})
     axes.plot(numpy.linspace(0.25, 0.75), numpy.linspace(0.25, 0.75) ** 2);
@@ -695,7 +547,7 @@ def step_impl(context):
 @when(u'adding data line marks to axes')
 def step_impl(context):
     context.canvas = toyplot.Canvas()
-    axes = context.canvas.axes()
+    axes = context.canvas.cartesian()
     axes.hlines(numpy.linspace(0, 0.6), style={"stroke":"steelblue", "opacity":0.4}, annotation=False)
     axes.vlines(numpy.linspace(0, 1), style={"stroke":"steelblue", "opacity":0.4}, annotation=False)
     axes.plot(numpy.linspace(0.25, 0.75), numpy.linspace(0.25, 0.75) ** 2);

@@ -45,14 +45,10 @@ class module_proxy(object):
 
 for module_name in [
         "numpy",
+        "numpy.linalg",
         "numpy.ma",
         "numpy.testing",
-        "PyQt5",
-        "PyQt5.QtCore",
-        "PyQt5.QtGui",
-        "PyQt5.QtPrintSupport",
-        "PyQt5.QtWebKitWidgets",
-        "PyQt5.QtWidgets"]:
+        ]:
     sys.modules[module_name] = module_proxy()
 
 # If extensions (or modules to document with autodoc) are in another directory,
@@ -71,12 +67,28 @@ sys.path.insert(0, os.path.abspath(".."))
 # ones.
 extensions = [
     "sphinx.ext.autodoc",
-    "sphinx.ext.viewcode",
+    "sphinx.ext.intersphinx",
     "sphinx.ext.mathjax",
+    "sphinx.ext.viewcode",
     "sphinxcontrib.napoleon",
 ]
 
 napoleon_use_param = False
+
+# Complain about all cross reference targets that can't be found.
+nitpicky = True
+
+nitpick_ignore = [
+    ("py:class", "QApplication"),
+    ]
+
+intersphinx_mapping = {
+    "arrow": ("http://arrow.readthedocs.io/en/latest", "arrow.inv"),
+    "numpy": ("http://docs.scipy.org/doc/numpy-1.13.0", "numpy.inv"),
+    "pandas": ("http://pandas-docs.github.io/pandas-docs-travis", "pandas.inv"),
+    "python": ("http://docs.python.org/3.6", "python.inv"),
+    "PIL": ("http://pillow.readthedocs.io/en/3.2.x", "pillow.inv"),
+    }
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -147,16 +159,24 @@ pygments_style = 'sphinx'
 
 # -- Options for HTML output ----------------------------------------------
 
-# on_rtd is whether we are on readthedocs.org, this line of code grabbed
-# from docs.readthedocs.org
+# on_rtd is whether we are on readthedocs.io, this line of code grabbed
+# from docs.readthedocs.io
 on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
 
 if not on_rtd:  # only import and set the theme if we're building docs locally
     import sphinx_rtd_theme
     html_theme = 'sphinx_rtd_theme'
     html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+else:
+    html_context = {
+        'css_files': [
+            'https://media.readthedocs.io/css/sphinx_rtd_theme.css',
+            'https://media.readthedocs.io/css/readthedocs-doc-embed.css',
+            '_static/toyplot.css',
+        ],
+    }
 
-# otherwise, readthedocs.org uses their theme by default, so no need to
+# otherwise, readthedocs.io uses their theme by default, so no need to
 # specify it
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
@@ -267,10 +287,6 @@ latex_documents = [
 # The name of an image file (relative to this directory) to place at the top of
 # the title page.
 latex_logo = "../artwork/toyplot.png"
-
-# For "manual" documents, if this is true, then toplevel headings are parts,
-# not chapters.
-latex_use_parts = True
 
 # If true, show page references after internal links.
 #latex_show_pagerefs = False
@@ -394,3 +410,14 @@ epub_exclude_files = ['search.html']
 
 # If false, no index is generated.
 #epub_use_index = True
+
+# set up the types of member to check that are documented
+def warn_undocumented_members(app, what, name, obj, options, lines):
+    if what not in [] and len(lines) == 0:
+        print("WARNING: %s is undocumented: %s" % (what, name))
+        lines.append(".. Warning:: %s '%s' undocumented" % (what, name))
+
+def setup(app):
+    app.connect('autodoc-process-docstring', warn_undocumented_members);
+
+

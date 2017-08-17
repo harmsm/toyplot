@@ -7,10 +7,14 @@
 from __future__ import absolute_import
 from __future__ import division
 
-import numpy
+import base64
+import io
 import re
+
+import numpy
 import reportlab.pdfgen.canvas
 import reportlab.pdfbase
+
 import toyplot.color
 import toyplot.units
 
@@ -72,6 +76,16 @@ def render(svg, canvas):
             color["a"] * stroke_opacity * opacity,
             )
 
+    def get_line_cap(style):
+        if "stroke-linecap" not in style:
+            return 0
+        elif style["stroke-linecap"] == "butt":
+            return 0
+        elif style["stroke-linecap"] == "round":
+            return 1
+        elif style["stroke-linecap"] == "square":
+            return 2
+
     def get_font_family(style):
         if "font-family" not in style:
             return None # pragma: no cover
@@ -118,7 +132,7 @@ def render(svg, canvas):
         canvas.setStrokeColorRGB(color["r"], color["g"], color["b"])
         canvas.setStrokeAlpha(numpy.asscalar(color["a"]))
 
-    def render_element(root, element, canvas, styles, text_state=None):
+    def render_element(root, element, canvas, styles):
         canvas.saveState()
 
         current_style = {}
@@ -128,8 +142,6 @@ def render(svg, canvas):
             if declaration == "":
                 continue
             key, value = declaration.split(":")
-            if key == "dominant-baseline" and value == "inherit":
-                continue
             current_style[key] = value
         styles.append(current_style)
 
@@ -144,12 +156,12 @@ def render(svg, canvas):
             if "transform" in element.attrib:
                 for transformation in element.get("transform").split(")")[::1]:
                     if transformation:
-                        type, arguments = transformation.split("(")
+                        transform, arguments = transformation.split("(")
                         arguments = arguments.split(",")
-                        if type.strip() == "translate":
+                        if transform.strip() == "translate":
                             if len(arguments) == 2:
                                 canvas.translate(float(arguments[0]), float(arguments[1]))
-                        elif type.strip() == "rotate":
+                        elif transform.strip() == "rotate":
                             if len(arguments) == 1:
                                 canvas.rotate(float(arguments[0]))
                             if len(arguments) == 3:
@@ -189,7 +201,7 @@ def render(svg, canvas):
                             path.close()
                             canvas.clipPath(path, stroke=0, fill=1)
                         else:
-                            toyplot.log.error("Unhandled clip tag: %s" % child.tag) # pragma: no cover
+                            toyplot.log.error("Unhandled clip tag: %s", child.tag) # pragma: no cover
 
                 for child in element:
                     render_element(root, child, canvas, styles)
@@ -201,16 +213,18 @@ def render(svg, canvas):
                 stroke = get_stroke(current_style)
                 if stroke is not None:
                     set_stroke_color(canvas, stroke)
+                    canvas.setLineCap(get_line_cap(current_style))
                     canvas.line(
-                        float(element.get("x1")),
-                        float(element.get("y1")),
-                        float(element.get("x2")),
-                        float(element.get("y2")),
+                        float(element.get("x1", 0)),
+                        float(element.get("y1", 0)),
+                        float(element.get("x2", 0)),
+                        float(element.get("y2", 0)),
                         )
             elif element.tag == "path":
                 stroke = get_stroke(current_style)
                 if stroke is not None:
                     set_stroke_color(canvas, stroke)
+                    canvas.setLineCap(get_line_cap(current_style))
                     path = canvas.beginPath()
                     commands = element.get("d").split()
                     while len(commands):
@@ -248,8 +262,8 @@ def render(svg, canvas):
                 if stroke is not None:
                     set_stroke_color(canvas, stroke)
 
-                x = float(element.get("x"))
-                y = float(element.get("y"))
+                x = float(element.get("x", 0))
+                y = float(element.get("y", 0))
                 width = float(element.get("width"))
                 height = float(element.get("height"))
 
@@ -267,7 +281,7 @@ def render(svg, canvas):
                         offset = float(stop.get("offset"))
                         color = toyplot.color.css(stop.get("stop-color"))
                         opacity = float(stop.get("stop-opacity"))
-                        pdf_colors.append(reportlab.lib.colors.Color(color["r"], color["g"], color["b"], color["a"]))
+                        pdf_colors.append(reportlab.lib.colors.Color(color["r"], color["g"], color["b"], color["a"] * opacity))
                         pdf_offsets.append(offset)
                     canvas.saveState()
                     canvas.clipPath(path, stroke=0, fill=1)
@@ -293,77 +307,55 @@ def render(svg, canvas):
                 if stroke is not None:
                     set_stroke_color(canvas, stroke)
 
-                cx = float(element.get("cx"))
-                cy = float(element.get("cy"))
+                cx = float(element.get("cx", 0))
+                cy = float(element.get("cy", 0))
                 r = float(element.get("r"))
                 canvas.circle(cx, cy, r, stroke=stroke is not None, fill=fill is not None)
             elif element.tag == "text":
-                text_state = {"x": 0, "y": 0, "chunks": [[]]}
-                for child in element:
-                    render_element(root, child, canvas, styles, text_state)
-                for chunk in text_state["chunks"]:
-                    width = sum([span[7] for span in chunk])
-
-                    dx = 0
-                    text_anchor = current_style.get("text-anchor", "start")
-                    if text_anchor == "middle":
-                        dx = -width * 0.5
-                    elif text_anchor == "end":
-                        dx = -width
-
-                    for x, y, fill, stroke, font_family, font_size, text, width in chunk:
-                        canvas.saveState()
-                        canvas.setFont(font_family, font_size)
-                        if fill is not None:
-                            set_fill_color(canvas, fill)
-                        if stroke is not None:
-                            set_stroke_color(canvas, stroke)
-                        canvas.translate(x + dx, y)
-                        canvas.scale(1, -1)
-                        canvas.drawString(0, 0, text)
-                        canvas.restoreState()
-
-            elif element.tag == "tspan":
-#                    if "font-weight" in current_style:
-#                        font_description.set_weight(
-#                            pango.WEIGHT_BOLD if current_style["font-weight"] == "bold" else pango.WEIGHT_NORMAL)
-                font_family = get_font_family(current_style)
-                font_size = toyplot.units.convert(current_style["font-size"].strip(), "px")
-
-                string_width = reportlab.pdfbase.pdfmetrics.stringWidth(element.text, font_family, font_size)
-                ascent, descent = reportlab.pdfbase.pdfmetrics.getAscentDescent(font_family, font_size)
-
-                if "x" in element.attrib:
-                    text_state["x"] = float(element.get("x"))
-                    text_state["chunks"].append([])
-
-                if "dy" in element.attrib:
-                    text_state["y"] += float(element.get("dy"))
-
-                x = text_state["x"]
-                y = text_state["y"]
-
-                alignment_baseline = current_style.get("alignment-baseline", "middle")
-                if alignment_baseline == "hanging":
-                    y += ascent
-                elif alignment_baseline == "central":
-                    y += ascent * 0.5
-                elif alignment_baseline == "middle":
-                    y += (ascent + descent) * 0.5
-                elif alignment_baseline == "alphabetic":
-                    pass
-                else:
-                    raise ValueError("Unsupported alignment-baseline: %s" % alignment_baseline) # pragma: no cover
-
-                baseline_shift = current_style.get("baseline-shift", "0").strip()
-                baseline_shift = toyplot.units.convert(baseline_shift, "px", "px", ascent - descent)
-                y -= baseline_shift
-
-                fill, fill_gradient = get_fill(root, current_style)
+                x = float(element.get("x", 0))
+                y = float(element.get("y", 0))
+                fill, fill_gradient = get_fill(element, current_style)
                 stroke = get_stroke(current_style)
+                font_family = get_font_family(current_style)
+                font_size = toyplot.units.convert(current_style["font-size"], target="px")
+                text = element.text
 
-                text_state["chunks"][-1].append((x, y, fill, stroke, font_family, font_size, element.text, string_width))
-                text_state["x"] += string_width
+                canvas.saveState()
+                canvas.setFont(font_family, font_size)
+                if fill is not None:
+                    set_fill_color(canvas, fill)
+                if stroke is not None:
+                    set_stroke_color(canvas, stroke)
+                canvas.translate(x, y)
+                canvas.scale(1, -1)
+                canvas.drawString(0, 0, text)
+                canvas.restoreState()
+
+            elif element.tag == "image":
+                # pylint: disable=redefined-variable-type
+
+                import PIL.Image
+                image = element.get("xlink:href")
+                if not image.startswith("data:image/png;base64,"):
+                    raise ValueError("Unsupported image type.") # pragma: no cover
+                image = base64.standard_b64decode(image[22:])
+                image = io.BytesIO(image)
+                image = PIL.Image.open(image)
+                image = reportlab.lib.utils.ImageReader(image)
+
+                x = float(element.get("x", 0))
+                y = float(element.get("y", 0))
+                width = float(element.get("width"))
+                height = float(element.get("height"))
+
+                canvas.saveState()
+                path = canvas.beginPath()
+                set_fill_color(canvas, toyplot.color.rgb(1, 1, 1))
+                canvas.rect(x, y, width, height, stroke=0, fill=1)
+                canvas.translate(x, y + height)
+                canvas.scale(1, -1)
+                canvas.drawImage(image=image, x=0, y=0, width=width, height=height, mask=None)
+                canvas.restoreState()
 
             elif element.tag in ["defs", "title"]:
                 pass
@@ -375,4 +367,3 @@ def render(svg, canvas):
         canvas.restoreState()
 
     render_element(svg, svg, canvas, [])
-

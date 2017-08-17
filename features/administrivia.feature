@@ -1,5 +1,9 @@
 Feature: Administrivia
 
     Scenario:
-        Given the Toyplot sources.
-        Then all sources must contain a copyright notice.
+        Given all Toyplot sources.
+        Then every source must contain a copyright notice.
+
+    Scenario:
+        Given pylint
+        Then all pylint tests must pass without any messages.

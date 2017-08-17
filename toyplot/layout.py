@@ -7,11 +7,10 @@
 
 from __future__ import division
 
-import io
-import numbers
-import numpy
-import subprocess
 import time
+
+import numpy
+
 import toyplot.compatibility
 import toyplot.units
 
@@ -24,37 +23,56 @@ def region(
         rect=None,
         corner=None,
         grid=None,
-        gutter=40):
+        margin=None):
     """Specify a rectangular target region relative to a parent region.
 
     Parameters
     ----------
-    xmin: number, required
+    xmin: :class:`number<numbers.Number>`, required
       Minimum X boundary of the parent region, specified in CSS pixel units.
-    xmax: number, required
+    xmax: :class:`number<numbers.Number>`, required
       Maximum X boundary of the parent region, specified in CSS pixel units.
-    ymin: number, required
+    ymin: :class:`number<numbers.Number>`, required
       Minimum Y boundary of the parent region, specified in CSS pixel units.
-    ymax: number, required
+    ymax: :class:`number<numbers.Number>`, required
       Maximum Y boundary of the parent region, specified in CSS pixel units.
-    gutter: number, string, or (number, string) tuple, optional
+    margin: :class:`number<numbers.Number>`, string, (:class:`number<numbers.Number>`, string) tuple, or tuple containing between one and four :class:`numbers<numbers.Number>`, strings, or (:class:`number<numbers.Number>`, string) tuples, optional
       Padding around the target region, specified in real-world units.  Defaults
-      to CSS pixel units.  See :ref:`units` for details.
+      to CSS pixel units.  See :ref:`units` for details.  Follows the same behavior as the CSS margin property.
 
     Returns
     -------
-    xmin, xmax, ymin, ymax: number
+    xmin, xmax, ymin, ymax: :class:`number<numbers.Number>`
       The boundaries of the target region, specified in CSS pixel units.
     """
 
-    gutter = toyplot.units.convert(gutter, "px", default="px")
+    if margin is None:
+        margin = 0
 
-    def convert(min, max, value):
+    if isinstance(margin, tuple):
+        if len(margin) == 4:
+            margin_top = toyplot.units.convert(margin[0], "px", default="px")
+            margin_right = toyplot.units.convert(margin[1], "px", default="px")
+            margin_bottom = toyplot.units.convert(margin[2], "px", default="px")
+            margin_left = toyplot.units.convert(margin[3], "px", default="px")
+        elif len(margin) == 3:
+            margin_top = toyplot.units.convert(margin[0], "px", default="px")
+            margin_left = margin_right = toyplot.units.convert(margin[1], "px", default="px")
+            margin_bottom = toyplot.units.convert(margin[2], "px", default="px")
+        elif len(margin) == 2:
+            margin_top = margin_bottom = toyplot.units.convert(margin[0], "px", default="px")
+            margin_left = margin_right = toyplot.units.convert(margin[1], "px", default="px")
+        elif len(margin) == 1:
+            margin_top = margin_bottom = margin_left = margin_right = toyplot.units.convert(margin[0], "px", default="px")
+    else:
+        margin_top = margin_bottom = margin_left = margin_right = toyplot.units.convert(margin, "px", default="px")
+
+    def convert(vmin, vmax, value):
         value = toyplot.units.convert(
-            value, "px", default="px", reference=max - min)
+            value, "px", default="px", reference=vmax - vmin)
         if value < 0:
-            return float(max + value)
-        return float(min + value)
+            return float(vmax + value)
+        return float(vmin + value)
 
     # Specify explicit bounds for the region
     if bounds is not None:
@@ -180,13 +198,13 @@ def region(
         cell_height = (ymax - ymin) / M
 
         return (
-            (j * cell_width) + gutter,
-            ((j + colspan) * cell_width) - gutter,
-            (i * cell_height) + gutter,
-            ((i + rowspan) * cell_height) - gutter,
+            (j * cell_width) + margin_left,
+            ((j + colspan) * cell_width) - margin_right,
+            (i * cell_height) + margin_top,
+            ((i + rowspan) * cell_height) - margin_bottom,
         )
     # If nothing else fits, consume the entire region
-    return (xmin + gutter, xmax - gutter, ymin + gutter, ymax - gutter)
+    return (xmin + margin_left, xmax - margin_right, ymin + margin_top, ymax - margin_bottom)
 
 
 class Graph(object):
@@ -281,6 +299,8 @@ def graph(a, b=None, c=None, olayout=None, layout=None, vcoordinates=None):
     # Apply the layout algorithm to whatever's left.
     start = time.time()
     if layout is None:
+        # pylint: disable=redefined-variable-type
+
         # If there are unspecified coordinates, use a force-directed layout.
         if numpy.ma.is_masked(ivcoordinates):
             layout = toyplot.layout.FruchtermanReingold()
@@ -288,7 +308,7 @@ def graph(a, b=None, c=None, olayout=None, layout=None, vcoordinates=None):
             # Otherwise, we can ignore the vertices and just create edges.
             layout = toyplot.layout.IgnoreVertices()
     vcoordinates, eshapes, ecoordinates = layout.graph(ivcoordinates, edges)
-    toyplot.log.info("Graph layout time: %s ms" % ((time.time() - start) * 1000))
+    toyplot.log.info("Graph layout time: %s ms", (time.time() - start) * 1000)
 
     if numpy.ma.is_masked(vcoordinates):
         raise RuntimeError("Graph layout cannot return masked vertex coordinates.") # pragma: no cover
@@ -416,7 +436,7 @@ class StraightEdges(EdgeLayout):
     def edges(self, vcoordinates, edges):
         loops = edges.T[0] == edges.T[1]
         if numpy.any(loops):
-            toyplot.log.warning("Graph contains %s loop edges that will not be visible." % numpy.count_nonzero(loops))
+            toyplot.log.warning("Graph contains %s loop edges that will not be visible.", numpy.count_nonzero(loops))
 
         eshapes = numpy.tile("ML", len(edges))
         ecoordinates = numpy.empty((len(edges) * 2, 2))
@@ -441,7 +461,7 @@ class CurvedEdges(EdgeLayout):
     def edges(self, vcoordinates, edges):
         loops = edges.T[0] == edges.T[1]
         if numpy.any(loops):
-            toyplot.log.warning("Graph contains %s loop edges that will not be visible." % numpy.count_nonzero(loops))
+            toyplot.log.warning("Graph contains %s loop edges that will not be visible.", numpy.count_nonzero(loops))
 
         eshapes = numpy.tile("MQ", len(edges))
         ecoordinates = numpy.empty((len(edges) * 3, 2))
@@ -491,7 +511,7 @@ class GraphLayout(object):
         ecoordinates : matrix containing two columns
             Contains coordinates for each of the edge shape strings, in drawing-code order.
         """
-        raise NotImplementedError() # pragma: no cover 
+        raise NotImplementedError() # pragma: no cover
 
 
 class IgnoreVertices(GraphLayout):
@@ -681,9 +701,12 @@ class Buchheim(GraphLayout):
 
     Note: this layout currently ignores preexisting vertex coordinates.
     """
-    def __init__(self, edges=None, basis=[[1, 0], [0, -1]]):
+    def __init__(self, edges=None, basis=None):
         if edges is None:
             edges = StraightEdges()
+
+        if basis is None:
+            basis = [[1, 0], [0, -1]]
 
         self._edges = edges
         self._basis = numpy.array(basis)
@@ -814,4 +837,3 @@ class Buchheim(GraphLayout):
 
         eshapes, ecoordinates = self._edges.edges(vcoordinates, edges)
         return vcoordinates, eshapes, ecoordinates
-

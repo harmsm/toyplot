@@ -1,8 +1,9 @@
 sudo: false
+dist: precise
 language: python
 python:
     - "2.7"
-    - "3.3"
+    - "3.6"
 addons:
     apt:
         packages:
@@ -16,16 +17,18 @@ install:
     - conda config --set always_yes yes --set changeps1 no
     - conda update -q conda
     - conda info -a
-    - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION graphviz mock multipledispatch networkx numpy pandas pillow pip reportlab
+    - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION graphviz mock multipledispatch networkx numpy=1.12.1 pandas pillow pip reportlab
+    - conda install pylint=1.6.4
     - source activate test-environment
-    - pip install arrow behave "colormath>=2.1.0" coverage coveralls nose-exclude
+    - pip install arrow behave "colormath>=2.1.0" coverage coveralls nose-exclude pypng
     - wget http://johnvansickle.com/ffmpeg/releases/ffmpeg-release-64bit-static.tar.xz
     - mkdir ffmpeg
     - tar xf ffmpeg-release-64bit-static.tar.xz --strip-components 1 -C ffmpeg
     - export PATH=$TRAVIS_BUILD_DIR/ffmpeg:$PATH
+    - ffmpeg -version
 script:
     - coverage run --source toyplot --omit toyplot/testing.py,toyplot/qt/*.py -m nose --exclude-dir toyplot
-    - coverage run --append --source toyplot --omit toyplot/testing.py,toyplot/qt/*.py -m behave
+    - coverage run --append --source toyplot --omit toyplot/testing.py,toyplot/qt/*.py -m behave --tags=~webm
     - coverage report
     - python backend-report.py
 after_script:

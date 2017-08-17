@@ -8,20 +8,34 @@
 from __future__ import absolute_import
 from __future__ import division
 
-
+import distutils.version
 import io
-import os.path
-import reportlab.pdfgen.canvas
 import subprocess
+
+import reportlab.pdfgen.canvas
+
 import toyplot.reportlab
+import toyplot.require
 import toyplot.svg
 
+# Verify that ghostscript is installed, and check the version
+_gs_command = None
+_gs_version = None
+for command in ["gs", "gswin64c", "gswin32c"]:
+    try:
+        _gs_version = subprocess.check_output([command, "--version"]).decode(encoding="utf-8").strip()
+        _gs_command = command
+    except:
+        pass
 
-for path in os.environ["PATH"].split(os.pathsep):
-    if os.path.exists(os.path.join(path, "gs")):
-        break
+if _gs_command is None:
+    raise Exception("A ghostscript executable is required.")  # pragma: no cover
+
+if distutils.version.StrictVersion(_gs_version) >= "9.10":
+    _gs_resolution = ["-r%s" % (96 * 4), "-dDownScaleFactor=4"]
 else:
-    raise Exception("The gs executable is required.")  # pragma: no cover
+    _gs_resolution = ["-r%s" % (96)]
+    toyplot.log.warning("For better output PNG quality, install ghostscript >= 9.10.")
 
 
 def render(canvas, fobj=None, width=None, height=None, scale=None):
@@ -48,10 +62,10 @@ def render(canvas, fobj=None, width=None, height=None, scale=None):
 
     Returns
     -------
-    png: PNG image data, or `None`
-      PNG representation of `canvas`, or `None` if the caller specifies the
-      `fobj` parameter.
+    png: :class:`bytes` containing PNG image data, or `None`
+      Returns `None` if the caller specifies the `fobj` parameter, returns the PNG image data otherwise.
     """
+    canvas = toyplot.require.instance(canvas, toyplot.canvas.Canvas)
     svg = toyplot.svg.render(canvas)
     scale = canvas._point_scale(width=width, height=height, scale=scale)
     pdf = io.BytesIO()
@@ -64,16 +78,17 @@ def render(canvas, fobj=None, width=None, height=None, scale=None):
     surface.save()
 
     command = [
-        "gs",
-        "-dNOPAUSE",
+        _gs_command,
+        "-dSAFER",
         "-dBATCH",
+        "-dNOPAUSE",
         "-dQUIET",
-        "-dMaxBitmap=2147483647",
-        "-sDEVICE=pngalpha",
-        "-r%s" % 96,
         "-sOutputFile=-",
-        "-",
-        ]
+        "-dMaxBitmap=2147483647",
+        "-dTextAlphaBits=4",
+        "-dGraphicsAlphaBits=4",
+        "-sDEVICE=pngalpha",
+        ] + _gs_resolution + ["-"]
 
     gs = subprocess.Popen(
         command,
@@ -92,7 +107,7 @@ def render(canvas, fobj=None, width=None, height=None, scale=None):
 
 
 def render_frames(canvas, width=None, height=None, scale=None):
-    """Render a canvas as a sequence of PNG images using Cairo.
+    """Render a canvas as a sequence of PNG images using ReportLab and Ghostscript.
 
     By default, canvas dimensions in CSS pixels are mapped directly to pixels in
     the output PNG images.  Use one of `width`, `height`, or `scale` to override
@@ -111,7 +126,7 @@ def render_frames(canvas, width=None, height=None, scale=None):
 
     Returns
     -------
-    frames: Python generator expression that returns each PNG image in the sequence.
+    frames: Sequence of :class:`bytes` objects containing PNG image data.
       The caller must iterate over the returned frames and is responsible for all
       subsequent processing, including disk I/O, video compression, etc.
 
@@ -120,6 +135,7 @@ def render_frames(canvas, width=None, height=None, scale=None):
     >>> for frame, png in enumerate(toyplot.reportlab.png.render_frames(canvas)):
     ...   open("frame-%s.png" % frame, "wb").write(png)
     """
+    canvas = toyplot.require.instance(canvas, toyplot.canvas.Canvas)
     svg, svg_animation = toyplot.svg.render(canvas, animation=True)
     scale = canvas._point_scale(width=width, height=height, scale=scale)
 
@@ -154,4 +170,3 @@ def render_frames(canvas, width=None, height=None, scale=None):
             stderr=subprocess.PIPE)
         stdout, stderr = gs.communicate(pdf.getvalue())
         yield stdout
-

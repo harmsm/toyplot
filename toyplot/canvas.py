@@ -2,12 +2,15 @@
 # DE-AC04-94AL85000 with Sandia Corporation, the U.S. Government retains certain
 # rights in this software.
 
+"""Implements the :class:`toyplot.canvas.Canvas` class, which defines the space that is available for creating plots.
+"""
+
 from __future__ import division
 
 import collections
 import numbers
 import numpy
-import toyplot.axes
+import toyplot.coordinates
 import toyplot.broadcast
 import toyplot.color
 import toyplot.compatibility
@@ -18,14 +21,12 @@ import toyplot.units
 
 
 class AnimationFrame(object):
-
     """Used to specify modifications to a `toyplot.canvas.Canvas` during animation.
 
     Do not create AnimationFrame instances yourself, an instance of
     AnimationFrame is automatically created by :meth:`toyplot.canvas.Canvas.animate`
     or :meth:`toyplot.canvas.Canvas.time` and passed to your callback.
     """
-
     def __init__(self, index, begin, end, changes):
         self._index = index
         self._begin = begin
@@ -84,26 +85,11 @@ class AnimationFrame(object):
         self._changes[self._begin][
             "set-datum-style"].append((mark, series, datum, style))
 
-    def set_datum_text(self, mark, series, datum, text):
-        """Change the text in a :class:`toyplot.mark.Text` at the current frame.
-
-        Parameters
-        ----------
-        mark: :class:`toyplot.mark.Text` instance
-        value: string
-        """
-        if not isinstance(mark, toyplot.mark.Text):
-            raise ValueError(
-                "Mark text can only be set for toyplot.mark.Text instances.")
-        self._changes[self._begin][
-            "set-datum-text"].append((mark, series, datum, text))
 
 ##########################################################################
 # Canvas
 
-
 class Canvas(object):
-
     """Top-level container for Toyplot drawings.
 
     Parameters
@@ -130,53 +116,61 @@ class Canvas(object):
     >>> canvas = toyplot.Canvas("8in", "6in", style={"background-color":"yellow"})
     """
 
+    class _AnimationFrames(collections.defaultdict):
+        def __init__(self):
+            collections.defaultdict.__init__(self, lambda: collections.defaultdict(list))
+
     def __init__(self, width=None, height=None, style=None, autorender=None, autoformat=None):
         self._width = toyplot.units.convert(
             width, "px", default="px") if width is not None else 600
         self._height = toyplot.units.convert(
             height, "px", default="px") if height is not None else self._width
-        self._style = toyplot.style.combine(
-            {
-                "background-color": "transparent",
-                "fill": toyplot.color.near_black,
-                "fill-opacity": 1.0,
-                "font-family": "Helvetica",
-                "font-size": "12px",
-                "opacity": 1.0,
-                "stroke": toyplot.color.near_black,
-                "stroke-opacity": 1.0,
-                "stroke-width": 1.0,
-            },
-            toyplot.require.style(style, allowed=set(["background-color", "border"])),
-            )
-        self._animation = collections.defaultdict(
-            lambda: collections.defaultdict(list))
+        self._style = {
+            "background-color": "transparent",
+            "fill": toyplot.color.near_black,
+            "fill-opacity": 1.0,
+            "font-family": "Helvetica",
+            "font-size": "12px",
+            "opacity": 1.0,
+            "stroke": toyplot.color.near_black,
+            "stroke-opacity": 1.0,
+            "stroke-width": 1.0,
+        }
+        self.style = style
+
+        self._animation = toyplot.Canvas._AnimationFrames()
         self._children = []
         self.autorender(autorender, autoformat)
 
     def _repr_html_(self):
-        import toyplot.html
-        import xml.etree.ElementTree as xml
-        return toyplot.compatibility.unicode_type(
-            xml.tostring(
-                toyplot.html.render(self),
-                encoding="utf-8",
-                method="html"),
-            encoding="utf-8")
+        from . import html
+        return toyplot.html.tostring(self, style={"text-align":"center"})
 
     def _repr_png_(self):
-        import toyplot.png
+        from . import png
         return toyplot.png.render(self)
-
-    @property
-    def width(self):
-        """Width of the canvas in CSS pixels."""
-        return self._width
 
     @property
     def height(self):
         """Height of the canvas in CSS pixels."""
         return self._height
+
+    @property
+    def style(self):
+        """Canvas style."""
+        return self._style
+
+    @style.setter
+    def style(self, value):
+        self._style = toyplot.style.combine(
+            self._style,
+            toyplot.style.require(value, allowed=set(["background-color", "border"])),
+            )
+
+    @property
+    def width(self):
+        """Width of the canvas in CSS pixels."""
+        return self._width
 
     def animate(self, frames, callback=None):
         """Generate a collection of animation frames, calling a callback to store an explicit representation of what changes at each frame.
@@ -242,29 +236,30 @@ class Canvas(object):
         if enable:
             Canvas._autorender.append((self, autoformat))
 
-    def axes(
+    def cartesian(
             self,
+            aspect=None,
             bounds=None,
-            rect=None,
             corner=None,
             grid=None,
-            gutter=50,
-            xmin=None,
-            xmax=None,
-            ymin=None,
-            ymax=None,
-            aspect=None,
-            show=True,
-            xshow=True,
-            yshow=True,
             label=None,
-            xlabel=None,
-            ylabel=None,
-            xticklocator=None,
-            yticklocator=None,
-            xscale="linear",
-            yscale="linear",
+            margin=50,
             padding=10,
+            palette=None,
+            rect=None,
+            show=True,
+            xlabel=None,
+            xmax=None,
+            xmin=None,
+            xscale="linear",
+            xshow=True,
+            xticklocator=None,
+            ylabel=None,
+            ymax=None,
+            ymin=None,
+            yscale="linear",
+            yshow=True,
+            yticklocator=None,
         ):
         """Add a set of Cartesian axes to the canvas.
 
@@ -296,7 +291,7 @@ class Canvas(object):
           left-ot-right, top-to-bottom order), a pair of i, j cell coordinates, or
           a set of i, column-span, j, row-span coordinates so the legend can cover
           more than one cell.
-        gutter: size of the gutter around grid cells, optional
+        margin: size of the margin around grid cells, optional
           Specifies the amount of empty space to leave between grid cells When using the
           `grid` parameter for positioning.  Assumes CSS pixels by default, and supports
           all of the absolute units described in :ref:`units`.
@@ -324,56 +319,65 @@ class Canvas(object):
 
         Returns
         -------
-        axes: :class:`toyplot.axes.Cartesian`
+        axes: :class:`toyplot.coordinates.Cartesian`
         """
         xmin_range, xmax_range, ymin_range, ymax_range = toyplot.layout.region(
-            0, self._width, 0, self._height, bounds=bounds, rect=rect, corner=corner, grid=grid, gutter=gutter)
+            0, self._width, 0, self._height,
+            bounds=bounds,
+            rect=rect,
+            corner=corner,
+            grid=grid,
+            margin=margin,
+            )
         self._children.append(
-            toyplot.axes.Cartesian(
-                xmin_range,
-                xmax_range,
-                ymin_range,
-                ymax_range,
+            toyplot.coordinates.Cartesian(
                 aspect=aspect,
-                xmin=xmin,
-                xmax=xmax,
-                ymin=ymin,
-                ymax=ymax,
-                show=show,
-                xshow=xshow,
-                yshow=yshow,
                 label=label,
-                xlabel=xlabel,
-                ylabel=ylabel,
-                xticklocator=xticklocator,
-                yticklocator=yticklocator,
-                xscale=xscale,
-                yscale=yscale,
                 padding=padding,
-                parent=self))
+                palette=palette,
+                parent=self,
+                show=show,
+                xaxis=None,
+                xlabel=xlabel,
+                xmax=xmax,
+                xmax_range=xmax_range,
+                xmin=xmin,
+                xmin_range=xmin_range,
+                xscale=xscale,
+                xshow=xshow,
+                xticklocator=xticklocator,
+                ylabel=ylabel,
+                yaxis=None,
+                ymax=ymax,
+                ymax_range=ymax_range,
+                ymin=ymin,
+                ymin_range=ymin_range,
+                yscale=yscale,
+                yshow=yshow,
+                yticklocator=yticklocator,
+                ))
 
         return self._children[-1]
 
     def legend(
             self,
-            marks,
+            entries,
             bounds=None,
-            rect=None,
             corner=None,
             grid=None,
-            gutter=50,
-            style=None,
-            label_style=None):
+            label=None,
+            margin=50,
+            rect=None,
+            ):
         """Add a legend to the canvas.
 
         Parameters
         ----------
-        marks: sequence of marks to add to the legend
-          Each mark to be displayed in the legend should be specified using either
-          a (label, mark) tuple or a (label, mark, style) tuple.  Each label should
-          be the human-readable text to be displayed next to the mark.  The mark
-          can be a string value "line" or "rect", a marker string "o", "s", "^",
-          or an actual intance of :class:`toyplot.mark.Mark`.
+        entries: sequence of entries to add to the legend Each entry to be
+            displayed in the legend must be either a (label, mark) tuple or a
+            (label, marker) tuple.  Labels are human-readable text, markers are
+            specified using the syntax described in :ref:`markers`, and marks can
+            be any instance of :class:`toyplot.mark.Mark`.
         bounds: (xmin, xmax, ymin, ymax) tuple, optional
           Use the bounds property to position / size the legend by specifying the
           position of each of its boundaries.  The boundaries may be specified in
@@ -399,56 +403,88 @@ class Canvas(object):
           left-ot-right, top-to-bottom order), a pair of i, j cell coordinates, or
           a set of i, column-span, j, row-span coordinates so the legend can cover
           more than one cell.
-        gutter: size of the gutter around grid cells, optional
+        margin: size of the margin around grid cells, optional
           Specifies the amount of empty space to leave between grid cells When using the
           `grid` parameter to position the legend.
-        style: dict, optional
         id: string, optional
 
         Returns
         -------
-        legend: :class:`toyplot.mark.Legend`
+        legend: :class:`toyplot.coordinates.Table`
         """
-        gutter = toyplot.require.scalar(gutter)
-        style = toyplot.require.style(style, allowed=toyplot.require.style.fill)
-        label_style = toyplot.require.style(label_style, allowed=toyplot.require.style.text)
 
         xmin, xmax, ymin, ymax = toyplot.layout.region(
-            0, self._width, 0, self._height, bounds=bounds, rect=rect, corner=corner, grid=grid, gutter=gutter)
-        self._children.append(
-            toyplot.mark.Legend(
-                xmin,
-                xmax,
-                ymin,
-                ymax,
-                marks,
-                style,
-                label_style))
-        return self._children[-1]
+            0, self._width, 0, self._height,
+            bounds=bounds,
+            corner=corner,
+            grid=grid,
+            margin=margin,
+            rect=rect,
+            )
+
+        table = toyplot.coordinates.Table(
+            annotation=True,
+            brows=0,
+            columns=2,
+            filename=None,
+            label=label,
+            lcolumns=0,
+            parent=self,
+            rcolumns=0,
+            rows=len(entries),
+            trows=0,
+            xmax_range=xmax,
+            xmin_range=xmin,
+            ymax_range=ymax,
+            ymin_range=ymin,
+            )
+
+        table.cells.column[0].align = "right"
+        table.cells.column[1].align = "left"
+
+        for index, (label, spec) in enumerate(entries):
+            if isinstance(spec, toyplot.mark.Mark):
+                markers = spec.markers
+            else:
+                markers = [toyplot.marker.convert(spec)]
+            text = ""
+            for marker in markers:
+                if text:
+                    text = text + " "
+                text = text + marker
+
+            table.cells.cell[index, 0].data = text
+            table.cells.cell[index, 1].data = label
+
+        self._children.append(table)
+
+        return table
 
     def matrix(
             self,
             data,
-            label=None,
-            tlabel=None,
-            llabel=None,
-            rlabel=None,
             blabel=None,
-            step=1,
-            tshow=None,
-            lshow=None,
-            rshow=None,
-            bshow=None,
-            tlocator=None,
-            llocator=None,
-            rlocator=None,
             blocator=None,
-            colorshow=False,
             bounds=None,
-            rect=None,
+            bshow=None,
+            colorshow=False,
             corner=None,
+            filename=None,
             grid=None,
-            gutter=50):
+            label=None,
+            llabel=None,
+            llocator=None,
+            lshow=None,
+            margin=50,
+            rect=None,
+            rlabel=None,
+            rlocator=None,
+            rshow=None,
+            step=1,
+            tlabel=None,
+            tlocator=None,
+            tshow=None,
+        ):
         """Add a matrix visualization to the canvas.
 
         Parameters
@@ -456,71 +492,68 @@ class Canvas(object):
 
         Returns
         -------
-        axes: :class:`toyplot.axes.Table`
+        axes: :class:`toyplot.coordinates.Table`
         """
-        colormap = None
-        palette = None
         if isinstance(data, tuple):
-            data, colors = data
-            matrix = toyplot.require.scalar_matrix(data)
-            if isinstance(colors, toyplot.color.Palette):
-                palette = colors
-            elif isinstance(colors, toyplot.color.Map):
-                colormap = colors
+            matrix = toyplot.require.scalar_matrix(data[0])
+            colormap = toyplot.require.instance(data[1], toyplot.color.Map)
         else:
             matrix = toyplot.require.scalar_matrix(data)
-
-        if colormap is None:
-            if palette is None:
-                palette = toyplot.color.brewer("BlueRed")
+            palette = toyplot.color.brewer.palette("BlueRed")
             colormap = toyplot.color.LinearMap(
-                palette, matrix.min(), matrix.max())
+                palette=palette,
+                domain_min=matrix.min(),
+                domain_max=matrix.max(),
+                )
 
         xmin_range, xmax_range, ymin_range, ymax_range = toyplot.layout.region(
-            0, self._width, 0, self._height, bounds=bounds, rect=rect, corner=corner, grid=grid, gutter=gutter)
+            0, self._width, 0, self._height, bounds=bounds, rect=rect, corner=corner, grid=grid, margin=margin)
 
-        table = toyplot.axes.Table(
-            xmin_range,
-            xmax_range,
-            ymin_range,
-            ymax_range,
-            trows=2,
+        table = toyplot.coordinates.Table(
+            annotation=False,
             brows=2,
-            lcols=2,
-            rcols=2,
-            rows=matrix.shape[0],
             columns=matrix.shape[1],
+            filename=filename,
             label=label,
-            parent=self)
+            lcolumns=2,
+            parent=self,
+            rcolumns=2,
+            rows=matrix.shape[0],
+            trows=2,
+            xmax_range=xmax_range,
+            xmin_range=xmin_range,
+            ymax_range=ymax_range,
+            ymin_range=ymin_range,
+            )
 
-        table.top.row(0).height = 20
-        table.top.row(1).height = 20
-        table.bottom.row(0).height = 20
-        table.bottom.row(1).height = 20
-        table.left.column(0).width = 20
-        table.left.column(1).width = 20
-        table.right.column(0).width = 20
-        table.right.column(1).width = 20
+        table.top.row[[0, 1]].height = 20
+        table.bottom.row[[0, 1]].height = 20
+        table.left.column[[0, 1]].width = 20
+        table.right.column[[0, 1]].width = 20
 
-        table.left.column(1).align = "right"
-        table.right.column(0).align = "left"
+        table.left.column[1].align = "right"
+        table.right.column[0].align = "left"
 
+        table.cells.column[[0, -1]].lstyle = {"font-weight":"bold"}
+        table.cells.row[[0, -1]].lstyle = {"font-weight":"bold"}
+
+        # pylint: disable=redefined-variable-type
         if tlabel is not None:
-            cell = table.top.row(0).merge()
+            cell = table.top.row[0].merge()
             cell.data = tlabel
 
         if llabel is not None:
-            cell = table.left.column(0).merge()
+            cell = table.left.column[0].merge()
             cell.data = llabel
             cell.angle = 90
 
         if rlabel is not None:
-            cell = table.right.column(1).merge()
+            cell = table.right.column[1].merge()
             cell.data = rlabel
             cell.angle = 90
 
         if blabel is not None:
-            cell = table.bottom.row(1).merge()
+            cell = table.bottom.row[1].merge()
             cell.data = blabel
 
         if tshow is None:
@@ -529,8 +562,8 @@ class Canvas(object):
             if tlocator is None:
                 tlocator = toyplot.locator.Integer(step=step)
             for j, label, title in zip(*tlocator.ticks(0, matrix.shape[1] - 1)):
-                table.top.cell(1, j).data = label
-                #table.top.cell(1, j).title = title
+                table.top.cell[1, int(j)].data = label
+                #table.top.cell[1, j].title = title
 
         if lshow is None:
             lshow = True
@@ -538,8 +571,8 @@ class Canvas(object):
             if llocator is None:
                 llocator = toyplot.locator.Integer(step=step)
             for i, label, title in zip(*llocator.ticks(0, matrix.shape[0] - 1)):
-                table.left.cell(i, 1).data = label
-                #table.left.cell(i, 1).title = title
+                table.left.cell[int(i), 1].data = label
+                #table.left.cell[i, 1].title = title
 
         if rshow is None and rlocator is not None:
             rshow = True
@@ -547,8 +580,8 @@ class Canvas(object):
             if rlocator is None:
                 rlocator = toyplot.locator.Integer(step=step)
             for i, label, title in zip(*rlocator.ticks(0, matrix.shape[0] - 1)):
-                table.right.cell(i, 0).data = label
-                #table.right.cell(i, 0).title = title
+                table.right.cell[int(i), 0].data = label
+                #table.right.cell[i, 0].title = title
 
         if bshow is None and blocator is not None:
             bshow = True
@@ -556,19 +589,22 @@ class Canvas(object):
             if blocator is None:
                 blocator = toyplot.locator.Integer(step=step)
             for j, label, title in zip(*blocator.ticks(0, matrix.shape[1] - 1)):
-                table.bottom.cell(0, j).data = label
-                #table.bottom.cell(0, j).title = title
+                table.bottom.cell[0, int(j)].data = label
+                #table.bottom.cell[0, j].title = title
+
+        table.body.cells.data = matrix
+        table.body.cells.format = toyplot.format.NullFormatter()
 
         for i, row in enumerate(matrix):
             for j, value in enumerate(row):
-                cell = table.body.cell(i, j)
-                cell.bstyle = {"stroke": "none", "fill": colormap.css(value)}
+                cell = table.body.cell[i, j]
+                cell.style = {"stroke": "none", "fill": colormap.css(value)}
                 cell.title = value
 
         self._children.append(table)
 
         if colorshow:
-            axis = self.color_scale(
+            self.color_scale(
                 colormap=colormap,
                 x1=xmax_range,
                 y1=ymax_range,
@@ -591,19 +627,20 @@ class Canvas(object):
             y1=None,
             x2=None,
             y2=None,
-            width=10,
             bounds=None,
-            rect=None,
             corner=None,
             grid=None,
-            gutter=50,
-            min=None,
-            max=None,
-            show=True,
             label=None,
-            ticklocator=None,
-            scale="linear",
+            margin=50,
+            max=None,
+            min=None,
+            offset=None,
             padding=10,
+            rect=None,
+            scale="linear",
+            show=True,
+            ticklocator=None,
+            width=10,
         ):
         """Add a color scale to the canvas.
 
@@ -629,28 +666,33 @@ class Canvas(object):
 
         Returns
         -------
-        axes: :class:`toyplot.axes.NumberLine`
+        axes: :class:`toyplot.coordinates.Numberline`
         """
         axes = self.numberline(
-            x1=x1,
-            y1=y1,
-            x2=x2,
-            y2=y2,
             bounds=bounds,
-            rect=rect,
             corner=corner,
             grid=grid,
-            gutter=gutter,
-            min=min,
-            max=max,
-            show=show,
             label=label,
-            ticklocator=ticklocator,
-            scale=scale,
+            margin=margin,
+            max=max,
+            min=min,
             padding=padding,
+            palette=None,
+            rect=rect,
+            scale=scale,
+            show=show,
+            ticklocator=ticklocator,
+            x1=x1,
+            x2=x2,
+            y1=y1,
+            y2=y2,
             )
 
-        axes.colormap(colormap)
+        axes.colormap(
+            colormap=colormap,
+            width=width,
+            offset=offset,
+        )
 
         return axes
 
@@ -661,20 +703,21 @@ class Canvas(object):
             x2=None,
             y2=None,
             bounds=None,
-            rect=None,
             corner=None,
             grid=None,
-            gutter=50,
-            min=None,
-            max=None,
-            show=True,
             label=None,
-            ticklocator=None,
-            scale="linear",
-            spacing=None,
+            margin=50,
+            max=None,
+            min=None,
             padding=None,
+            palette=None,
+            rect=None,
+            scale="linear",
+            show=True,
+            spacing=None,
+            ticklocator=None,
         ):
-        """Add a 1D number line to the canvas.
+        """Add a 1D numberline to the canvas.
 
         Parameters
         ----------
@@ -701,10 +744,10 @@ class Canvas(object):
 
         Returns
         -------
-        axes: :class:`toyplot.axes.Cartesian`
+        axes: :class:`toyplot.coordinates.Cartesian`
         """
         xmin_range, xmax_range, ymin_range, ymax_range = toyplot.layout.region(
-            0, self._width, 0, self._height, bounds=bounds, rect=rect, corner=corner, grid=grid, gutter=gutter)
+            0, self._width, 0, self._height, bounds=bounds, rect=rect, corner=corner, grid=grid, margin=margin)
 
         if x1 is None:
             x1 = xmin_range
@@ -740,20 +783,22 @@ class Canvas(object):
         if padding is None:
             padding = spacing
 
-        axes = toyplot.axes.NumberLine(
-            x1=x1,
-            y1=y1,
-            x2=x2,
-            y2=y2,
-            padding=padding,
-            spacing=spacing,
-            min=min,
-            max=max,
-            show=show,
+        axes = toyplot.coordinates.Numberline(
             label=label,
-            ticklocator=ticklocator,
+            max=max,
+            min=min,
+            padding=padding,
+            palette=palette,
+            parent=self,
             scale=scale,
-            parent=self)
+            show=show,
+            spacing=spacing,
+            ticklocator=ticklocator,
+            x1=x1,
+            x2=x2,
+            y1=y1,
+            y2=y2,
+            )
         self._children.append(axes)
         return axes
 
@@ -762,16 +807,19 @@ class Canvas(object):
             data=None,
             rows=None,
             columns=None,
-            hrows=None,
-            brows=None,
-            lcols=None,
-            rcols=None,
-            label=None,
+            annotation=False,
             bounds=None,
-            rect=None,
+            brows=None,
             corner=None,
+            filename=None,
             grid=None,
-            gutter=50):
+            label=None,
+            lcolumns=None,
+            margin=50,
+            rcolumns=None,
+            rect=None,
+            trows=None,
+        ):
         """Add a set of table axes to the canvas.
 
         Parameters
@@ -779,65 +827,150 @@ class Canvas(object):
 
         Returns
         -------
-        axes: :class:`toyplot.axes.Table`
+        axes: :class:`toyplot.coordinates.Table`
         """
         if data is not None:
             data = toyplot.data.Table(data)
             rows = data.shape[0] if rows is None else max(rows, data.shape[0])
             columns = data.shape[1] if columns is None else max(
                 columns, data.shape[1])
-            if hrows is None:
-                hrows = 1
+            if trows is None:
+                trows = 1
         if rows is None or columns is None: # pragma: no cover
             raise ValueError("You must specify data, or rows and columns.")
-        if hrows is None:
-            hrows = 0
+        if trows is None:
+            trows = 0
         if brows is None:
             brows = 0
-        if lcols is None:
-            lcols = 0
-        if rcols is None:
-            rcols = 0
+        if lcolumns is None:
+            lcolumns = 0
+        if rcolumns is None:
+            rcolumns = 0
 
         xmin_range, xmax_range, ymin_range, ymax_range = toyplot.layout.region(
-            0, self._width, 0, self._height, bounds=bounds, rect=rect, corner=corner, grid=grid, gutter=gutter)
-        table = toyplot.axes.Table(
-            xmin_range,
-            xmax_range,
-            ymin_range,
-            ymax_range,
-            rows=rows,
-            columns=columns,
-            label=label,
-            trows=hrows,
+            0, self._width, 0, self._height,
+            bounds=bounds,
+            rect=rect,
+            corner=corner,
+            grid=grid,
+            margin=margin,
+            )
+        table = toyplot.coordinates.Table(
+            annotation=annotation,
             brows=brows,
-            lcols=lcols,
-            rcols=rcols,
-            parent=self)
+            columns=columns,
+            filename=filename,
+            label=label,
+            lcolumns=lcolumns,
+            parent=self,
+            rcolumns=rcolumns,
+            rows=rows,
+            trows=trows,
+            xmax_range=xmax_range,
+            xmin_range=xmin_range,
+            ymax_range=ymax_range,
+            ymin_range=ymin_range,
+            )
 
         if data is not None:
             for j, (key, column) in enumerate(data.items()):
-                if hrows:
-                    table.header.cell(hrows - 1, j).data = key
+                if trows:
+                    table.top.cell[trows - 1, j].data = key
                 for i, (value, mask) in enumerate(zip(column, numpy.ma.getmaskarray(column))):
                     if not mask:
-                        table.body.cell(i, j).data = value
+                        table.body.cell[i, j].data = value
                 if issubclass(column._data.dtype.type, numpy.floating):
-                    if hrows:
-                        table.header.cell(0, j).align = "center"
-                    table.body.column(j).format = toyplot.format.FloatFormatter()
-                    table.body.column(j).align = "separator"
+                    if trows:
+                        table.top.cell[0, j].align = "center"
+                    table.body.cell[:, j].format = toyplot.format.FloatFormatter()
+                    table.body.cell[:, j].align = "separator"
                 elif issubclass(column._data.dtype.type, numpy.character):
-                    table.column(j).align = "left"
+                    table.cells.cell[:, j].align = "left"
                 elif issubclass(column._data.dtype.type, numpy.integer):
-                    table.column(j).align = "right"
+                    table.cells.cell[:, j].align = "right"
 
-        # Enable a single horizontal line between header and body.
-        if hrows:
-            table.grid.hlines[hrows] = "single"
+            if trows:
+                # Format top cells for use as a header
+                table.top.cells.lstyle = {"font-weight": "bold"}
+                # Enable a single horizontal line between top and body.
+                table.cells.grid.hlines[trows] = "single"
 
         self._children.append(table)
         return table
+
+    def image(
+            self,
+            data,
+            bounds=None,
+            corner=None,
+            grid=None,
+            margin=50,
+            rect=None,
+        ):
+        """Add an image to the canvas.
+
+        Parameters
+        ----------
+        data: image, or (image, colormap) tuple
+        bounds: (xmin, xmax, ymin, ymax) tuple, optional
+          Use the bounds property to position / size the image by specifying the
+          position of each of its boundaries.  Assumes CSS pixels if units
+          aren't provided, and supports all units described in :ref:`units`,
+          including percentage of the canvas width / height.
+        rect: (x, y, width, height) tuple, optional
+          Use the rect property to position / size the image by specifying its
+          upper-left-hand corner, width, and height.  Assumes CSS pixels if
+          units aren't provided, and supports all units described in
+          :ref:`units`, including percentage of the canvas width / height.
+        corner: (corner, inset, width, height) tuple, optional
+          Use the corner property to position / size the image by specifying its
+          width and height, plus an inset from a corner of the canvas.  Allowed
+          corner values are "top-left", "top", "top-right", "right",
+          "bottom-right", "bottom", "bottom-left", and "left".  The width and
+          height may be specified using absolute units as described in
+          :ref:`units`, or as a percentage of the canvas width / height.  The
+          inset only supports absolute drawing units.  All units default to CSS
+          pixels if unspecified.
+        grid: (rows, columns, index) tuple, or (rows, columns, i, j) tuple, or (rows, columns, i, rowspan, j, columnspan) tuple, optional
+          Use the grid property to position / size the image using a collection of
+          grid cells filling the canvas.  Specify the number of rows and columns in
+          the grid, then specify either a zero-based cell index (which runs in
+          left-ot-right, top-to-bottom order), a pair of i, j cell coordinates, or
+          a set of i, column-span, j, row-span coordinates so the legend can cover
+          more than one cell.
+        margin: size of the margin around grid cells, optional
+          Specifies the amount of empty space to leave between grid cells When using the
+          `grid` parameter for positioning.  Assumes CSS pixels by default, and supports
+          all of the absolute units described in :ref:`units`.
+        """
+        colormap = None
+        if isinstance(data, tuple):
+            data, colormap = data
+            if not isinstance(colormap, toyplot.color.Map):
+                raise ValueError("Expected toyplot.color.Map, received %s." % colormap) # pragma: no cover
+            data = numpy.atleast_3d(data)
+            if data.shape[2] != 1:
+                raise ValueError("Expected an image with one channel.") # pragma: no cover
+            data = colormap.colors(data)
+
+        xmin_range, xmax_range, ymin_range, ymax_range = toyplot.layout.region(
+            0, self._width, 0, self._height,
+            bounds=bounds,
+            rect=rect,
+            corner=corner,
+            grid=grid,
+            margin=margin,
+            )
+
+        self._children.append(
+            toyplot.mark.Image(
+                xmin_range,
+                xmax_range,
+                ymin_range,
+                ymax_range,
+                data=data,
+                ))
+        return self._children[-1]
 
     def text(
             self,
@@ -872,17 +1005,17 @@ class Canvas(object):
         table = toyplot.data.Table()
         table["x"] = toyplot.require.scalar_vector(x)
         table["y"] = toyplot.require.scalar_vector(y, table.shape[0])
-        table["text"] = toyplot.broadcast.object(text, table.shape[0])
+        table["text"] = toyplot.broadcast.pyobject(text, table.shape[0])
         table["angle"] = toyplot.broadcast.scalar(angle, table.shape[0])
-        table["fill"] = toyplot.broadcast.object(fill, table.shape[0])
+        table["fill"] = toyplot.broadcast.pyobject(fill, table.shape[0])
         table["toyplot:fill"] = toyplot.color.broadcast(
             colors=fill,
             shape=(table.shape[0],),
             default=toyplot.color.near_black,
             )
         table["opacity"] = toyplot.broadcast.scalar(opacity, table.shape[0])
-        table["title"] = toyplot.broadcast.object(title, table.shape[0])
-        style = toyplot.require.style(style, allowed=toyplot.require.style.text)
+        table["title"] = toyplot.broadcast.pyobject(title, table.shape[0])
+        style = toyplot.style.require(style, allowed=toyplot.style.allowed.text)
 
         self._children.append(
             toyplot.mark.Text(
@@ -895,7 +1028,9 @@ class Canvas(object):
                 opacity=["opacity"],
                 title=["title"],
                 style=style,
-                filename=None))
+                annotation=True,
+                filename=None,
+                ))
         return self._children[-1]
 
     def time(self, begin, end, index=None):

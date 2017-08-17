@@ -24,37 +24,45 @@ def _in_range(a, x, b):
     return result
 
 
-class Piecewise(object):
+class Projection(object):
+    """Base class for objects that can map from domain to range and range to domain."""
+    def __call__(self, domain_values):
+        raise NotImplementedError() # pragma: no cover
+
+    def inverse(self, range_values):
+        raise NotImplementedError() # pragma: no cover
+
+
+class Piecewise(Projection):
     """Compute a projection from an arbitrary collection of linear and log segments."""
-
     class Segment(object):
-
         class Container(object):
             pass
 
         def __init__(
                 self,
                 scale,
+                domain_bounds_min,
                 domain_min,
                 domain_max,
-                range_min,
-                range_max,
-                domain_bounds_min,
                 domain_bounds_max,
                 range_bounds_min,
-                range_bounds_max):
+                range_min,
+                range_max,
+                range_bounds_max,
+            ):
             self.scale = scale
             self.domain = Piecewise.Segment.Container()
-            self.domain.min = domain_min
-            self.domain.max = domain_max
             self.domain.bounds = Piecewise.Segment.Container()
             self.domain.bounds.min = domain_bounds_min
+            self.domain.min = domain_min
+            self.domain.max = domain_max
             self.domain.bounds.max = domain_bounds_max
             self.range = Piecewise.Segment.Container()
-            self.range.min = range_min
-            self.range.max = range_max
             self.range.bounds = Piecewise.Segment.Container()
             self.range.bounds.min = range_bounds_min
+            self.range.min = range_min
+            self.range.max = range_max
             self.range.bounds.max = range_bounds_max
 
     def __init__(self, segments):
@@ -136,9 +144,18 @@ def linear(domain_min, domain_max, range_min, range_max):
     """
 
     return Piecewise([
-        Piecewise.Segment("linear", domain_min, domain_max, range_min,
-                          range_max, -numpy.inf, numpy.inf, -numpy.inf, numpy.inf),
-    ])
+        Piecewise.Segment(
+            "linear",
+            -numpy.inf,
+            domain_min,
+            domain_max,
+            numpy.inf,
+            -numpy.inf,
+            range_min,
+            range_max,
+            numpy.inf,
+            ),
+        ])
 
 
 def log(
@@ -148,7 +165,8 @@ def log(
         range_min,
         range_max,
         linear_domain_min=-1,
-        linear_domain_max=1):
+        linear_domain_max=1,
+    ):
     """Return an instance of :class:`toyplot.projection.Piecewise` that performs a log projection.
 
     The returned projection will work correctly with both positive, negative,
@@ -172,52 +190,163 @@ def log(
     projection : :class:`toyplot.projection.Piecewise`
     """
 
-    # Negative domain
-    if domain_max < 0:
-        return Piecewise([
-            Piecewise.Segment(("log", base), domain_min, domain_max, range_min,
-                              range_max, -numpy.inf, numpy.inf, -numpy.inf, numpy.inf),
-        ])
-
-    # Positive domain
+    # Domain is all positive.
     if 0 < domain_min:
         return Piecewise([
-            Piecewise.Segment(("log", base), domain_min, domain_max, range_min,
-                              range_max, -numpy.inf, numpy.inf, -numpy.inf, numpy.inf),
-        ])
+            Piecewise.Segment(
+                "linear",
+                -numpy.inf,
+                domain_min - (domain_max - domain_min),
+                domain_min,
+                domain_min,
+                -numpy.inf,
+                range_min - (range_max - range_min),
+                range_min,
+                range_min,
+                ),
+            Piecewise.Segment(
+                ("log", base),
+                domain_min,
+                domain_min,
+                domain_max,
+                numpy.inf,
+                range_min,
+                range_min,
+                range_max,
+                numpy.inf,
+                ),
+            ])
+
+    # Domain is all negative.
+    if domain_max < 0:
+        return Piecewise([
+            Piecewise.Segment(
+                ("log", base),
+                -numpy.inf,
+                domain_min,
+                domain_max,
+                domain_max,
+                -numpy.inf,
+                range_min,
+                range_max,
+                range_max,
+                ),
+            Piecewise.Segment(
+                "linear",
+                domain_max,
+                domain_max,
+                domain_max + (domain_max - domain_min),
+                numpy.inf,
+                range_max,
+                range_max,
+                range_max + (range_max - range_min),
+                numpy.inf,
+                ),
+            ])
 
     # Mixed negative / positive domain
     if domain_min < linear_domain_min and linear_domain_max < domain_max:
         linear_range_min = mix(range_min, range_max, 0.4)
         linear_range_max = mix(range_min, range_max, 0.6)
         return Piecewise([
-            Piecewise.Segment(("log", base), domain_min, linear_domain_min, range_min,
-                              linear_range_min, -numpy.inf, linear_domain_min, -numpy.inf, linear_range_min),
-            Piecewise.Segment("linear", linear_domain_min, linear_domain_max, linear_range_min,
-                              linear_range_max, linear_domain_min, linear_domain_max, linear_range_min, linear_range_max),
-            Piecewise.Segment(("log", base), linear_domain_max, domain_max, linear_range_max,
-                              range_max, linear_domain_max, numpy.inf, linear_range_max, numpy.inf),
-        ])
+            Piecewise.Segment(
+                ("log", base),
+                -numpy.inf,
+                domain_min,
+                linear_domain_min,
+                linear_domain_min,
+                -numpy.inf,
+                range_min,
+                linear_range_min,
+                linear_range_min,
+                ),
+            Piecewise.Segment(
+                "linear",
+                linear_domain_min,
+                linear_domain_min,
+                linear_domain_max,
+                linear_domain_max,
+                linear_range_min,
+                linear_range_min,
+                linear_range_max,
+                linear_range_max,
+                ),
+            Piecewise.Segment(
+                ("log", base),
+                linear_domain_max,
+                linear_domain_max,
+                domain_max,
+                numpy.inf,
+                linear_range_max,
+                linear_range_max,
+                range_max,
+                numpy.inf,
+                ),
+            ])
 
     if domain_min < linear_domain_min:
         linear_range_min = mix(range_min, range_max, 0.8)
         return Piecewise([
-            Piecewise.Segment(("log", base), domain_min, linear_domain_min, range_min,
-                              linear_range_min, -numpy.inf, linear_domain_min, -numpy.inf, linear_range_min),
-            Piecewise.Segment("linear", linear_domain_min, linear_domain_max, linear_range_min,
-                              range_max, linear_domain_min, numpy.inf, linear_range_min, numpy.inf),
-        ])
+            Piecewise.Segment(
+                ("log", base),
+                -numpy.inf,
+                domain_min,
+                linear_domain_min,
+                linear_domain_min,
+                -numpy.inf,
+                range_min,
+                linear_range_min,
+                linear_range_min,
+                ),
+            Piecewise.Segment(
+                "linear",
+                linear_domain_min,
+                linear_domain_min,
+                linear_domain_max,
+                numpy.inf,
+                linear_range_min,
+                linear_range_min,
+                range_max,
+                numpy.inf,
+                ),
+            ])
 
     if linear_domain_max < domain_max:
         linear_range_max = mix(range_min, range_max, 0.2)
         return Piecewise([
-            Piecewise.Segment("linear", domain_min, linear_domain_max, range_min,
-                              linear_range_max, -numpy.inf, linear_domain_max, -numpy.inf, linear_range_max),
-            Piecewise.Segment(("log", base), linear_domain_max, domain_max, linear_range_max,
-                              range_max, linear_domain_max, numpy.inf, linear_range_max, numpy.inf),
-        ])
+            Piecewise.Segment(
+                "linear",
+                -numpy.inf,
+                domain_min,
+                linear_domain_max,
+                linear_domain_max,
+                -numpy.inf,
+                range_min,
+                linear_range_max,
+                linear_range_max,
+                ),
+            Piecewise.Segment(
+                ("log", base),
+                linear_domain_max,
+                linear_domain_max,
+                domain_max,
+                numpy.inf,
+                linear_range_max,
+                linear_range_max,
+                range_max,
+                numpy.inf,
+                ),
+            ])
 
     return Piecewise([
-        Piecewise.Segment("linear", domain_min, domain_max, range_min,
-                          range_max, -numpy.inf, numpy.inf, -numpy.inf, numpy.inf),
-    ])
+        Piecewise.Segment(
+            "linear",
+            -numpy.inf,
+            domain_min,
+            domain_max,
+            numpy.inf,
+            -numpy.inf,
+            range_min,
+            range_max,
+            numpy.inf),
+        ])

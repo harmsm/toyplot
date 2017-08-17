@@ -15,6 +15,9 @@ scatterplots:
 
     import numpy
     import toyplot
+    
+    import logging
+    logging.basicConfig()
 
 .. code:: python
 
@@ -25,164 +28,334 @@ scatterplots:
 
 .. raw:: html
 
-    <div align="center" class="toyplot" id="t82b6517744e547b7948b355f8e228c9b"><svg height="300.0px" id="t035488e71746442995859fc44ab5af71" preserveAspectRatio="xMidYMid meet" style="background-color:transparent;fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:Helvetica;font-size:12px;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0;stroke-width:1.0" viewBox="0 0 300.0 300.0" width="300.0px" xmlns="http://www.w3.org/2000/svg" xmlns:toyplot="http://www.sandia.gov/toyplot"><g class="toyplot-axes-Cartesian" id="t15048b4892554515ad1ad173f1d9dce0"><clipPath id="t6f8076bc929e4cac9cc980895eef0907"><rect height="220.0" width="220.0" x="40.0" y="40.0"></rect></clipPath><g class="toyplot-coordinate-events" clip-path="url(#t6f8076bc929e4cac9cc980895eef0907)" style="cursor:crosshair"><rect height="220.0" style="pointer-events:all;visibility:hidden" width="220.0" x="40.0" y="40.0"></rect><g class="toyplot-mark-Scatterplot" id="t32365bdc4c2f4884afb8f88a283b4c95" style=""><g class="toyplot-Series"><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="50.0" cy="250.0" r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="60.0" cy="249.4459833795014" r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="70.0" cy="247.78393351800551" r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="80.0" cy="245.01385041551248" r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="90.0" cy="241.13573407202216" r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="100.0" cy="236.14958448753461" r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="110.0" cy="230.05540166204986" r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="120.0" cy="222.85318559556785" r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="130.0" cy="214.54293628808864" r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="140.0" cy="205.1246537396122" r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="150.0" cy="194.5983379501385" r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="160.0" cy="182.96398891966757" r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="170.0" cy="170.22160664819947" r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="180.0" cy="156.37119113573411" r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="190.0" cy="141.41274238227149" r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="200.0" cy="125.34626038781163" r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="210.0" cy="108.17174515235459" r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="220.0" cy="89.889196675900322" r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="230.0" cy="70.498614958448783" r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="240.0" cy="50.0" r="2.0"></circle></g></g></g></g><g class="toyplot-coordinates" style="visibility:hidden"><rect height="14.0" style="fill:rgb(100%,100%,100%);fill-opacity:1.0;opacity:0.75;stroke:none" width="90.0" x="150.0" y="60.0"></rect><text style="alignment-baseline:middle;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" x="195.0" y="67.0"></text></g><g class="toyplot-axes-Axis" id="ted133d86017944ea83879a6e5a72a971" transform="translate(50.0,250.0) rotate(0.0) translate(0,10.0)"><line style="" x1="0" x2="190.0" y1="0" y2="0"></line><g><text style="dominant-baseline:hanging;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(0.0,6)"><tspan style="dominant-baseline:inherit">0</tspan></text><text style="dominant-baseline:hanging;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(50.0,6)"><tspan style="dominant-baseline:inherit">5</tspan></text><text style="dominant-baseline:hanging;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(100.0,6)"><tspan style="dominant-baseline:inherit">10</tspan></text><text style="dominant-baseline:hanging;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(150.0,6)"><tspan style="dominant-baseline:inherit">15</tspan></text><text style="dominant-baseline:hanging;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(200.0,6)"><tspan style="dominant-baseline:inherit">20</tspan></text></g></g><g class="toyplot-axes-Axis" id="t08a8e3dc35854b21a2838a5d62750845" transform="translate(50.0,250.0) rotate(-90.0) translate(0,-10.0)"><line style="" x1="0" x2="200.0" y1="0" y2="0"></line><g><text style="dominant-baseline:alphabetic;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(0.0,-6)"><tspan style="dominant-baseline:inherit">0.0</tspan></text><text style="dominant-baseline:alphabetic;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(100.0,-6)"><tspan style="dominant-baseline:inherit">0.5</tspan></text><text style="dominant-baseline:alphabetic;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(200.0,-6)"><tspan style="dominant-baseline:inherit">1.0</tspan></text></g></g></g></svg><div class="toyplot-controls"><ul class="toyplot-mark-popup" onmouseleave="this.style.visibility='hidden'" style="background:rgba(0%,0%,0%,0.75);border:0;border-radius:6px;color:white;cursor:default;list-style:none;margin:0;padding:5px;position:fixed;visibility:hidden"><li class="toyplot-mark-popup-title" style="color:lightgray;cursor:default;padding:5px;list-style:none;margin:0;"></li><li class="toyplot-mark-popup-save-csv" onmouseout="this.style.color='white';this.style.background='steelblue'" onmouseover="this.style.color='steelblue';this.style.background='white'" style="border-radius:3px;padding:5px;list-style:none;margin:0;">Save as .csv</li></ul><script>
-    (function()
+    <div class="toyplot" id="t2ec2a0bd5cae4c4994fa2a6604616c48" style="text-align:center"><svg class="toyplot-canvas-Canvas" height="300.0px" id="tb3c4b55ae858460397998855c3bc221a" preserveAspectRatio="xMidYMid meet" style="background-color:transparent;fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:Helvetica;font-size:12px;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0;stroke-width:1.0" viewBox="0 0 300.0 300.0" width="300.0px" xmlns="http://www.w3.org/2000/svg" xmlns:toyplot="http://www.sandia.gov/toyplot" xmlns:xlink="http://www.w3.org/1999/xlink"><g class="toyplot-coordinates-Cartesian" id="teaebe3757e834aba9be193d6ad503050"><clipPath id="tb143a0f9754248eeb3c32b6ae8bbf547"><rect height="220.0" width="220.0" x="40.0" y="40.0"></rect></clipPath><g clip-path="url(#tb143a0f9754248eeb3c32b6ae8bbf547)"><g class="toyplot-mark-Scatterplot" id="tc54108dd9049461f8775fefe249db24d"><g class="toyplot-Series"><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(50.0, 250.0)"><circle r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(60.0, 249.4459833795014)"><circle r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(70.0, 247.78393351800551)"><circle r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(80.0, 245.01385041551248)"><circle r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(90.0, 241.13573407202216)"><circle r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(100.0, 236.14958448753461)"><circle r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(110.0, 230.05540166204986)"><circle r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(120.0, 222.85318559556785)"><circle r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(130.0, 214.54293628808864)"><circle r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(140.0, 205.1246537396122)"><circle r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(150.0, 194.5983379501385)"><circle r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(160.0, 182.96398891966757)"><circle r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(170.0, 170.22160664819947)"><circle r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(180.0, 156.37119113573411)"><circle r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(190.0, 141.41274238227149)"><circle r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(200.0, 125.34626038781163)"><circle r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(210.0, 108.17174515235459)"><circle r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(220.0, 89.889196675900322)"><circle r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(230.0, 70.498614958448783)"><circle r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(240.0, 50.0)"><circle r="2.0"></circle></g></g></g></g><g class="toyplot-coordinates-Axis" id="t21abd9b588e84d9781355ef94370df93" transform="translate(50.0,250.0)translate(0,10.0)"><line style="" x1="0" x2="190.0" y1="0" y2="0"></line><g><g transform="translate(0.0,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-2.78" y="8.555">0</text></g><g transform="translate(50.0,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-2.78" y="8.555">5</text></g><g transform="translate(100.0,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-5.56" y="8.555">10</text></g><g transform="translate(150.0,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-5.56" y="8.555">15</text></g><g transform="translate(200.0,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-5.56" y="8.555">20</text></g></g><g class="toyplot-coordinates-Axis-coordinates" style="visibility:hidden" transform=""><line style="stroke:rgb(43.9%,50.2%,56.5%);stroke-opacity:1.0;stroke-width:1.0" x1="0" x2="0" y1="-3.0" y2="4.5"></line><text style="alignment-baseline:alphabetic;fill:rgb(43.9%,50.2%,56.5%);fill-opacity:1.0;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" x="0" y="-6"></text></g></g><g class="toyplot-coordinates-Axis" id="t18e9372aef0d490bbb54453483f96ef5" transform="translate(50.0,250.0)rotate(-90.0)translate(0,-10.0)"><line style="" x1="0" x2="200.0" y1="0" y2="0"></line><g><g transform="translate(0.0,-6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-6.95" y="-4.4408920985e-16">0.0</text></g><g transform="translate(100.0,-6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-6.95" y="-4.4408920985e-16">0.5</text></g><g transform="translate(200.0,-6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-6.95" y="-4.4408920985e-16">1.0</text></g></g><g class="toyplot-coordinates-Axis-coordinates" style="visibility:hidden" transform=""><line style="stroke:rgb(43.9%,50.2%,56.5%);stroke-opacity:1.0;stroke-width:1.0" x1="0" x2="0" y1="3.0" y2="-4.5"></line><text style="alignment-baseline:hanging;fill:rgb(43.9%,50.2%,56.5%);fill-opacity:1.0;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" x="0" y="6"></text></g></g></g></svg><div class="toyplot-behavior"><script>(function()
     {
-      var data_tables = [{"data": [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19], [0.0, 0.0027700831024930744, 0.011080332409972297, 0.02493074792243767, 0.04432132963988919, 0.06925207756232686, 0.09972299168975068, 0.13573407202216065, 0.17728531855955676, 0.22437673130193903, 0.27700831024930744, 0.33518005540166207, 0.39889196675900274, 0.4681440443213295, 0.5429362880886426, 0.6232686980609419, 0.709141274238227, 0.8005540166204984, 0.8975069252077561, 1.0]], "title": "Scatterplot Data", "names": ["x", "y0"], "id": "t32365bdc4c2f4884afb8f88a283b4c95", "filename": "toyplot"}];
-    
-      function save_csv(data_table)
-      {
-        var uri = "data:text/csv;charset=utf-8,";
-        uri += data_table.names.join(",") + "\n";
-        for(var i = 0; i != data_table.data[0].length; ++i)
+    var modules={};
+    modules["toyplot/tables"] = (function()
         {
-          for(var j = 0; j != data_table.data.length; ++j)
-          {
-            if(j)
-              uri += ",";
-            uri += data_table.data[j][i];
-          }
-          uri += "\n";
-        }
-        uri = encodeURI(uri);
+            var tables = [];
     
-        var link = document.createElement("a");
-        if(typeof link.download != "undefined")
-        {
-          link.href = uri;
-          link.style = "visibility:hidden";
-          link.download = data_table.filename + ".csv";
+            var module = {};
     
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-        }
-        else
-        {
-          window.open(uri);
-        }
-      }
-    
-      function open_popup(data_table)
-      {
-        return function(e)
-        {
-          var popup = document.querySelector("#t82b6517744e547b7948b355f8e228c9b .toyplot-mark-popup");
-          popup.querySelector(".toyplot-mark-popup-title").innerHTML = data_table.title;
-          popup.querySelector(".toyplot-mark-popup-save-csv").onclick = function() { popup.style.visibility = "hidden"; save_csv(data_table); }
-          popup.style.left = (e.clientX - 50) + "px";
-          popup.style.top = (e.clientY - 20) + "px";
-          popup.style.visibility = "visible";
-          e.stopPropagation();
-          e.preventDefault();
-        }
-    
-      }
-    
-      for(var i = 0; i != data_tables.length; ++i)
-      {
-        var data_table = data_tables[i];
-        var event_target = document.querySelector("#" + data_table.id);
-        event_target.oncontextmenu = open_popup(data_table);
-      }
-    })();
-    </script><script>
-    (function()
-    {
-      var axes = {"t15048b4892554515ad1ad173f1d9dce0": {"x": [{"domain": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 20.0, "min": 0.0}, "range": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 250.0, "min": 50.0}, "scale": "linear"}], "y": [{"domain": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 1.0, "min": 0.0}, "range": {"bounds": {"max": -Infinity, "min": Infinity}, "max": 50.0, "min": 250.0}, "scale": "linear"}]}};
-    
-      function sign(x)
-      {
-        return x < 0 ? -1 : x > 0 ? 1 : 0;
-      }
-    
-      function _mix(a, b, amount)
-      {
-        return ((1.0 - amount) * a) + (amount * b);
-      }
-    
-      function _log(x, base)
-      {
-        return Math.log(Math.abs(x)) / Math.log(base);
-      }
-    
-      function _in_range(a, x, b)
-      {
-        var left = Math.min(a, b);
-        var right = Math.max(a, b);
-        return left <= x && x <= right;
-      }
-    
-      function to_domain(projection, range)
-      {
-        for(var i = 0; i != projection.length; ++i)
-        {
-          var segment = projection[i];
-          if(_in_range(segment.range.bounds.min, range, segment.range.bounds.max))
-          {
-            if(segment.scale == "linear")
+            module.set = function(owner, key, names, columns)
             {
-              var amount = (range - segment.range.min) / (segment.range.max - segment.range.min);
-              return _mix(segment.domain.min, segment.domain.max, amount)
+                tables.push({owner: owner, key: key, names: names, columns: columns});
             }
-            else if(segment.scale[0] == "log")
+    
+            module.get = function(owner, key)
             {
-              var amount = (range - segment.range.min) / (segment.range.max - segment.range.min);
-              var base = segment.scale[1];
-              return sign(segment.domain.min) * Math.pow(base, _mix(_log(segment.domain.min, base), _log(segment.domain.max, base), amount));
+                for(var i = 0; i != tables.length; ++i)
+                {
+                    var table = tables[i];
+                    if(table.owner != owner)
+                        continue;
+                    if(table.key != key)
+                        continue;
+                    return {names: table.names, columns: table.columns};
+                }
             }
-          }
-        }
-      }
     
-      // Compute mouse coordinates relative to a DOM object, with thanks to d3js.org, where this code originated.
-      function d3_mousePoint(container, e)
-      {
-        if (e.changedTouches) e = e.changedTouches[0];
-        var svg = container.ownerSVGElement || container;
-        if (svg.createSVGPoint) {
-          var point = svg.createSVGPoint();
-          point.x = e.clientX, point.y = e.clientY;
-          point = point.matrixTransform(container.getScreenCTM().inverse());
-          return [point.x, point.y];
-        }
-        var rect = container.getBoundingClientRect();
-        return [e.clientX - rect.left - container.clientLeft, e.clientY - rect.top - container.clientTop];
-      };
+            module.get_csv = function(owner, key)
+            {
+                var table = module.get(owner, key);
+                if(table != undefined)
+                {
+                    var csv = "";
+                    csv += table.names.join(",") + "\n";
+                    for(var i = 0; i != table.columns[0].length; ++i)
+                    {
+                      for(var j = 0; j != table.columns.length; ++j)
+                      {
+                        if(j)
+                          csv += ",";
+                        csv += table.columns[j][i];
+                      }
+                      csv += "\n";
+                    }
+                    return csv;
+                }
+            }
     
-      function display_coordinates(e)
-      {
-        var dom_axes = e.currentTarget.parentElement;
-        var data = axes[dom_axes.id];
-    
-        point = d3_mousePoint(e.target, e);
-        var x = Number(to_domain(data["x"], point[0])).toFixed(2);
-        var y = Number(to_domain(data["y"], point[1])).toFixed(2);
-    
-        var coordinates = dom_axes.querySelectorAll(".toyplot-coordinates");
-        for(var i = 0; i != coordinates.length; ++i)
+            return module;
+        })();
+    modules["toyplot/root/id"] = "t2ec2a0bd5cae4c4994fa2a6604616c48";
+    modules["toyplot/root"] = (function(root_id)
         {
-          coordinates[i].style.visibility = "visible";
-          coordinates[i].querySelector("text").textContent = "x=" + x + " y=" + y;
-        }
-      }
+            return document.querySelector("#" + root_id);
+        })(modules["toyplot/root/id"]);
+    modules["toyplot/canvas/id"] = "tb3c4b55ae858460397998855c3bc221a";
+    modules["toyplot/canvas"] = (function(canvas_id)
+        {
+            return document.querySelector("#" + canvas_id);
+        })(modules["toyplot/canvas/id"]);
+    modules["toyplot/menus/context"] = (function(root, canvas)
+        {
+            var wrapper = document.createElement("div");
+            wrapper.innerHTML = "<ul class='toyplot-context-menu' style='background:#eee; border:1px solid #b8b8b8; border-radius:5px; box-shadow: 0px 0px 8px rgba(0%,0%,0%,0.25); margin:0; padding:3px 0; position:fixed; visibility:hidden;'></ul>"
+            var menu = wrapper.firstChild;
     
-      function clear_coordinates(e)
-      {
-        var dom_axes = e.currentTarget.parentElement;
-        var coordinates = dom_axes.querySelectorAll(".toyplot-coordinates");
-        for(var i = 0; i != coordinates.length; ++i)
-          coordinates[i].style.visibility = "hidden";
-      }
+            root.appendChild(menu);
     
-      for(var axes_id in axes)
-      {
-        var event_target = document.querySelector("#" + axes_id + " .toyplot-coordinate-events");
-        event_target.onmousemove = display_coordinates;
-        event_target.onmouseout = clear_coordinates;
-      }
-    })();
-    </script></div></div>
+            var items = [];
+    
+            var ignore_mouseup = null;
+            function open_menu(e)
+            {
+                var show_menu = false;
+                for(var index=0; index != items.length; ++index)
+                {
+                    var item = items[index];
+                    if(item.show(e))
+                    {
+                        item.item.style.display = "block";
+                        show_menu = true;
+                    }
+                    else
+                    {
+                        item.item.style.display = "none";
+                    }
+                }
+    
+                if(show_menu)
+                {
+                    ignore_mouseup = true;
+                    menu.style.left = (e.clientX + 1) + "px";
+                    menu.style.top = (e.clientY - 5) + "px";
+                    menu.style.visibility = "visible";
+                    e.stopPropagation();
+                    e.preventDefault();
+                }
+            }
+    
+            function close_menu()
+            {
+                menu.style.visibility = "hidden";
+            }
+    
+            function contextmenu(e)
+            {
+                open_menu(e);
+            }
+    
+            function mousemove(e)
+            {
+                ignore_mouseup = false;
+            }
+    
+            function mouseup(e)
+            {
+                if(ignore_mouseup)
+                {
+                    ignore_mouseup = false;
+                    return;
+                }
+                close_menu();
+            }
+    
+            function keydown(e)
+            {
+                if(e.key == "Escape" || e.key == "Esc" || e.keyCode == 27)
+                {
+                    close_menu();
+                }
+            }
+    
+            canvas.addEventListener("contextmenu", contextmenu);
+            canvas.addEventListener("mousemove", mousemove);
+            document.addEventListener("mouseup", mouseup);
+            document.addEventListener("keydown", keydown);
+    
+            var module = {};
+            module.add_item = function(label, show, activate)
+            {
+                var wrapper = document.createElement("div");
+                wrapper.innerHTML = "<li class='toyplot-context-menu-item' style='background:#eee; color:#333; padding:2px 20px; list-style:none; margin:0; text-align:left;'>" + label + "</li>"
+                var item = wrapper.firstChild;
+    
+                items.push({item: item, show: show});
+    
+                function mouseover()
+                {
+                    this.style.background = "steelblue";
+                    this.style.color = "white";
+                }
+    
+                function mouseout()
+                {
+                    this.style.background = "#eee";
+                    this.style.color = "#333";
+                }
+    
+                function choose_item(e)
+                {
+                    close_menu();
+                    activate();
+    
+                    e.stopPropagation();
+                    e.preventDefault();
+                }
+    
+                item.addEventListener("mouseover", mouseover);
+                item.addEventListener("mouseout", mouseout);
+                item.addEventListener("mouseup", choose_item);
+                item.addEventListener("contextmenu", choose_item);
+    
+                menu.appendChild(item);
+            };
+            return module;
+        })(modules["toyplot/root"],modules["toyplot/canvas"]);
+    modules["toyplot/io"] = (function()
+        {
+            var module = {};
+            module.save_file = function(mime_type, charset, data, filename)
+            {
+                var uri = "data:" + mime_type + ";charset=" + charset + "," + data;
+                uri = encodeURI(uri);
+    
+                var link = document.createElement("a");
+                if(typeof link.download != "undefined")
+                {
+                  link.href = uri;
+                  link.style = "visibility:hidden";
+                  link.download = filename;
+    
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+                }
+                else
+                {
+                  window.open(uri);
+                }
+            };
+            return module;
+        })();
+    modules["toyplot.coordinates.Axis"] = (
+            function(canvas)
+            {
+                function sign(x)
+                {
+                    return x < 0 ? -1 : x > 0 ? 1 : 0;
+                }
+    
+                function mix(a, b, amount)
+                {
+                    return ((1.0 - amount) * a) + (amount * b);
+                }
+    
+                function log(x, base)
+                {
+                    return Math.log(Math.abs(x)) / Math.log(base);
+                }
+    
+                function in_range(a, x, b)
+                {
+                    var left = Math.min(a, b);
+                    var right = Math.max(a, b);
+                    return left <= x && x <= right;
+                }
+    
+                function inside(range, projection)
+                {
+                    for(var i = 0; i != projection.length; ++i)
+                    {
+                        var segment = projection[i];
+                        if(in_range(segment.range.min, range, segment.range.max))
+                            return true;
+                    }
+                    return false;
+                }
+    
+                function to_domain(range, projection)
+                {
+                    for(var i = 0; i != projection.length; ++i)
+                    {
+                        var segment = projection[i];
+                        if(in_range(segment.range.bounds.min, range, segment.range.bounds.max))
+                        {
+                            if(segment.scale == "linear")
+                            {
+                                var amount = (range - segment.range.min) / (segment.range.max - segment.range.min);
+                                return mix(segment.domain.min, segment.domain.max, amount)
+                            }
+                            else if(segment.scale[0] == "log")
+                            {
+                                var amount = (range - segment.range.min) / (segment.range.max - segment.range.min);
+                                var base = segment.scale[1];
+                                return sign(segment.domain.min) * Math.pow(base, mix(log(segment.domain.min, base), log(segment.domain.max, base), amount));
+                            }
+                        }
+                    }
+                }
+    
+                var axes = {};
+    
+                function display_coordinates(e)
+                {
+                    var current = canvas.createSVGPoint();
+                    current.x = e.clientX;
+                    current.y = e.clientY;
+    
+                    for(var axis_id in axes)
+                    {
+                        var axis = document.querySelector("#" + axis_id);
+                        var coordinates = axis.querySelector(".toyplot-coordinates-Axis-coordinates");
+                        if(coordinates)
+                        {
+                            var projection = axes[axis_id];
+                            var local = current.matrixTransform(axis.getScreenCTM().inverse());
+                            if(inside(local.x, projection))
+                            {
+                                var domain = to_domain(local.x, projection);
+                                coordinates.style.visibility = "visible";
+                                coordinates.setAttribute("transform", "translate(" + local.x + ")");
+                                var text = coordinates.querySelector("text");
+                                text.textContent = domain.toFixed(2);
+                            }
+                            else
+                            {
+                                coordinates.style.visibility= "hidden";
+                            }
+                        }
+                    }
+                }
+    
+                canvas.addEventListener("click", display_coordinates);
+    
+                var module = {};
+                module.show_coordinates = function(axis_id, projection)
+                {
+                    axes[axis_id] = projection;
+                }
+    
+                return module;
+            })(modules["toyplot/canvas"]);
+    (function(tables, context_menu, io, owner_id, key, label, names, columns, filename)
+            {
+                tables.set(owner_id, key, names, columns);
+    
+                var owner = document.querySelector("#" + owner_id);
+                function show_item(e)
+                {
+                    return owner.contains(e.target);
+                }
+    
+                function choose_item()
+                {
+                    io.save_file("text/csv", "utf-8", tables.get_csv(owner_id, key), filename + ".csv");
+                }
+    
+                context_menu.add_item("Save " + label + " as CSV", show_item, choose_item);
+            })(modules["toyplot/tables"],modules["toyplot/menus/context"],modules["toyplot/io"],"tc54108dd9049461f8775fefe249db24d","data","scatterplot",["x", "y0"],[[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19], [0.0, 0.0027700831024930744, 0.011080332409972297, 0.02493074792243767, 0.04432132963988919, 0.06925207756232686, 0.09972299168975068, 0.13573407202216065, 0.17728531855955676, 0.22437673130193903, 0.27700831024930744, 0.33518005540166207, 0.39889196675900274, 0.4681440443213295, 0.5429362880886426, 0.6232686980609419, 0.709141274238227, 0.8005540166204984, 0.8975069252077561, 1.0]],"toyplot");
+    (function(axis, axis_id, projection)
+            {
+                axis.show_coordinates(axis_id, projection);
+            })(modules["toyplot.coordinates.Axis"],"t21abd9b588e84d9781355ef94370df93",[{"domain": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 20.0, "min": 0.0}, "range": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 200.0, "min": 0.0}, "scale": "linear"}]);
+    (function(axis, axis_id, projection)
+            {
+                axis.show_coordinates(axis_id, projection);
+            })(modules["toyplot.coordinates.Axis"],"t18e9372aef0d490bbb54453483f96ef5",[{"domain": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 1.0, "min": 0.0}, "range": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 200.0, "min": 0.0}, "scale": "linear"}]);
+    })();</script></div></div>
 
 
 Markers can also be added to regular plots to highlight the datums (they
@@ -191,171 +364,366 @@ are turned-off by default):
 .. code:: python
 
     canvas = toyplot.Canvas(600, 300)
-    canvas.axes(grid=(1, 2, 0)).plot(y)
-    canvas.axes(grid=(1, 2, 1)).plot(y, marker="o");
+    canvas.cartesian(grid=(1, 2, 0)).plot(y)
+    canvas.cartesian(grid=(1, 2, 1)).plot(y, marker="o");
 
 
 
 .. raw:: html
 
-    <div align="center" class="toyplot" id="t77f4ac1d80a445ce85c21cd61c4d5656"><svg height="300.0px" id="t0baddb3adec14ca8affa70700a0ea2c8" preserveAspectRatio="xMidYMid meet" style="background-color:transparent;fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:Helvetica;font-size:12px;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0;stroke-width:1.0" viewBox="0 0 600.0 300.0" width="600.0px" xmlns="http://www.w3.org/2000/svg" xmlns:toyplot="http://www.sandia.gov/toyplot"><g class="toyplot-axes-Cartesian" id="t7bccdaed6717460fb685927d659a6b54"><clipPath id="t6fa6829aa5f6410d98dd59629dcb6800"><rect height="220.0" width="220.0" x="40.0" y="40.0"></rect></clipPath><g class="toyplot-coordinate-events" clip-path="url(#t6fa6829aa5f6410d98dd59629dcb6800)" style="cursor:crosshair"><rect height="220.0" style="pointer-events:all;visibility:hidden" width="220.0" x="40.0" y="40.0"></rect><g class="toyplot-mark-Plot" id="tb9a0d653bf134cd6bdcf902b6020ce15" style="fill:none"><g class="toyplot-Series"><path d="M 50.0 250.0 L 60.0 249.4459833795014 L 70.0 247.78393351800551 L 80.0 245.01385041551248 L 90.0 241.13573407202216 L 100.0 236.14958448753461 L 110.0 230.05540166204986 L 120.0 222.85318559556785 L 130.0 214.54293628808864 L 140.0 205.1246537396122 L 150.0 194.5983379501385 L 160.0 182.96398891966757 L 170.0 170.22160664819947 L 180.0 156.37119113573411 L 190.0 141.41274238227149 L 200.0 125.34626038781163 L 210.0 108.17174515235459 L 220.0 89.889196675900322 L 230.0 70.498614958448783 L 240.0 50.0" style="stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0;stroke-width:2.0"></path></g></g></g><g class="toyplot-coordinates" style="visibility:hidden"><rect height="14.0" style="fill:rgb(100%,100%,100%);fill-opacity:1.0;opacity:0.75;stroke:none" width="90.0" x="150.0" y="60.0"></rect><text style="alignment-baseline:middle;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" x="195.0" y="67.0"></text></g><g class="toyplot-axes-Axis" id="t2621effbce5a450bb71d409a4e495bd2" transform="translate(50.0,250.0) rotate(0.0) translate(0,10.0)"><line style="" x1="0" x2="190.0" y1="0" y2="0"></line><g><text style="dominant-baseline:hanging;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(0.0,6)"><tspan style="dominant-baseline:inherit">0</tspan></text><text style="dominant-baseline:hanging;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(50.0,6)"><tspan style="dominant-baseline:inherit">5</tspan></text><text style="dominant-baseline:hanging;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(100.0,6)"><tspan style="dominant-baseline:inherit">10</tspan></text><text style="dominant-baseline:hanging;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(150.0,6)"><tspan style="dominant-baseline:inherit">15</tspan></text><text style="dominant-baseline:hanging;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(200.0,6)"><tspan style="dominant-baseline:inherit">20</tspan></text></g></g><g class="toyplot-axes-Axis" id="t53e8032ef1cd42aeb3e1908eddec8fd4" transform="translate(50.0,250.0) rotate(-90.0) translate(0,-10.0)"><line style="" x1="0" x2="200.0" y1="0" y2="0"></line><g><text style="dominant-baseline:alphabetic;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(0.0,-6)"><tspan style="dominant-baseline:inherit">0.0</tspan></text><text style="dominant-baseline:alphabetic;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(100.0,-6)"><tspan style="dominant-baseline:inherit">0.5</tspan></text><text style="dominant-baseline:alphabetic;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(200.0,-6)"><tspan style="dominant-baseline:inherit">1.0</tspan></text></g></g></g><g class="toyplot-axes-Cartesian" id="tb9668f2a2e444a5dbce55dd0d1a86230"><clipPath id="taea2b2016e9343dda176ad0ac7049f52"><rect height="220.0" width="220.0" x="340.0" y="40.0"></rect></clipPath><g class="toyplot-coordinate-events" clip-path="url(#taea2b2016e9343dda176ad0ac7049f52)" style="cursor:crosshair"><rect height="220.0" style="pointer-events:all;visibility:hidden" width="220.0" x="340.0" y="40.0"></rect><g class="toyplot-mark-Plot" id="ta2c63f56371b48c7ae13c8345307048f" style="fill:none"><g class="toyplot-Series"><path d="M 350.0 250.0 L 360.0 249.4459833795014 L 370.0 247.78393351800551 L 380.0 245.01385041551248 L 390.0 241.13573407202216 L 400.0 236.14958448753461 L 410.0 230.05540166204986 L 420.0 222.85318559556785 L 430.0 214.54293628808864 L 440.0 205.1246537396122 L 450.0 194.5983379501385 L 460.0 182.96398891966757 L 470.0 170.22160664819947 L 480.0 156.37119113573411 L 490.0 141.41274238227149 L 500.0 125.34626038781163 L 510.0 108.17174515235459 L 520.0 89.889196675900322 L 530.0 70.498614958448783 L 540.0 50.0" style="stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0;stroke-width:2.0"></path><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="350.0" cy="250.0" r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="360.0" cy="249.4459833795014" r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="370.0" cy="247.78393351800551" r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="380.0" cy="245.01385041551248" r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="390.0" cy="241.13573407202216" r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="400.0" cy="236.14958448753461" r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="410.0" cy="230.05540166204986" r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="420.0" cy="222.85318559556785" r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="430.0" cy="214.54293628808864" r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="440.0" cy="205.1246537396122" r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="450.0" cy="194.5983379501385" r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="460.0" cy="182.96398891966757" r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="470.0" cy="170.22160664819947" r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="480.0" cy="156.37119113573411" r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="490.0" cy="141.41274238227149" r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="500.0" cy="125.34626038781163" r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="510.0" cy="108.17174515235459" r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="520.0" cy="89.889196675900322" r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="530.0" cy="70.498614958448783" r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="540.0" cy="50.0" r="2.0"></circle></g></g></g></g><g class="toyplot-coordinates" style="visibility:hidden"><rect height="14.0" style="fill:rgb(100%,100%,100%);fill-opacity:1.0;opacity:0.75;stroke:none" width="90.0" x="450.0" y="60.0"></rect><text style="alignment-baseline:middle;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" x="495.0" y="67.0"></text></g><g class="toyplot-axes-Axis" id="ta5e17834b3214c45b24c4d0c454c36e0" transform="translate(350.0,250.0) rotate(0.0) translate(0,10.0)"><line style="" x1="0" x2="190.0" y1="0" y2="0"></line><g><text style="dominant-baseline:hanging;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(0.0,6)"><tspan style="dominant-baseline:inherit">0</tspan></text><text style="dominant-baseline:hanging;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(50.0,6)"><tspan style="dominant-baseline:inherit">5</tspan></text><text style="dominant-baseline:hanging;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(100.0,6)"><tspan style="dominant-baseline:inherit">10</tspan></text><text style="dominant-baseline:hanging;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(150.0,6)"><tspan style="dominant-baseline:inherit">15</tspan></text><text style="dominant-baseline:hanging;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(200.0,6)"><tspan style="dominant-baseline:inherit">20</tspan></text></g></g><g class="toyplot-axes-Axis" id="t6f143352ac98486ebc7f53fb213357af" transform="translate(350.0,250.0) rotate(-90.0) translate(0,-10.0)"><line style="" x1="0" x2="200.0" y1="0" y2="0"></line><g><text style="dominant-baseline:alphabetic;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(0.0,-6)"><tspan style="dominant-baseline:inherit">0.0</tspan></text><text style="dominant-baseline:alphabetic;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(100.0,-6)"><tspan style="dominant-baseline:inherit">0.5</tspan></text><text style="dominant-baseline:alphabetic;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(200.0,-6)"><tspan style="dominant-baseline:inherit">1.0</tspan></text></g></g></g></svg><div class="toyplot-controls"><ul class="toyplot-mark-popup" onmouseleave="this.style.visibility='hidden'" style="background:rgba(0%,0%,0%,0.75);border:0;border-radius:6px;color:white;cursor:default;list-style:none;margin:0;padding:5px;position:fixed;visibility:hidden"><li class="toyplot-mark-popup-title" style="color:lightgray;cursor:default;padding:5px;list-style:none;margin:0;"></li><li class="toyplot-mark-popup-save-csv" onmouseout="this.style.color='white';this.style.background='steelblue'" onmouseover="this.style.color='steelblue';this.style.background='white'" style="border-radius:3px;padding:5px;list-style:none;margin:0;">Save as .csv</li></ul><script>
-    (function()
+    <div class="toyplot" id="t20775cbc210f458f91502e0e94eeeb24" style="text-align:center"><svg class="toyplot-canvas-Canvas" height="300.0px" id="ta7e37d3587cc4c8db0cb465d1a81395d" preserveAspectRatio="xMidYMid meet" style="background-color:transparent;fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:Helvetica;font-size:12px;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0;stroke-width:1.0" viewBox="0 0 600.0 300.0" width="600.0px" xmlns="http://www.w3.org/2000/svg" xmlns:toyplot="http://www.sandia.gov/toyplot" xmlns:xlink="http://www.w3.org/1999/xlink"><g class="toyplot-coordinates-Cartesian" id="t77fcb602644c4ee0833c4fa391170d19"><clipPath id="tcea09e726c3a415eada737fba2ab101e"><rect height="220.0" width="220.0" x="40.0" y="40.0"></rect></clipPath><g clip-path="url(#tcea09e726c3a415eada737fba2ab101e)"><g class="toyplot-mark-Plot" id="tb3e32ab0eb8d45a58e7837d409adc2bf" style="fill:none"><g class="toyplot-Series"><path d="M 50.0 250.0 L 60.0 249.4459833795014 L 70.0 247.78393351800551 L 80.0 245.01385041551248 L 90.0 241.13573407202216 L 100.0 236.14958448753461 L 110.0 230.05540166204986 L 120.0 222.85318559556785 L 130.0 214.54293628808864 L 140.0 205.1246537396122 L 150.0 194.5983379501385 L 160.0 182.96398891966757 L 170.0 170.22160664819947 L 180.0 156.37119113573411 L 190.0 141.41274238227149 L 200.0 125.34626038781163 L 210.0 108.17174515235459 L 220.0 89.889196675900322 L 230.0 70.498614958448783 L 240.0 50.0" style="stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0;stroke-width:2.0"></path></g></g></g><g class="toyplot-coordinates-Axis" id="tf6a272bb8d6b44e1883ce4d7f9d30465" transform="translate(50.0,250.0)translate(0,10.0)"><line style="" x1="0" x2="190.0" y1="0" y2="0"></line><g><g transform="translate(0.0,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-2.78" y="8.555">0</text></g><g transform="translate(50.0,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-2.78" y="8.555">5</text></g><g transform="translate(100.0,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-5.56" y="8.555">10</text></g><g transform="translate(150.0,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-5.56" y="8.555">15</text></g><g transform="translate(200.0,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-5.56" y="8.555">20</text></g></g><g class="toyplot-coordinates-Axis-coordinates" style="visibility:hidden" transform=""><line style="stroke:rgb(43.9%,50.2%,56.5%);stroke-opacity:1.0;stroke-width:1.0" x1="0" x2="0" y1="-3.0" y2="4.5"></line><text style="alignment-baseline:alphabetic;fill:rgb(43.9%,50.2%,56.5%);fill-opacity:1.0;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" x="0" y="-6"></text></g></g><g class="toyplot-coordinates-Axis" id="tdd826ad5a9e945f081d7f8889d9a27a7" transform="translate(50.0,250.0)rotate(-90.0)translate(0,-10.0)"><line style="" x1="0" x2="200.0" y1="0" y2="0"></line><g><g transform="translate(0.0,-6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-6.95" y="-4.4408920985e-16">0.0</text></g><g transform="translate(100.0,-6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-6.95" y="-4.4408920985e-16">0.5</text></g><g transform="translate(200.0,-6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-6.95" y="-4.4408920985e-16">1.0</text></g></g><g class="toyplot-coordinates-Axis-coordinates" style="visibility:hidden" transform=""><line style="stroke:rgb(43.9%,50.2%,56.5%);stroke-opacity:1.0;stroke-width:1.0" x1="0" x2="0" y1="3.0" y2="-4.5"></line><text style="alignment-baseline:hanging;fill:rgb(43.9%,50.2%,56.5%);fill-opacity:1.0;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" x="0" y="6"></text></g></g></g><g class="toyplot-coordinates-Cartesian" id="t22ce3da97b364107a49a9a864e60b761"><clipPath id="t537a4ed35c5445fab7afd0a06357c063"><rect height="220.0" width="220.0" x="340.0" y="40.0"></rect></clipPath><g clip-path="url(#t537a4ed35c5445fab7afd0a06357c063)"><g class="toyplot-mark-Plot" id="t3cee09476c5a49049ef3f58120031187" style="fill:none"><g class="toyplot-Series"><path d="M 350.0 250.0 L 360.0 249.4459833795014 L 370.0 247.78393351800551 L 380.0 245.01385041551248 L 390.0 241.13573407202216 L 400.0 236.14958448753461 L 410.0 230.05540166204986 L 420.0 222.85318559556785 L 430.0 214.54293628808864 L 440.0 205.1246537396122 L 450.0 194.5983379501385 L 460.0 182.96398891966757 L 470.0 170.22160664819947 L 480.0 156.37119113573411 L 490.0 141.41274238227149 L 500.0 125.34626038781163 L 510.0 108.17174515235459 L 520.0 89.889196675900322 L 530.0 70.498614958448783 L 540.0 50.0" style="stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0;stroke-width:2.0"></path><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(350.0, 250.0)"><circle r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(360.0, 249.4459833795014)"><circle r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(370.0, 247.78393351800551)"><circle r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(380.0, 245.01385041551248)"><circle r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(390.0, 241.13573407202216)"><circle r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(400.0, 236.14958448753461)"><circle r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(410.0, 230.05540166204986)"><circle r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(420.0, 222.85318559556785)"><circle r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(430.0, 214.54293628808864)"><circle r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(440.0, 205.1246537396122)"><circle r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(450.0, 194.5983379501385)"><circle r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(460.0, 182.96398891966757)"><circle r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(470.0, 170.22160664819947)"><circle r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(480.0, 156.37119113573411)"><circle r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(490.0, 141.41274238227149)"><circle r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(500.0, 125.34626038781163)"><circle r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(510.0, 108.17174515235459)"><circle r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(520.0, 89.889196675900322)"><circle r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(530.0, 70.498614958448783)"><circle r="2.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(540.0, 50.0)"><circle r="2.0"></circle></g></g></g></g><g class="toyplot-coordinates-Axis" id="tf8a1a27dac2048ea973a3d1407c0e0de" transform="translate(350.0,250.0)translate(0,10.0)"><line style="" x1="0" x2="190.0" y1="0" y2="0"></line><g><g transform="translate(0.0,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-2.78" y="8.555">0</text></g><g transform="translate(50.0,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-2.78" y="8.555">5</text></g><g transform="translate(100.0,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-5.56" y="8.555">10</text></g><g transform="translate(150.0,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-5.56" y="8.555">15</text></g><g transform="translate(200.0,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-5.56" y="8.555">20</text></g></g><g class="toyplot-coordinates-Axis-coordinates" style="visibility:hidden" transform=""><line style="stroke:rgb(43.9%,50.2%,56.5%);stroke-opacity:1.0;stroke-width:1.0" x1="0" x2="0" y1="-3.0" y2="4.5"></line><text style="alignment-baseline:alphabetic;fill:rgb(43.9%,50.2%,56.5%);fill-opacity:1.0;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" x="0" y="-6"></text></g></g><g class="toyplot-coordinates-Axis" id="ta76c4cedfc06410aad7f81e61fa31556" transform="translate(350.0,250.0)rotate(-90.0)translate(0,-10.0)"><line style="" x1="0" x2="200.0" y1="0" y2="0"></line><g><g transform="translate(0.0,-6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-6.95" y="-4.4408920985e-16">0.0</text></g><g transform="translate(100.0,-6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-6.95" y="-4.4408920985e-16">0.5</text></g><g transform="translate(200.0,-6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-6.95" y="-4.4408920985e-16">1.0</text></g></g><g class="toyplot-coordinates-Axis-coordinates" style="visibility:hidden" transform=""><line style="stroke:rgb(43.9%,50.2%,56.5%);stroke-opacity:1.0;stroke-width:1.0" x1="0" x2="0" y1="3.0" y2="-4.5"></line><text style="alignment-baseline:hanging;fill:rgb(43.9%,50.2%,56.5%);fill-opacity:1.0;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" x="0" y="6"></text></g></g></g></svg><div class="toyplot-behavior"><script>(function()
     {
-      var data_tables = [{"data": [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19], [0.0, 0.0027700831024930744, 0.011080332409972297, 0.02493074792243767, 0.04432132963988919, 0.06925207756232686, 0.09972299168975068, 0.13573407202216065, 0.17728531855955676, 0.22437673130193903, 0.27700831024930744, 0.33518005540166207, 0.39889196675900274, 0.4681440443213295, 0.5429362880886426, 0.6232686980609419, 0.709141274238227, 0.8005540166204984, 0.8975069252077561, 1.0]], "title": "Plot Data", "names": ["x", "y0"], "id": "tb9a0d653bf134cd6bdcf902b6020ce15", "filename": "toyplot"}, {"data": [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19], [0.0, 0.0027700831024930744, 0.011080332409972297, 0.02493074792243767, 0.04432132963988919, 0.06925207756232686, 0.09972299168975068, 0.13573407202216065, 0.17728531855955676, 0.22437673130193903, 0.27700831024930744, 0.33518005540166207, 0.39889196675900274, 0.4681440443213295, 0.5429362880886426, 0.6232686980609419, 0.709141274238227, 0.8005540166204984, 0.8975069252077561, 1.0]], "title": "Plot Data", "names": ["x", "y0"], "id": "ta2c63f56371b48c7ae13c8345307048f", "filename": "toyplot"}];
-    
-      function save_csv(data_table)
-      {
-        var uri = "data:text/csv;charset=utf-8,";
-        uri += data_table.names.join(",") + "\n";
-        for(var i = 0; i != data_table.data[0].length; ++i)
+    var modules={};
+    modules["toyplot/tables"] = (function()
         {
-          for(var j = 0; j != data_table.data.length; ++j)
-          {
-            if(j)
-              uri += ",";
-            uri += data_table.data[j][i];
-          }
-          uri += "\n";
-        }
-        uri = encodeURI(uri);
+            var tables = [];
     
-        var link = document.createElement("a");
-        if(typeof link.download != "undefined")
-        {
-          link.href = uri;
-          link.style = "visibility:hidden";
-          link.download = data_table.filename + ".csv";
+            var module = {};
     
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-        }
-        else
-        {
-          window.open(uri);
-        }
-      }
-    
-      function open_popup(data_table)
-      {
-        return function(e)
-        {
-          var popup = document.querySelector("#t77f4ac1d80a445ce85c21cd61c4d5656 .toyplot-mark-popup");
-          popup.querySelector(".toyplot-mark-popup-title").innerHTML = data_table.title;
-          popup.querySelector(".toyplot-mark-popup-save-csv").onclick = function() { popup.style.visibility = "hidden"; save_csv(data_table); }
-          popup.style.left = (e.clientX - 50) + "px";
-          popup.style.top = (e.clientY - 20) + "px";
-          popup.style.visibility = "visible";
-          e.stopPropagation();
-          e.preventDefault();
-        }
-    
-      }
-    
-      for(var i = 0; i != data_tables.length; ++i)
-      {
-        var data_table = data_tables[i];
-        var event_target = document.querySelector("#" + data_table.id);
-        event_target.oncontextmenu = open_popup(data_table);
-      }
-    })();
-    </script><script>
-    (function()
-    {
-      var axes = {"t7bccdaed6717460fb685927d659a6b54": {"x": [{"domain": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 20.0, "min": 0.0}, "range": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 250.0, "min": 50.0}, "scale": "linear"}], "y": [{"domain": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 1.0, "min": 0.0}, "range": {"bounds": {"max": -Infinity, "min": Infinity}, "max": 50.0, "min": 250.0}, "scale": "linear"}]}, "tb9668f2a2e444a5dbce55dd0d1a86230": {"x": [{"domain": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 20.0, "min": 0.0}, "range": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 550.0, "min": 350.0}, "scale": "linear"}], "y": [{"domain": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 1.0, "min": 0.0}, "range": {"bounds": {"max": -Infinity, "min": Infinity}, "max": 50.0, "min": 250.0}, "scale": "linear"}]}};
-    
-      function sign(x)
-      {
-        return x < 0 ? -1 : x > 0 ? 1 : 0;
-      }
-    
-      function _mix(a, b, amount)
-      {
-        return ((1.0 - amount) * a) + (amount * b);
-      }
-    
-      function _log(x, base)
-      {
-        return Math.log(Math.abs(x)) / Math.log(base);
-      }
-    
-      function _in_range(a, x, b)
-      {
-        var left = Math.min(a, b);
-        var right = Math.max(a, b);
-        return left <= x && x <= right;
-      }
-    
-      function to_domain(projection, range)
-      {
-        for(var i = 0; i != projection.length; ++i)
-        {
-          var segment = projection[i];
-          if(_in_range(segment.range.bounds.min, range, segment.range.bounds.max))
-          {
-            if(segment.scale == "linear")
+            module.set = function(owner, key, names, columns)
             {
-              var amount = (range - segment.range.min) / (segment.range.max - segment.range.min);
-              return _mix(segment.domain.min, segment.domain.max, amount)
+                tables.push({owner: owner, key: key, names: names, columns: columns});
             }
-            else if(segment.scale[0] == "log")
+    
+            module.get = function(owner, key)
             {
-              var amount = (range - segment.range.min) / (segment.range.max - segment.range.min);
-              var base = segment.scale[1];
-              return sign(segment.domain.min) * Math.pow(base, _mix(_log(segment.domain.min, base), _log(segment.domain.max, base), amount));
+                for(var i = 0; i != tables.length; ++i)
+                {
+                    var table = tables[i];
+                    if(table.owner != owner)
+                        continue;
+                    if(table.key != key)
+                        continue;
+                    return {names: table.names, columns: table.columns};
+                }
             }
-          }
-        }
-      }
     
-      // Compute mouse coordinates relative to a DOM object, with thanks to d3js.org, where this code originated.
-      function d3_mousePoint(container, e)
-      {
-        if (e.changedTouches) e = e.changedTouches[0];
-        var svg = container.ownerSVGElement || container;
-        if (svg.createSVGPoint) {
-          var point = svg.createSVGPoint();
-          point.x = e.clientX, point.y = e.clientY;
-          point = point.matrixTransform(container.getScreenCTM().inverse());
-          return [point.x, point.y];
-        }
-        var rect = container.getBoundingClientRect();
-        return [e.clientX - rect.left - container.clientLeft, e.clientY - rect.top - container.clientTop];
-      };
+            module.get_csv = function(owner, key)
+            {
+                var table = module.get(owner, key);
+                if(table != undefined)
+                {
+                    var csv = "";
+                    csv += table.names.join(",") + "\n";
+                    for(var i = 0; i != table.columns[0].length; ++i)
+                    {
+                      for(var j = 0; j != table.columns.length; ++j)
+                      {
+                        if(j)
+                          csv += ",";
+                        csv += table.columns[j][i];
+                      }
+                      csv += "\n";
+                    }
+                    return csv;
+                }
+            }
     
-      function display_coordinates(e)
-      {
-        var dom_axes = e.currentTarget.parentElement;
-        var data = axes[dom_axes.id];
-    
-        point = d3_mousePoint(e.target, e);
-        var x = Number(to_domain(data["x"], point[0])).toFixed(2);
-        var y = Number(to_domain(data["y"], point[1])).toFixed(2);
-    
-        var coordinates = dom_axes.querySelectorAll(".toyplot-coordinates");
-        for(var i = 0; i != coordinates.length; ++i)
+            return module;
+        })();
+    modules["toyplot/root/id"] = "t20775cbc210f458f91502e0e94eeeb24";
+    modules["toyplot/root"] = (function(root_id)
         {
-          coordinates[i].style.visibility = "visible";
-          coordinates[i].querySelector("text").textContent = "x=" + x + " y=" + y;
-        }
-      }
+            return document.querySelector("#" + root_id);
+        })(modules["toyplot/root/id"]);
+    modules["toyplot/canvas/id"] = "ta7e37d3587cc4c8db0cb465d1a81395d";
+    modules["toyplot/canvas"] = (function(canvas_id)
+        {
+            return document.querySelector("#" + canvas_id);
+        })(modules["toyplot/canvas/id"]);
+    modules["toyplot/menus/context"] = (function(root, canvas)
+        {
+            var wrapper = document.createElement("div");
+            wrapper.innerHTML = "<ul class='toyplot-context-menu' style='background:#eee; border:1px solid #b8b8b8; border-radius:5px; box-shadow: 0px 0px 8px rgba(0%,0%,0%,0.25); margin:0; padding:3px 0; position:fixed; visibility:hidden;'></ul>"
+            var menu = wrapper.firstChild;
     
-      function clear_coordinates(e)
-      {
-        var dom_axes = e.currentTarget.parentElement;
-        var coordinates = dom_axes.querySelectorAll(".toyplot-coordinates");
-        for(var i = 0; i != coordinates.length; ++i)
-          coordinates[i].style.visibility = "hidden";
-      }
+            root.appendChild(menu);
     
-      for(var axes_id in axes)
-      {
-        var event_target = document.querySelector("#" + axes_id + " .toyplot-coordinate-events");
-        event_target.onmousemove = display_coordinates;
-        event_target.onmouseout = clear_coordinates;
-      }
-    })();
-    </script></div></div>
+            var items = [];
+    
+            var ignore_mouseup = null;
+            function open_menu(e)
+            {
+                var show_menu = false;
+                for(var index=0; index != items.length; ++index)
+                {
+                    var item = items[index];
+                    if(item.show(e))
+                    {
+                        item.item.style.display = "block";
+                        show_menu = true;
+                    }
+                    else
+                    {
+                        item.item.style.display = "none";
+                    }
+                }
+    
+                if(show_menu)
+                {
+                    ignore_mouseup = true;
+                    menu.style.left = (e.clientX + 1) + "px";
+                    menu.style.top = (e.clientY - 5) + "px";
+                    menu.style.visibility = "visible";
+                    e.stopPropagation();
+                    e.preventDefault();
+                }
+            }
+    
+            function close_menu()
+            {
+                menu.style.visibility = "hidden";
+            }
+    
+            function contextmenu(e)
+            {
+                open_menu(e);
+            }
+    
+            function mousemove(e)
+            {
+                ignore_mouseup = false;
+            }
+    
+            function mouseup(e)
+            {
+                if(ignore_mouseup)
+                {
+                    ignore_mouseup = false;
+                    return;
+                }
+                close_menu();
+            }
+    
+            function keydown(e)
+            {
+                if(e.key == "Escape" || e.key == "Esc" || e.keyCode == 27)
+                {
+                    close_menu();
+                }
+            }
+    
+            canvas.addEventListener("contextmenu", contextmenu);
+            canvas.addEventListener("mousemove", mousemove);
+            document.addEventListener("mouseup", mouseup);
+            document.addEventListener("keydown", keydown);
+    
+            var module = {};
+            module.add_item = function(label, show, activate)
+            {
+                var wrapper = document.createElement("div");
+                wrapper.innerHTML = "<li class='toyplot-context-menu-item' style='background:#eee; color:#333; padding:2px 20px; list-style:none; margin:0; text-align:left;'>" + label + "</li>"
+                var item = wrapper.firstChild;
+    
+                items.push({item: item, show: show});
+    
+                function mouseover()
+                {
+                    this.style.background = "steelblue";
+                    this.style.color = "white";
+                }
+    
+                function mouseout()
+                {
+                    this.style.background = "#eee";
+                    this.style.color = "#333";
+                }
+    
+                function choose_item(e)
+                {
+                    close_menu();
+                    activate();
+    
+                    e.stopPropagation();
+                    e.preventDefault();
+                }
+    
+                item.addEventListener("mouseover", mouseover);
+                item.addEventListener("mouseout", mouseout);
+                item.addEventListener("mouseup", choose_item);
+                item.addEventListener("contextmenu", choose_item);
+    
+                menu.appendChild(item);
+            };
+            return module;
+        })(modules["toyplot/root"],modules["toyplot/canvas"]);
+    modules["toyplot/io"] = (function()
+        {
+            var module = {};
+            module.save_file = function(mime_type, charset, data, filename)
+            {
+                var uri = "data:" + mime_type + ";charset=" + charset + "," + data;
+                uri = encodeURI(uri);
+    
+                var link = document.createElement("a");
+                if(typeof link.download != "undefined")
+                {
+                  link.href = uri;
+                  link.style = "visibility:hidden";
+                  link.download = filename;
+    
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+                }
+                else
+                {
+                  window.open(uri);
+                }
+            };
+            return module;
+        })();
+    modules["toyplot.coordinates.Axis"] = (
+            function(canvas)
+            {
+                function sign(x)
+                {
+                    return x < 0 ? -1 : x > 0 ? 1 : 0;
+                }
+    
+                function mix(a, b, amount)
+                {
+                    return ((1.0 - amount) * a) + (amount * b);
+                }
+    
+                function log(x, base)
+                {
+                    return Math.log(Math.abs(x)) / Math.log(base);
+                }
+    
+                function in_range(a, x, b)
+                {
+                    var left = Math.min(a, b);
+                    var right = Math.max(a, b);
+                    return left <= x && x <= right;
+                }
+    
+                function inside(range, projection)
+                {
+                    for(var i = 0; i != projection.length; ++i)
+                    {
+                        var segment = projection[i];
+                        if(in_range(segment.range.min, range, segment.range.max))
+                            return true;
+                    }
+                    return false;
+                }
+    
+                function to_domain(range, projection)
+                {
+                    for(var i = 0; i != projection.length; ++i)
+                    {
+                        var segment = projection[i];
+                        if(in_range(segment.range.bounds.min, range, segment.range.bounds.max))
+                        {
+                            if(segment.scale == "linear")
+                            {
+                                var amount = (range - segment.range.min) / (segment.range.max - segment.range.min);
+                                return mix(segment.domain.min, segment.domain.max, amount)
+                            }
+                            else if(segment.scale[0] == "log")
+                            {
+                                var amount = (range - segment.range.min) / (segment.range.max - segment.range.min);
+                                var base = segment.scale[1];
+                                return sign(segment.domain.min) * Math.pow(base, mix(log(segment.domain.min, base), log(segment.domain.max, base), amount));
+                            }
+                        }
+                    }
+                }
+    
+                var axes = {};
+    
+                function display_coordinates(e)
+                {
+                    var current = canvas.createSVGPoint();
+                    current.x = e.clientX;
+                    current.y = e.clientY;
+    
+                    for(var axis_id in axes)
+                    {
+                        var axis = document.querySelector("#" + axis_id);
+                        var coordinates = axis.querySelector(".toyplot-coordinates-Axis-coordinates");
+                        if(coordinates)
+                        {
+                            var projection = axes[axis_id];
+                            var local = current.matrixTransform(axis.getScreenCTM().inverse());
+                            if(inside(local.x, projection))
+                            {
+                                var domain = to_domain(local.x, projection);
+                                coordinates.style.visibility = "visible";
+                                coordinates.setAttribute("transform", "translate(" + local.x + ")");
+                                var text = coordinates.querySelector("text");
+                                text.textContent = domain.toFixed(2);
+                            }
+                            else
+                            {
+                                coordinates.style.visibility= "hidden";
+                            }
+                        }
+                    }
+                }
+    
+                canvas.addEventListener("click", display_coordinates);
+    
+                var module = {};
+                module.show_coordinates = function(axis_id, projection)
+                {
+                    axes[axis_id] = projection;
+                }
+    
+                return module;
+            })(modules["toyplot/canvas"]);
+    (function(tables, context_menu, io, owner_id, key, label, names, columns, filename)
+            {
+                tables.set(owner_id, key, names, columns);
+    
+                var owner = document.querySelector("#" + owner_id);
+                function show_item(e)
+                {
+                    return owner.contains(e.target);
+                }
+    
+                function choose_item()
+                {
+                    io.save_file("text/csv", "utf-8", tables.get_csv(owner_id, key), filename + ".csv");
+                }
+    
+                context_menu.add_item("Save " + label + " as CSV", show_item, choose_item);
+            })(modules["toyplot/tables"],modules["toyplot/menus/context"],modules["toyplot/io"],"tb3e32ab0eb8d45a58e7837d409adc2bf","data","plot data",["x", "y0"],[[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19], [0.0, 0.0027700831024930744, 0.011080332409972297, 0.02493074792243767, 0.04432132963988919, 0.06925207756232686, 0.09972299168975068, 0.13573407202216065, 0.17728531855955676, 0.22437673130193903, 0.27700831024930744, 0.33518005540166207, 0.39889196675900274, 0.4681440443213295, 0.5429362880886426, 0.6232686980609419, 0.709141274238227, 0.8005540166204984, 0.8975069252077561, 1.0]],"toyplot");
+    (function(axis, axis_id, projection)
+            {
+                axis.show_coordinates(axis_id, projection);
+            })(modules["toyplot.coordinates.Axis"],"tf6a272bb8d6b44e1883ce4d7f9d30465",[{"domain": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 20.0, "min": 0.0}, "range": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 200.0, "min": 0.0}, "scale": "linear"}]);
+    (function(axis, axis_id, projection)
+            {
+                axis.show_coordinates(axis_id, projection);
+            })(modules["toyplot.coordinates.Axis"],"tdd826ad5a9e945f081d7f8889d9a27a7",[{"domain": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 1.0, "min": 0.0}, "range": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 200.0, "min": 0.0}, "scale": "linear"}]);
+    (function(tables, context_menu, io, owner_id, key, label, names, columns, filename)
+            {
+                tables.set(owner_id, key, names, columns);
+    
+                var owner = document.querySelector("#" + owner_id);
+                function show_item(e)
+                {
+                    return owner.contains(e.target);
+                }
+    
+                function choose_item()
+                {
+                    io.save_file("text/csv", "utf-8", tables.get_csv(owner_id, key), filename + ".csv");
+                }
+    
+                context_menu.add_item("Save " + label + " as CSV", show_item, choose_item);
+            })(modules["toyplot/tables"],modules["toyplot/menus/context"],modules["toyplot/io"],"t3cee09476c5a49049ef3f58120031187","data","plot data",["x", "y0"],[[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19], [0.0, 0.0027700831024930744, 0.011080332409972297, 0.02493074792243767, 0.04432132963988919, 0.06925207756232686, 0.09972299168975068, 0.13573407202216065, 0.17728531855955676, 0.22437673130193903, 0.27700831024930744, 0.33518005540166207, 0.39889196675900274, 0.4681440443213295, 0.5429362880886426, 0.6232686980609419, 0.709141274238227, 0.8005540166204984, 0.8975069252077561, 1.0]],"toyplot");
+    (function(axis, axis_id, projection)
+            {
+                axis.show_coordinates(axis_id, projection);
+            })(modules["toyplot.coordinates.Axis"],"tf8a1a27dac2048ea973a3d1407c0e0de",[{"domain": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 20.0, "min": 0.0}, "range": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 200.0, "min": 0.0}, "scale": "linear"}]);
+    (function(axis, axis_id, projection)
+            {
+                axis.show_coordinates(axis_id, projection);
+            })(modules["toyplot.coordinates.Axis"],"ta76c4cedfc06410aad7f81e61fa31556",[{"domain": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 1.0, "min": 0.0}, "range": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 200.0, "min": 0.0}, "scale": "linear"}]);
+    })();</script></div></div>
 
 
 You can use the ``size`` argument to control the size of the markers:
@@ -363,348 +731,738 @@ You can use the ``size`` argument to control the size of the markers:
 .. code:: python
 
     canvas = toyplot.Canvas(600, 300)
-    canvas.axes(grid=(1, 2, 0)).plot(y, marker="o", size=6)
-    canvas.axes(grid=(1, 2, 1)).plot(y, marker="o", size=10);
+    canvas.cartesian(grid=(1, 2, 0)).plot(y, marker="o", size=6)
+    canvas.cartesian(grid=(1, 2, 1)).plot(y, marker="o", size=10);
 
 
 
 .. raw:: html
 
-    <div align="center" class="toyplot" id="t9edee7e5e07f4977bff1babb8714c9bc"><svg height="300.0px" id="t0bde0e26b43d4ffc84a2bf29ea17aad5" preserveAspectRatio="xMidYMid meet" style="background-color:transparent;fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:Helvetica;font-size:12px;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0;stroke-width:1.0" viewBox="0 0 600.0 300.0" width="600.0px" xmlns="http://www.w3.org/2000/svg" xmlns:toyplot="http://www.sandia.gov/toyplot"><g class="toyplot-axes-Cartesian" id="tf45119517f604c0e93c3ee061f03b7ab"><clipPath id="tdbb80f466786438da27c2fe08ade68ed"><rect height="220.0" width="220.0" x="40.0" y="40.0"></rect></clipPath><g class="toyplot-coordinate-events" clip-path="url(#tdbb80f466786438da27c2fe08ade68ed)" style="cursor:crosshair"><rect height="220.0" style="pointer-events:all;visibility:hidden" width="220.0" x="40.0" y="40.0"></rect><g class="toyplot-mark-Plot" id="t9738bf227b5e4ba5a77f17ad411e9d07" style="fill:none"><g class="toyplot-Series"><path d="M 50.0 250.0 L 60.0 249.4459833795014 L 70.0 247.78393351800551 L 80.0 245.01385041551248 L 90.0 241.13573407202216 L 100.0 236.14958448753461 L 110.0 230.05540166204986 L 120.0 222.85318559556785 L 130.0 214.54293628808864 L 140.0 205.1246537396122 L 150.0 194.5983379501385 L 160.0 182.96398891966757 L 170.0 170.22160664819947 L 180.0 156.37119113573411 L 190.0 141.41274238227149 L 200.0 125.34626038781163 L 210.0 108.17174515235459 L 220.0 89.889196675900322 L 230.0 70.498614958448783 L 240.0 50.0" style="stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0;stroke-width:2.0"></path><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="50.0" cy="250.0" r="3.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="60.0" cy="249.4459833795014" r="3.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="70.0" cy="247.78393351800551" r="3.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="80.0" cy="245.01385041551248" r="3.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="90.0" cy="241.13573407202216" r="3.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="100.0" cy="236.14958448753461" r="3.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="110.0" cy="230.05540166204986" r="3.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="120.0" cy="222.85318559556785" r="3.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="130.0" cy="214.54293628808864" r="3.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="140.0" cy="205.1246537396122" r="3.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="150.0" cy="194.5983379501385" r="3.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="160.0" cy="182.96398891966757" r="3.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="170.0" cy="170.22160664819947" r="3.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="180.0" cy="156.37119113573411" r="3.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="190.0" cy="141.41274238227149" r="3.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="200.0" cy="125.34626038781163" r="3.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="210.0" cy="108.17174515235459" r="3.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="220.0" cy="89.889196675900322" r="3.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="230.0" cy="70.498614958448783" r="3.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="240.0" cy="50.0" r="3.0"></circle></g></g></g></g><g class="toyplot-coordinates" style="visibility:hidden"><rect height="14.0" style="fill:rgb(100%,100%,100%);fill-opacity:1.0;opacity:0.75;stroke:none" width="90.0" x="150.0" y="60.0"></rect><text style="alignment-baseline:middle;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" x="195.0" y="67.0"></text></g><g class="toyplot-axes-Axis" id="t62131b4fadd84675a3c31448cf47f855" transform="translate(50.0,250.0) rotate(0.0) translate(0,10.0)"><line style="" x1="0" x2="190.0" y1="0" y2="0"></line><g><text style="dominant-baseline:hanging;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(0.0,6)"><tspan style="dominant-baseline:inherit">0</tspan></text><text style="dominant-baseline:hanging;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(50.0,6)"><tspan style="dominant-baseline:inherit">5</tspan></text><text style="dominant-baseline:hanging;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(100.0,6)"><tspan style="dominant-baseline:inherit">10</tspan></text><text style="dominant-baseline:hanging;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(150.0,6)"><tspan style="dominant-baseline:inherit">15</tspan></text><text style="dominant-baseline:hanging;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(200.0,6)"><tspan style="dominant-baseline:inherit">20</tspan></text></g></g><g class="toyplot-axes-Axis" id="t01cf2314aa6f4b878f09a33a06afb3ac" transform="translate(50.0,250.0) rotate(-90.0) translate(0,-10.0)"><line style="" x1="0" x2="200.0" y1="0" y2="0"></line><g><text style="dominant-baseline:alphabetic;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(0.0,-6)"><tspan style="dominant-baseline:inherit">0.0</tspan></text><text style="dominant-baseline:alphabetic;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(100.0,-6)"><tspan style="dominant-baseline:inherit">0.5</tspan></text><text style="dominant-baseline:alphabetic;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(200.0,-6)"><tspan style="dominant-baseline:inherit">1.0</tspan></text></g></g></g><g class="toyplot-axes-Cartesian" id="t5d24687784e04782b16a2cb0df679630"><clipPath id="t63585c2b19a94ebda637873fa40d362f"><rect height="220.0" width="220.0" x="340.0" y="40.0"></rect></clipPath><g class="toyplot-coordinate-events" clip-path="url(#t63585c2b19a94ebda637873fa40d362f)" style="cursor:crosshair"><rect height="220.0" style="pointer-events:all;visibility:hidden" width="220.0" x="340.0" y="40.0"></rect><g class="toyplot-mark-Plot" id="td87f8f4d4b194653abeb3588eae0c313" style="fill:none"><g class="toyplot-Series"><path d="M 350.0 250.0 L 360.0 249.4459833795014 L 370.0 247.78393351800551 L 380.0 245.01385041551248 L 390.0 241.13573407202216 L 400.0 236.14958448753461 L 410.0 230.05540166204986 L 420.0 222.85318559556785 L 430.0 214.54293628808864 L 440.0 205.1246537396122 L 450.0 194.5983379501385 L 460.0 182.96398891966757 L 470.0 170.22160664819947 L 480.0 156.37119113573411 L 490.0 141.41274238227149 L 500.0 125.34626038781163 L 510.0 108.17174515235459 L 520.0 89.889196675900322 L 530.0 70.498614958448783 L 540.0 50.0" style="stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0;stroke-width:2.0"></path><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="350.0" cy="250.0" r="5.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="360.0" cy="249.4459833795014" r="5.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="370.0" cy="247.78393351800551" r="5.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="380.0" cy="245.01385041551248" r="5.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="390.0" cy="241.13573407202216" r="5.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="400.0" cy="236.14958448753461" r="5.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="410.0" cy="230.05540166204986" r="5.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="420.0" cy="222.85318559556785" r="5.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="430.0" cy="214.54293628808864" r="5.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="440.0" cy="205.1246537396122" r="5.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="450.0" cy="194.5983379501385" r="5.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="460.0" cy="182.96398891966757" r="5.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="470.0" cy="170.22160664819947" r="5.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="480.0" cy="156.37119113573411" r="5.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="490.0" cy="141.41274238227149" r="5.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="500.0" cy="125.34626038781163" r="5.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="510.0" cy="108.17174515235459" r="5.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="520.0" cy="89.889196675900322" r="5.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="530.0" cy="70.498614958448783" r="5.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="540.0" cy="50.0" r="5.0"></circle></g></g></g></g><g class="toyplot-coordinates" style="visibility:hidden"><rect height="14.0" style="fill:rgb(100%,100%,100%);fill-opacity:1.0;opacity:0.75;stroke:none" width="90.0" x="450.0" y="60.0"></rect><text style="alignment-baseline:middle;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" x="495.0" y="67.0"></text></g><g class="toyplot-axes-Axis" id="t7468da58ebae4cd1994572f422216820" transform="translate(350.0,250.0) rotate(0.0) translate(0,10.0)"><line style="" x1="0" x2="190.0" y1="0" y2="0"></line><g><text style="dominant-baseline:hanging;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(0.0,6)"><tspan style="dominant-baseline:inherit">0</tspan></text><text style="dominant-baseline:hanging;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(50.0,6)"><tspan style="dominant-baseline:inherit">5</tspan></text><text style="dominant-baseline:hanging;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(100.0,6)"><tspan style="dominant-baseline:inherit">10</tspan></text><text style="dominant-baseline:hanging;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(150.0,6)"><tspan style="dominant-baseline:inherit">15</tspan></text><text style="dominant-baseline:hanging;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(200.0,6)"><tspan style="dominant-baseline:inherit">20</tspan></text></g></g><g class="toyplot-axes-Axis" id="t7f7b733a01934f48bdcd98bdec2885c2" transform="translate(350.0,250.0) rotate(-90.0) translate(0,-10.0)"><line style="" x1="0" x2="200.0" y1="0" y2="0"></line><g><text style="dominant-baseline:alphabetic;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(0.0,-6)"><tspan style="dominant-baseline:inherit">0.0</tspan></text><text style="dominant-baseline:alphabetic;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(100.0,-6)"><tspan style="dominant-baseline:inherit">0.5</tspan></text><text style="dominant-baseline:alphabetic;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(200.0,-6)"><tspan style="dominant-baseline:inherit">1.0</tspan></text></g></g></g></svg><div class="toyplot-controls"><ul class="toyplot-mark-popup" onmouseleave="this.style.visibility='hidden'" style="background:rgba(0%,0%,0%,0.75);border:0;border-radius:6px;color:white;cursor:default;list-style:none;margin:0;padding:5px;position:fixed;visibility:hidden"><li class="toyplot-mark-popup-title" style="color:lightgray;cursor:default;padding:5px;list-style:none;margin:0;"></li><li class="toyplot-mark-popup-save-csv" onmouseout="this.style.color='white';this.style.background='steelblue'" onmouseover="this.style.color='steelblue';this.style.background='white'" style="border-radius:3px;padding:5px;list-style:none;margin:0;">Save as .csv</li></ul><script>
-    (function()
+    <div class="toyplot" id="t4a86f314dc66462a92ed97bfc2102f36" style="text-align:center"><svg class="toyplot-canvas-Canvas" height="300.0px" id="t0218d3b0b0ca4f7b8c1d47f87399b9bd" preserveAspectRatio="xMidYMid meet" style="background-color:transparent;fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:Helvetica;font-size:12px;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0;stroke-width:1.0" viewBox="0 0 600.0 300.0" width="600.0px" xmlns="http://www.w3.org/2000/svg" xmlns:toyplot="http://www.sandia.gov/toyplot" xmlns:xlink="http://www.w3.org/1999/xlink"><g class="toyplot-coordinates-Cartesian" id="t4e5cf6b2e5c342bbaf423e5f1921a40f"><clipPath id="t76d253babb474351bb91dafa349f85b1"><rect height="220.0" width="220.0" x="40.0" y="40.0"></rect></clipPath><g clip-path="url(#t76d253babb474351bb91dafa349f85b1)"><g class="toyplot-mark-Plot" id="t161e4b54520b4446ae58c7039e23eda7" style="fill:none"><g class="toyplot-Series"><path d="M 50.0 250.0 L 60.0 249.4459833795014 L 70.0 247.78393351800551 L 80.0 245.01385041551248 L 90.0 241.13573407202216 L 100.0 236.14958448753461 L 110.0 230.05540166204986 L 120.0 222.85318559556785 L 130.0 214.54293628808864 L 140.0 205.1246537396122 L 150.0 194.5983379501385 L 160.0 182.96398891966757 L 170.0 170.22160664819947 L 180.0 156.37119113573411 L 190.0 141.41274238227149 L 200.0 125.34626038781163 L 210.0 108.17174515235459 L 220.0 89.889196675900322 L 230.0 70.498614958448783 L 240.0 50.0" style="stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0;stroke-width:2.0"></path><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(50.0, 250.0)"><circle r="3.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(60.0, 249.4459833795014)"><circle r="3.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(70.0, 247.78393351800551)"><circle r="3.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(80.0, 245.01385041551248)"><circle r="3.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(90.0, 241.13573407202216)"><circle r="3.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(100.0, 236.14958448753461)"><circle r="3.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(110.0, 230.05540166204986)"><circle r="3.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(120.0, 222.85318559556785)"><circle r="3.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(130.0, 214.54293628808864)"><circle r="3.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(140.0, 205.1246537396122)"><circle r="3.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(150.0, 194.5983379501385)"><circle r="3.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(160.0, 182.96398891966757)"><circle r="3.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(170.0, 170.22160664819947)"><circle r="3.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(180.0, 156.37119113573411)"><circle r="3.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(190.0, 141.41274238227149)"><circle r="3.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(200.0, 125.34626038781163)"><circle r="3.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(210.0, 108.17174515235459)"><circle r="3.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(220.0, 89.889196675900322)"><circle r="3.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(230.0, 70.498614958448783)"><circle r="3.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(240.0, 50.0)"><circle r="3.0"></circle></g></g></g></g><g class="toyplot-coordinates-Axis" id="t4bc1b490a277441dac86f345c71bda8b" transform="translate(50.0,250.0)translate(0,10.0)"><line style="" x1="0" x2="190.0" y1="0" y2="0"></line><g><g transform="translate(0.0,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-2.78" y="8.555">0</text></g><g transform="translate(50.0,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-2.78" y="8.555">5</text></g><g transform="translate(100.0,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-5.56" y="8.555">10</text></g><g transform="translate(150.0,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-5.56" y="8.555">15</text></g><g transform="translate(200.0,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-5.56" y="8.555">20</text></g></g><g class="toyplot-coordinates-Axis-coordinates" style="visibility:hidden" transform=""><line style="stroke:rgb(43.9%,50.2%,56.5%);stroke-opacity:1.0;stroke-width:1.0" x1="0" x2="0" y1="-3.0" y2="4.5"></line><text style="alignment-baseline:alphabetic;fill:rgb(43.9%,50.2%,56.5%);fill-opacity:1.0;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" x="0" y="-6"></text></g></g><g class="toyplot-coordinates-Axis" id="t78e1b10fbb994f349f5dc192a898dbc8" transform="translate(50.0,250.0)rotate(-90.0)translate(0,-10.0)"><line style="" x1="0" x2="200.0" y1="0" y2="0"></line><g><g transform="translate(0.0,-6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-6.95" y="-4.4408920985e-16">0.0</text></g><g transform="translate(100.0,-6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-6.95" y="-4.4408920985e-16">0.5</text></g><g transform="translate(200.0,-6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-6.95" y="-4.4408920985e-16">1.0</text></g></g><g class="toyplot-coordinates-Axis-coordinates" style="visibility:hidden" transform=""><line style="stroke:rgb(43.9%,50.2%,56.5%);stroke-opacity:1.0;stroke-width:1.0" x1="0" x2="0" y1="3.0" y2="-4.5"></line><text style="alignment-baseline:hanging;fill:rgb(43.9%,50.2%,56.5%);fill-opacity:1.0;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" x="0" y="6"></text></g></g></g><g class="toyplot-coordinates-Cartesian" id="t87121c54609d43a69a54c3114763d390"><clipPath id="tfe02663cac4541768756804871d3359b"><rect height="220.0" width="220.0" x="340.0" y="40.0"></rect></clipPath><g clip-path="url(#tfe02663cac4541768756804871d3359b)"><g class="toyplot-mark-Plot" id="t504d890e2bbf4f319d079133a9c653b5" style="fill:none"><g class="toyplot-Series"><path d="M 350.0 250.0 L 360.0 249.4459833795014 L 370.0 247.78393351800551 L 380.0 245.01385041551248 L 390.0 241.13573407202216 L 400.0 236.14958448753461 L 410.0 230.05540166204986 L 420.0 222.85318559556785 L 430.0 214.54293628808864 L 440.0 205.1246537396122 L 450.0 194.5983379501385 L 460.0 182.96398891966757 L 470.0 170.22160664819947 L 480.0 156.37119113573411 L 490.0 141.41274238227149 L 500.0 125.34626038781163 L 510.0 108.17174515235459 L 520.0 89.889196675900322 L 530.0 70.498614958448783 L 540.0 50.0" style="stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0;stroke-width:2.0"></path><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(350.0, 250.0)"><circle r="5.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(360.0, 249.4459833795014)"><circle r="5.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(370.0, 247.78393351800551)"><circle r="5.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(380.0, 245.01385041551248)"><circle r="5.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(390.0, 241.13573407202216)"><circle r="5.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(400.0, 236.14958448753461)"><circle r="5.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(410.0, 230.05540166204986)"><circle r="5.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(420.0, 222.85318559556785)"><circle r="5.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(430.0, 214.54293628808864)"><circle r="5.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(440.0, 205.1246537396122)"><circle r="5.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(450.0, 194.5983379501385)"><circle r="5.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(460.0, 182.96398891966757)"><circle r="5.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(470.0, 170.22160664819947)"><circle r="5.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(480.0, 156.37119113573411)"><circle r="5.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(490.0, 141.41274238227149)"><circle r="5.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(500.0, 125.34626038781163)"><circle r="5.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(510.0, 108.17174515235459)"><circle r="5.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(520.0, 89.889196675900322)"><circle r="5.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(530.0, 70.498614958448783)"><circle r="5.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(540.0, 50.0)"><circle r="5.0"></circle></g></g></g></g><g class="toyplot-coordinates-Axis" id="tbfdceeb37b3f4becbf6fff181add8387" transform="translate(350.0,250.0)translate(0,10.0)"><line style="" x1="0" x2="190.0" y1="0" y2="0"></line><g><g transform="translate(0.0,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-2.78" y="8.555">0</text></g><g transform="translate(50.0,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-2.78" y="8.555">5</text></g><g transform="translate(100.0,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-5.56" y="8.555">10</text></g><g transform="translate(150.0,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-5.56" y="8.555">15</text></g><g transform="translate(200.0,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-5.56" y="8.555">20</text></g></g><g class="toyplot-coordinates-Axis-coordinates" style="visibility:hidden" transform=""><line style="stroke:rgb(43.9%,50.2%,56.5%);stroke-opacity:1.0;stroke-width:1.0" x1="0" x2="0" y1="-3.0" y2="4.5"></line><text style="alignment-baseline:alphabetic;fill:rgb(43.9%,50.2%,56.5%);fill-opacity:1.0;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" x="0" y="-6"></text></g></g><g class="toyplot-coordinates-Axis" id="t4aadfa0efb8940689c1e7147a506cb1f" transform="translate(350.0,250.0)rotate(-90.0)translate(0,-10.0)"><line style="" x1="0" x2="200.0" y1="0" y2="0"></line><g><g transform="translate(0.0,-6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-6.95" y="-4.4408920985e-16">0.0</text></g><g transform="translate(100.0,-6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-6.95" y="-4.4408920985e-16">0.5</text></g><g transform="translate(200.0,-6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-6.95" y="-4.4408920985e-16">1.0</text></g></g><g class="toyplot-coordinates-Axis-coordinates" style="visibility:hidden" transform=""><line style="stroke:rgb(43.9%,50.2%,56.5%);stroke-opacity:1.0;stroke-width:1.0" x1="0" x2="0" y1="3.0" y2="-4.5"></line><text style="alignment-baseline:hanging;fill:rgb(43.9%,50.2%,56.5%);fill-opacity:1.0;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" x="0" y="6"></text></g></g></g></svg><div class="toyplot-behavior"><script>(function()
     {
-      var data_tables = [{"data": [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19], [0.0, 0.0027700831024930744, 0.011080332409972297, 0.02493074792243767, 0.04432132963988919, 0.06925207756232686, 0.09972299168975068, 0.13573407202216065, 0.17728531855955676, 0.22437673130193903, 0.27700831024930744, 0.33518005540166207, 0.39889196675900274, 0.4681440443213295, 0.5429362880886426, 0.6232686980609419, 0.709141274238227, 0.8005540166204984, 0.8975069252077561, 1.0]], "title": "Plot Data", "names": ["x", "y0"], "id": "t9738bf227b5e4ba5a77f17ad411e9d07", "filename": "toyplot"}, {"data": [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19], [0.0, 0.0027700831024930744, 0.011080332409972297, 0.02493074792243767, 0.04432132963988919, 0.06925207756232686, 0.09972299168975068, 0.13573407202216065, 0.17728531855955676, 0.22437673130193903, 0.27700831024930744, 0.33518005540166207, 0.39889196675900274, 0.4681440443213295, 0.5429362880886426, 0.6232686980609419, 0.709141274238227, 0.8005540166204984, 0.8975069252077561, 1.0]], "title": "Plot Data", "names": ["x", "y0"], "id": "td87f8f4d4b194653abeb3588eae0c313", "filename": "toyplot"}];
-    
-      function save_csv(data_table)
-      {
-        var uri = "data:text/csv;charset=utf-8,";
-        uri += data_table.names.join(",") + "\n";
-        for(var i = 0; i != data_table.data[0].length; ++i)
+    var modules={};
+    modules["toyplot/tables"] = (function()
         {
-          for(var j = 0; j != data_table.data.length; ++j)
-          {
-            if(j)
-              uri += ",";
-            uri += data_table.data[j][i];
-          }
-          uri += "\n";
-        }
-        uri = encodeURI(uri);
+            var tables = [];
     
-        var link = document.createElement("a");
-        if(typeof link.download != "undefined")
-        {
-          link.href = uri;
-          link.style = "visibility:hidden";
-          link.download = data_table.filename + ".csv";
+            var module = {};
     
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-        }
-        else
-        {
-          window.open(uri);
-        }
-      }
-    
-      function open_popup(data_table)
-      {
-        return function(e)
-        {
-          var popup = document.querySelector("#t9edee7e5e07f4977bff1babb8714c9bc .toyplot-mark-popup");
-          popup.querySelector(".toyplot-mark-popup-title").innerHTML = data_table.title;
-          popup.querySelector(".toyplot-mark-popup-save-csv").onclick = function() { popup.style.visibility = "hidden"; save_csv(data_table); }
-          popup.style.left = (e.clientX - 50) + "px";
-          popup.style.top = (e.clientY - 20) + "px";
-          popup.style.visibility = "visible";
-          e.stopPropagation();
-          e.preventDefault();
-        }
-    
-      }
-    
-      for(var i = 0; i != data_tables.length; ++i)
-      {
-        var data_table = data_tables[i];
-        var event_target = document.querySelector("#" + data_table.id);
-        event_target.oncontextmenu = open_popup(data_table);
-      }
-    })();
-    </script><script>
-    (function()
-    {
-      var axes = {"t5d24687784e04782b16a2cb0df679630": {"x": [{"domain": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 20.0, "min": 0.0}, "range": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 550.0, "min": 350.0}, "scale": "linear"}], "y": [{"domain": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 1.0, "min": 0.0}, "range": {"bounds": {"max": -Infinity, "min": Infinity}, "max": 50.0, "min": 250.0}, "scale": "linear"}]}, "tf45119517f604c0e93c3ee061f03b7ab": {"x": [{"domain": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 20.0, "min": 0.0}, "range": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 250.0, "min": 50.0}, "scale": "linear"}], "y": [{"domain": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 1.0, "min": 0.0}, "range": {"bounds": {"max": -Infinity, "min": Infinity}, "max": 50.0, "min": 250.0}, "scale": "linear"}]}};
-    
-      function sign(x)
-      {
-        return x < 0 ? -1 : x > 0 ? 1 : 0;
-      }
-    
-      function _mix(a, b, amount)
-      {
-        return ((1.0 - amount) * a) + (amount * b);
-      }
-    
-      function _log(x, base)
-      {
-        return Math.log(Math.abs(x)) / Math.log(base);
-      }
-    
-      function _in_range(a, x, b)
-      {
-        var left = Math.min(a, b);
-        var right = Math.max(a, b);
-        return left <= x && x <= right;
-      }
-    
-      function to_domain(projection, range)
-      {
-        for(var i = 0; i != projection.length; ++i)
-        {
-          var segment = projection[i];
-          if(_in_range(segment.range.bounds.min, range, segment.range.bounds.max))
-          {
-            if(segment.scale == "linear")
+            module.set = function(owner, key, names, columns)
             {
-              var amount = (range - segment.range.min) / (segment.range.max - segment.range.min);
-              return _mix(segment.domain.min, segment.domain.max, amount)
+                tables.push({owner: owner, key: key, names: names, columns: columns});
             }
-            else if(segment.scale[0] == "log")
+    
+            module.get = function(owner, key)
             {
-              var amount = (range - segment.range.min) / (segment.range.max - segment.range.min);
-              var base = segment.scale[1];
-              return sign(segment.domain.min) * Math.pow(base, _mix(_log(segment.domain.min, base), _log(segment.domain.max, base), amount));
+                for(var i = 0; i != tables.length; ++i)
+                {
+                    var table = tables[i];
+                    if(table.owner != owner)
+                        continue;
+                    if(table.key != key)
+                        continue;
+                    return {names: table.names, columns: table.columns};
+                }
             }
-          }
-        }
-      }
     
-      // Compute mouse coordinates relative to a DOM object, with thanks to d3js.org, where this code originated.
-      function d3_mousePoint(container, e)
-      {
-        if (e.changedTouches) e = e.changedTouches[0];
-        var svg = container.ownerSVGElement || container;
-        if (svg.createSVGPoint) {
-          var point = svg.createSVGPoint();
-          point.x = e.clientX, point.y = e.clientY;
-          point = point.matrixTransform(container.getScreenCTM().inverse());
-          return [point.x, point.y];
-        }
-        var rect = container.getBoundingClientRect();
-        return [e.clientX - rect.left - container.clientLeft, e.clientY - rect.top - container.clientTop];
-      };
+            module.get_csv = function(owner, key)
+            {
+                var table = module.get(owner, key);
+                if(table != undefined)
+                {
+                    var csv = "";
+                    csv += table.names.join(",") + "\n";
+                    for(var i = 0; i != table.columns[0].length; ++i)
+                    {
+                      for(var j = 0; j != table.columns.length; ++j)
+                      {
+                        if(j)
+                          csv += ",";
+                        csv += table.columns[j][i];
+                      }
+                      csv += "\n";
+                    }
+                    return csv;
+                }
+            }
     
-      function display_coordinates(e)
-      {
-        var dom_axes = e.currentTarget.parentElement;
-        var data = axes[dom_axes.id];
-    
-        point = d3_mousePoint(e.target, e);
-        var x = Number(to_domain(data["x"], point[0])).toFixed(2);
-        var y = Number(to_domain(data["y"], point[1])).toFixed(2);
-    
-        var coordinates = dom_axes.querySelectorAll(".toyplot-coordinates");
-        for(var i = 0; i != coordinates.length; ++i)
+            return module;
+        })();
+    modules["toyplot/root/id"] = "t4a86f314dc66462a92ed97bfc2102f36";
+    modules["toyplot/root"] = (function(root_id)
         {
-          coordinates[i].style.visibility = "visible";
-          coordinates[i].querySelector("text").textContent = "x=" + x + " y=" + y;
-        }
-      }
+            return document.querySelector("#" + root_id);
+        })(modules["toyplot/root/id"]);
+    modules["toyplot/canvas/id"] = "t0218d3b0b0ca4f7b8c1d47f87399b9bd";
+    modules["toyplot/canvas"] = (function(canvas_id)
+        {
+            return document.querySelector("#" + canvas_id);
+        })(modules["toyplot/canvas/id"]);
+    modules["toyplot/menus/context"] = (function(root, canvas)
+        {
+            var wrapper = document.createElement("div");
+            wrapper.innerHTML = "<ul class='toyplot-context-menu' style='background:#eee; border:1px solid #b8b8b8; border-radius:5px; box-shadow: 0px 0px 8px rgba(0%,0%,0%,0.25); margin:0; padding:3px 0; position:fixed; visibility:hidden;'></ul>"
+            var menu = wrapper.firstChild;
     
-      function clear_coordinates(e)
-      {
-        var dom_axes = e.currentTarget.parentElement;
-        var coordinates = dom_axes.querySelectorAll(".toyplot-coordinates");
-        for(var i = 0; i != coordinates.length; ++i)
-          coordinates[i].style.visibility = "hidden";
-      }
+            root.appendChild(menu);
     
-      for(var axes_id in axes)
-      {
-        var event_target = document.querySelector("#" + axes_id + " .toyplot-coordinate-events");
-        event_target.onmousemove = display_coordinates;
-        event_target.onmouseout = clear_coordinates;
-      }
-    })();
-    </script></div></div>
+            var items = [];
+    
+            var ignore_mouseup = null;
+            function open_menu(e)
+            {
+                var show_menu = false;
+                for(var index=0; index != items.length; ++index)
+                {
+                    var item = items[index];
+                    if(item.show(e))
+                    {
+                        item.item.style.display = "block";
+                        show_menu = true;
+                    }
+                    else
+                    {
+                        item.item.style.display = "none";
+                    }
+                }
+    
+                if(show_menu)
+                {
+                    ignore_mouseup = true;
+                    menu.style.left = (e.clientX + 1) + "px";
+                    menu.style.top = (e.clientY - 5) + "px";
+                    menu.style.visibility = "visible";
+                    e.stopPropagation();
+                    e.preventDefault();
+                }
+            }
+    
+            function close_menu()
+            {
+                menu.style.visibility = "hidden";
+            }
+    
+            function contextmenu(e)
+            {
+                open_menu(e);
+            }
+    
+            function mousemove(e)
+            {
+                ignore_mouseup = false;
+            }
+    
+            function mouseup(e)
+            {
+                if(ignore_mouseup)
+                {
+                    ignore_mouseup = false;
+                    return;
+                }
+                close_menu();
+            }
+    
+            function keydown(e)
+            {
+                if(e.key == "Escape" || e.key == "Esc" || e.keyCode == 27)
+                {
+                    close_menu();
+                }
+            }
+    
+            canvas.addEventListener("contextmenu", contextmenu);
+            canvas.addEventListener("mousemove", mousemove);
+            document.addEventListener("mouseup", mouseup);
+            document.addEventListener("keydown", keydown);
+    
+            var module = {};
+            module.add_item = function(label, show, activate)
+            {
+                var wrapper = document.createElement("div");
+                wrapper.innerHTML = "<li class='toyplot-context-menu-item' style='background:#eee; color:#333; padding:2px 20px; list-style:none; margin:0; text-align:left;'>" + label + "</li>"
+                var item = wrapper.firstChild;
+    
+                items.push({item: item, show: show});
+    
+                function mouseover()
+                {
+                    this.style.background = "steelblue";
+                    this.style.color = "white";
+                }
+    
+                function mouseout()
+                {
+                    this.style.background = "#eee";
+                    this.style.color = "#333";
+                }
+    
+                function choose_item(e)
+                {
+                    close_menu();
+                    activate();
+    
+                    e.stopPropagation();
+                    e.preventDefault();
+                }
+    
+                item.addEventListener("mouseover", mouseover);
+                item.addEventListener("mouseout", mouseout);
+                item.addEventListener("mouseup", choose_item);
+                item.addEventListener("contextmenu", choose_item);
+    
+                menu.appendChild(item);
+            };
+            return module;
+        })(modules["toyplot/root"],modules["toyplot/canvas"]);
+    modules["toyplot/io"] = (function()
+        {
+            var module = {};
+            module.save_file = function(mime_type, charset, data, filename)
+            {
+                var uri = "data:" + mime_type + ";charset=" + charset + "," + data;
+                uri = encodeURI(uri);
+    
+                var link = document.createElement("a");
+                if(typeof link.download != "undefined")
+                {
+                  link.href = uri;
+                  link.style = "visibility:hidden";
+                  link.download = filename;
+    
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+                }
+                else
+                {
+                  window.open(uri);
+                }
+            };
+            return module;
+        })();
+    modules["toyplot.coordinates.Axis"] = (
+            function(canvas)
+            {
+                function sign(x)
+                {
+                    return x < 0 ? -1 : x > 0 ? 1 : 0;
+                }
+    
+                function mix(a, b, amount)
+                {
+                    return ((1.0 - amount) * a) + (amount * b);
+                }
+    
+                function log(x, base)
+                {
+                    return Math.log(Math.abs(x)) / Math.log(base);
+                }
+    
+                function in_range(a, x, b)
+                {
+                    var left = Math.min(a, b);
+                    var right = Math.max(a, b);
+                    return left <= x && x <= right;
+                }
+    
+                function inside(range, projection)
+                {
+                    for(var i = 0; i != projection.length; ++i)
+                    {
+                        var segment = projection[i];
+                        if(in_range(segment.range.min, range, segment.range.max))
+                            return true;
+                    }
+                    return false;
+                }
+    
+                function to_domain(range, projection)
+                {
+                    for(var i = 0; i != projection.length; ++i)
+                    {
+                        var segment = projection[i];
+                        if(in_range(segment.range.bounds.min, range, segment.range.bounds.max))
+                        {
+                            if(segment.scale == "linear")
+                            {
+                                var amount = (range - segment.range.min) / (segment.range.max - segment.range.min);
+                                return mix(segment.domain.min, segment.domain.max, amount)
+                            }
+                            else if(segment.scale[0] == "log")
+                            {
+                                var amount = (range - segment.range.min) / (segment.range.max - segment.range.min);
+                                var base = segment.scale[1];
+                                return sign(segment.domain.min) * Math.pow(base, mix(log(segment.domain.min, base), log(segment.domain.max, base), amount));
+                            }
+                        }
+                    }
+                }
+    
+                var axes = {};
+    
+                function display_coordinates(e)
+                {
+                    var current = canvas.createSVGPoint();
+                    current.x = e.clientX;
+                    current.y = e.clientY;
+    
+                    for(var axis_id in axes)
+                    {
+                        var axis = document.querySelector("#" + axis_id);
+                        var coordinates = axis.querySelector(".toyplot-coordinates-Axis-coordinates");
+                        if(coordinates)
+                        {
+                            var projection = axes[axis_id];
+                            var local = current.matrixTransform(axis.getScreenCTM().inverse());
+                            if(inside(local.x, projection))
+                            {
+                                var domain = to_domain(local.x, projection);
+                                coordinates.style.visibility = "visible";
+                                coordinates.setAttribute("transform", "translate(" + local.x + ")");
+                                var text = coordinates.querySelector("text");
+                                text.textContent = domain.toFixed(2);
+                            }
+                            else
+                            {
+                                coordinates.style.visibility= "hidden";
+                            }
+                        }
+                    }
+                }
+    
+                canvas.addEventListener("click", display_coordinates);
+    
+                var module = {};
+                module.show_coordinates = function(axis_id, projection)
+                {
+                    axes[axis_id] = projection;
+                }
+    
+                return module;
+            })(modules["toyplot/canvas"]);
+    (function(tables, context_menu, io, owner_id, key, label, names, columns, filename)
+            {
+                tables.set(owner_id, key, names, columns);
+    
+                var owner = document.querySelector("#" + owner_id);
+                function show_item(e)
+                {
+                    return owner.contains(e.target);
+                }
+    
+                function choose_item()
+                {
+                    io.save_file("text/csv", "utf-8", tables.get_csv(owner_id, key), filename + ".csv");
+                }
+    
+                context_menu.add_item("Save " + label + " as CSV", show_item, choose_item);
+            })(modules["toyplot/tables"],modules["toyplot/menus/context"],modules["toyplot/io"],"t161e4b54520b4446ae58c7039e23eda7","data","plot data",["x", "y0"],[[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19], [0.0, 0.0027700831024930744, 0.011080332409972297, 0.02493074792243767, 0.04432132963988919, 0.06925207756232686, 0.09972299168975068, 0.13573407202216065, 0.17728531855955676, 0.22437673130193903, 0.27700831024930744, 0.33518005540166207, 0.39889196675900274, 0.4681440443213295, 0.5429362880886426, 0.6232686980609419, 0.709141274238227, 0.8005540166204984, 0.8975069252077561, 1.0]],"toyplot");
+    (function(axis, axis_id, projection)
+            {
+                axis.show_coordinates(axis_id, projection);
+            })(modules["toyplot.coordinates.Axis"],"t4bc1b490a277441dac86f345c71bda8b",[{"domain": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 20.0, "min": 0.0}, "range": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 200.0, "min": 0.0}, "scale": "linear"}]);
+    (function(axis, axis_id, projection)
+            {
+                axis.show_coordinates(axis_id, projection);
+            })(modules["toyplot.coordinates.Axis"],"t78e1b10fbb994f349f5dc192a898dbc8",[{"domain": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 1.0, "min": 0.0}, "range": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 200.0, "min": 0.0}, "scale": "linear"}]);
+    (function(tables, context_menu, io, owner_id, key, label, names, columns, filename)
+            {
+                tables.set(owner_id, key, names, columns);
+    
+                var owner = document.querySelector("#" + owner_id);
+                function show_item(e)
+                {
+                    return owner.contains(e.target);
+                }
+    
+                function choose_item()
+                {
+                    io.save_file("text/csv", "utf-8", tables.get_csv(owner_id, key), filename + ".csv");
+                }
+    
+                context_menu.add_item("Save " + label + " as CSV", show_item, choose_item);
+            })(modules["toyplot/tables"],modules["toyplot/menus/context"],modules["toyplot/io"],"t504d890e2bbf4f319d079133a9c653b5","data","plot data",["x", "y0"],[[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19], [0.0, 0.0027700831024930744, 0.011080332409972297, 0.02493074792243767, 0.04432132963988919, 0.06925207756232686, 0.09972299168975068, 0.13573407202216065, 0.17728531855955676, 0.22437673130193903, 0.27700831024930744, 0.33518005540166207, 0.39889196675900274, 0.4681440443213295, 0.5429362880886426, 0.6232686980609419, 0.709141274238227, 0.8005540166204984, 0.8975069252077561, 1.0]],"toyplot");
+    (function(axis, axis_id, projection)
+            {
+                axis.show_coordinates(axis_id, projection);
+            })(modules["toyplot.coordinates.Axis"],"tbfdceeb37b3f4becbf6fff181add8387",[{"domain": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 20.0, "min": 0.0}, "range": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 200.0, "min": 0.0}, "scale": "linear"}]);
+    (function(axis, axis_id, projection)
+            {
+                axis.show_coordinates(axis_id, projection);
+            })(modules["toyplot.coordinates.Axis"],"t4aadfa0efb8940689c1e7147a506cb1f",[{"domain": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 1.0, "min": 0.0}, "range": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 200.0, "min": 0.0}, "scale": "linear"}]);
+    })();</script></div></div>
 
 
-You can use the ``area`` argument instead of ``size`` as an
-approximation of the *area* of the markers (this is recommended if
-you're using per-datum marker sizes to display data).
+Or you can use the ``area`` argument instead to control the approximate
+*area* of the markers (this is recommended if you're using per-datum
+marker sizes to display data).
 
-By default, the markers are small circles, but there are many
-alternatives:
+By default, plot and scatterplot markers are small circles, but many
+other shapes can be specified using a string *shape code*:
 
 .. code:: python
 
     canvas = toyplot.Canvas(600, 300)
-    canvas.axes(grid=(1, 2, 0)).scatterplot(y, marker="x", size=10)
-    canvas.axes(grid=(1, 2, 1)).scatterplot(y, marker="^", size=10, mstyle={"stroke":toyplot.color.near_black});
+    canvas.cartesian(grid=(1, 2, 0)).scatterplot(y, marker="x", size=10)
+    canvas.cartesian(grid=(1, 2, 1)).scatterplot(y, marker="^", size=10, mstyle={"stroke":toyplot.color.near_black});
 
 
 
 .. raw:: html
 
-    <div align="center" class="toyplot" id="t21aa1112be0d43fb8f61120bc5d2cc49"><svg height="300.0px" id="t443d9258b7ca44c8a52a12ad0b574b37" preserveAspectRatio="xMidYMid meet" style="background-color:transparent;fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:Helvetica;font-size:12px;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0;stroke-width:1.0" viewBox="0 0 600.0 300.0" width="600.0px" xmlns="http://www.w3.org/2000/svg" xmlns:toyplot="http://www.sandia.gov/toyplot"><g class="toyplot-axes-Cartesian" id="t28c2b0bcae0c45a4b5fd1f3d3c7f0fd9"><clipPath id="t7ecd4f15139541849ff34cf843212f29"><rect height="220.0" width="220.0" x="40.0" y="40.0"></rect></clipPath><g class="toyplot-coordinate-events" clip-path="url(#t7ecd4f15139541849ff34cf843212f29)" style="cursor:crosshair"><rect height="220.0" style="pointer-events:all;visibility:hidden" width="220.0" x="40.0" y="40.0"></rect><g class="toyplot-mark-Scatterplot" id="t3c8790d13e7b451d995e2bc27c5dc4f3" style=""><g class="toyplot-Series"><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><line transform="rotate(-45, 50.0, 250.0)" x1="50.0" x2="50.0" y1="245.0" y2="255.0"></line><line transform="rotate(-45, 50.0, 250.0)" x1="45.0" x2="55.0" y1="250.0" y2="250.0"></line></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><line transform="rotate(-45, 60.0, 249.4459833795014)" x1="60.0" x2="60.0" y1="244.4459833795014" y2="254.4459833795014"></line><line transform="rotate(-45, 60.0, 249.4459833795014)" x1="55.0" x2="65.0" y1="249.4459833795014" y2="249.4459833795014"></line></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><line transform="rotate(-45, 70.0, 247.78393351800551)" x1="70.0" x2="70.0" y1="242.78393351800551" y2="252.78393351800551"></line><line transform="rotate(-45, 70.0, 247.78393351800551)" x1="65.0" x2="75.0" y1="247.78393351800551" y2="247.78393351800551"></line></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><line transform="rotate(-45, 80.0, 245.01385041551248)" x1="80.0" x2="80.0" y1="240.01385041551248" y2="250.01385041551248"></line><line transform="rotate(-45, 80.0, 245.01385041551248)" x1="75.0" x2="85.0" y1="245.01385041551248" y2="245.01385041551248"></line></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><line transform="rotate(-45, 90.0, 241.13573407202216)" x1="90.0" x2="90.0" y1="236.13573407202216" y2="246.13573407202216"></line><line transform="rotate(-45, 90.0, 241.13573407202216)" x1="85.0" x2="95.0" y1="241.13573407202216" y2="241.13573407202216"></line></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><line transform="rotate(-45, 100.0, 236.14958448753461)" x1="100.0" x2="100.0" y1="231.14958448753461" y2="241.14958448753461"></line><line transform="rotate(-45, 100.0, 236.14958448753461)" x1="95.0" x2="105.0" y1="236.14958448753461" y2="236.14958448753461"></line></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><line transform="rotate(-45, 110.0, 230.05540166204986)" x1="110.0" x2="110.0" y1="225.05540166204986" y2="235.05540166204986"></line><line transform="rotate(-45, 110.0, 230.05540166204986)" x1="105.0" x2="115.0" y1="230.05540166204986" y2="230.05540166204986"></line></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><line transform="rotate(-45, 120.0, 222.85318559556785)" x1="120.0" x2="120.0" y1="217.85318559556785" y2="227.85318559556785"></line><line transform="rotate(-45, 120.0, 222.85318559556785)" x1="115.0" x2="125.0" y1="222.85318559556785" y2="222.85318559556785"></line></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><line transform="rotate(-45, 130.0, 214.54293628808864)" x1="130.0" x2="130.0" y1="209.54293628808864" y2="219.54293628808864"></line><line transform="rotate(-45, 130.0, 214.54293628808864)" x1="125.0" x2="135.0" y1="214.54293628808864" y2="214.54293628808864"></line></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><line transform="rotate(-45, 140.0, 205.1246537396122)" x1="140.0" x2="140.0" y1="200.1246537396122" y2="210.1246537396122"></line><line transform="rotate(-45, 140.0, 205.1246537396122)" x1="135.0" x2="145.0" y1="205.1246537396122" y2="205.1246537396122"></line></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><line transform="rotate(-45, 150.0, 194.5983379501385)" x1="150.0" x2="150.0" y1="189.5983379501385" y2="199.5983379501385"></line><line transform="rotate(-45, 150.0, 194.5983379501385)" x1="145.0" x2="155.0" y1="194.5983379501385" y2="194.5983379501385"></line></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><line transform="rotate(-45, 160.0, 182.96398891966757)" x1="160.0" x2="160.0" y1="177.96398891966757" y2="187.96398891966757"></line><line transform="rotate(-45, 160.0, 182.96398891966757)" x1="155.0" x2="165.0" y1="182.96398891966757" y2="182.96398891966757"></line></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><line transform="rotate(-45, 170.0, 170.22160664819947)" x1="170.0" x2="170.0" y1="165.22160664819947" y2="175.22160664819947"></line><line transform="rotate(-45, 170.0, 170.22160664819947)" x1="165.0" x2="175.0" y1="170.22160664819947" y2="170.22160664819947"></line></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><line transform="rotate(-45, 180.0, 156.37119113573411)" x1="180.0" x2="180.0" y1="151.37119113573411" y2="161.37119113573411"></line><line transform="rotate(-45, 180.0, 156.37119113573411)" x1="175.0" x2="185.0" y1="156.37119113573411" y2="156.37119113573411"></line></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><line transform="rotate(-45, 190.0, 141.41274238227149)" x1="190.0" x2="190.0" y1="136.41274238227149" y2="146.41274238227149"></line><line transform="rotate(-45, 190.0, 141.41274238227149)" x1="185.0" x2="195.0" y1="141.41274238227149" y2="141.41274238227149"></line></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><line transform="rotate(-45, 200.0, 125.34626038781163)" x1="200.0" x2="200.0" y1="120.34626038781163" y2="130.34626038781164"></line><line transform="rotate(-45, 200.0, 125.34626038781163)" x1="195.0" x2="205.0" y1="125.34626038781163" y2="125.34626038781163"></line></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><line transform="rotate(-45, 210.0, 108.17174515235459)" x1="210.0" x2="210.0" y1="103.17174515235459" y2="113.17174515235459"></line><line transform="rotate(-45, 210.0, 108.17174515235459)" x1="205.0" x2="215.0" y1="108.17174515235459" y2="108.17174515235459"></line></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><line transform="rotate(-45, 220.0, 89.889196675900322)" x1="220.0" x2="220.0" y1="84.889196675900322" y2="94.889196675900322"></line><line transform="rotate(-45, 220.0, 89.889196675900322)" x1="215.0" x2="225.0" y1="89.889196675900322" y2="89.889196675900322"></line></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><line transform="rotate(-45, 230.0, 70.498614958448783)" x1="230.0" x2="230.0" y1="65.498614958448783" y2="75.498614958448783"></line><line transform="rotate(-45, 230.0, 70.498614958448783)" x1="225.0" x2="235.0" y1="70.498614958448783" y2="70.498614958448783"></line></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><line transform="rotate(-45, 240.0, 50.0)" x1="240.0" x2="240.0" y1="45.0" y2="55.0"></line><line transform="rotate(-45, 240.0, 50.0)" x1="235.0" x2="245.0" y1="50.0" y2="50.0"></line></g></g></g></g><g class="toyplot-coordinates" style="visibility:hidden"><rect height="14.0" style="fill:rgb(100%,100%,100%);fill-opacity:1.0;opacity:0.75;stroke:none" width="90.0" x="150.0" y="60.0"></rect><text style="alignment-baseline:middle;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" x="195.0" y="67.0"></text></g><g class="toyplot-axes-Axis" id="t4b687a08f48c4ba7a45ae73c5474d77a" transform="translate(50.0,250.0) rotate(0.0) translate(0,10.0)"><line style="" x1="0" x2="190.0" y1="0" y2="0"></line><g><text style="dominant-baseline:hanging;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(0.0,6)"><tspan style="dominant-baseline:inherit">0</tspan></text><text style="dominant-baseline:hanging;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(50.0,6)"><tspan style="dominant-baseline:inherit">5</tspan></text><text style="dominant-baseline:hanging;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(100.0,6)"><tspan style="dominant-baseline:inherit">10</tspan></text><text style="dominant-baseline:hanging;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(150.0,6)"><tspan style="dominant-baseline:inherit">15</tspan></text><text style="dominant-baseline:hanging;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(200.0,6)"><tspan style="dominant-baseline:inherit">20</tspan></text></g></g><g class="toyplot-axes-Axis" id="tb8cf52bf799b42659c9b42e15a60ae72" transform="translate(50.0,250.0) rotate(-90.0) translate(0,-10.0)"><line style="" x1="0" x2="200.0" y1="0" y2="0"></line><g><text style="dominant-baseline:alphabetic;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(0.0,-6)"><tspan style="dominant-baseline:inherit">0.0</tspan></text><text style="dominant-baseline:alphabetic;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(100.0,-6)"><tspan style="dominant-baseline:inherit">0.5</tspan></text><text style="dominant-baseline:alphabetic;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(200.0,-6)"><tspan style="dominant-baseline:inherit">1.0</tspan></text></g></g></g><g class="toyplot-axes-Cartesian" id="t5afae70226154dc180e3edc03708f457"><clipPath id="t40be90c686194a8ebdeb4de83fe2c65b"><rect height="220.0" width="220.0" x="340.0" y="40.0"></rect></clipPath><g class="toyplot-coordinate-events" clip-path="url(#t40be90c686194a8ebdeb4de83fe2c65b)" style="cursor:crosshair"><rect height="220.0" style="pointer-events:all;visibility:hidden" width="220.0" x="340.0" y="40.0"></rect><g class="toyplot-mark-Scatterplot" id="t60285f90875848f195411aee69ef696a" style=""><g class="toyplot-Series"><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0"><polygon points="345.0,255.0 350.0,245.0 355.0,255.0" transform="rotate(0, 350.0, 250.0)"></polygon></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0"><polygon points="355.0,254.4459833795014 360.0,244.4459833795014 365.0,254.4459833795014" transform="rotate(0, 360.0, 249.4459833795014)"></polygon></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0"><polygon points="365.0,252.78393351800551 370.0,242.78393351800551 375.0,252.78393351800551" transform="rotate(0, 370.0, 247.78393351800551)"></polygon></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0"><polygon points="375.0,250.01385041551248 380.0,240.01385041551248 385.0,250.01385041551248" transform="rotate(0, 380.0, 245.01385041551248)"></polygon></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0"><polygon points="385.0,246.13573407202216 390.0,236.13573407202216 395.0,246.13573407202216" transform="rotate(0, 390.0, 241.13573407202216)"></polygon></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0"><polygon points="395.0,241.14958448753461 400.0,231.14958448753461 405.0,241.14958448753461" transform="rotate(0, 400.0, 236.14958448753461)"></polygon></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0"><polygon points="405.0,235.05540166204986 410.0,225.05540166204986 415.0,235.05540166204986" transform="rotate(0, 410.0, 230.05540166204986)"></polygon></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0"><polygon points="415.0,227.85318559556785 420.0,217.85318559556785 425.0,227.85318559556785" transform="rotate(0, 420.0, 222.85318559556785)"></polygon></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0"><polygon points="425.0,219.54293628808864 430.0,209.54293628808864 435.0,219.54293628808864" transform="rotate(0, 430.0, 214.54293628808864)"></polygon></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0"><polygon points="435.0,210.1246537396122 440.0,200.1246537396122 445.0,210.1246537396122" transform="rotate(0, 440.0, 205.1246537396122)"></polygon></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0"><polygon points="445.0,199.5983379501385 450.0,189.5983379501385 455.0,199.5983379501385" transform="rotate(0, 450.0, 194.5983379501385)"></polygon></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0"><polygon points="455.0,187.96398891966757 460.0,177.96398891966757 465.0,187.96398891966757" transform="rotate(0, 460.0, 182.96398891966757)"></polygon></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0"><polygon points="465.0,175.22160664819947 470.0,165.22160664819947 475.0,175.22160664819947" transform="rotate(0, 470.0, 170.22160664819947)"></polygon></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0"><polygon points="475.0,161.37119113573411 480.0,151.37119113573411 485.0,161.37119113573411" transform="rotate(0, 480.0, 156.37119113573411)"></polygon></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0"><polygon points="485.0,146.41274238227149 490.0,136.41274238227149 495.0,146.41274238227149" transform="rotate(0, 490.0, 141.41274238227149)"></polygon></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0"><polygon points="495.0,130.34626038781164 500.0,120.34626038781163 505.0,130.34626038781164" transform="rotate(0, 500.0, 125.34626038781163)"></polygon></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0"><polygon points="505.0,113.17174515235459 510.0,103.17174515235459 515.0,113.17174515235459" transform="rotate(0, 510.0, 108.17174515235459)"></polygon></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0"><polygon points="515.0,94.889196675900322 520.0,84.889196675900322 525.0,94.889196675900322" transform="rotate(0, 520.0, 89.889196675900322)"></polygon></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0"><polygon points="525.0,75.498614958448783 530.0,65.498614958448783 535.0,75.498614958448783" transform="rotate(0, 530.0, 70.498614958448783)"></polygon></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0"><polygon points="535.0,55.0 540.0,45.0 545.0,55.0" transform="rotate(0, 540.0, 50.0)"></polygon></g></g></g></g><g class="toyplot-coordinates" style="visibility:hidden"><rect height="14.0" style="fill:rgb(100%,100%,100%);fill-opacity:1.0;opacity:0.75;stroke:none" width="90.0" x="450.0" y="60.0"></rect><text style="alignment-baseline:middle;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" x="495.0" y="67.0"></text></g><g class="toyplot-axes-Axis" id="tb9014203079b40f1bb1fc7472702e4c2" transform="translate(350.0,250.0) rotate(0.0) translate(0,10.0)"><line style="" x1="0" x2="190.0" y1="0" y2="0"></line><g><text style="dominant-baseline:hanging;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(0.0,6)"><tspan style="dominant-baseline:inherit">0</tspan></text><text style="dominant-baseline:hanging;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(50.0,6)"><tspan style="dominant-baseline:inherit">5</tspan></text><text style="dominant-baseline:hanging;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(100.0,6)"><tspan style="dominant-baseline:inherit">10</tspan></text><text style="dominant-baseline:hanging;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(150.0,6)"><tspan style="dominant-baseline:inherit">15</tspan></text><text style="dominant-baseline:hanging;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(200.0,6)"><tspan style="dominant-baseline:inherit">20</tspan></text></g></g><g class="toyplot-axes-Axis" id="tda92cb41d6a84942a0287252825462b0" transform="translate(350.0,250.0) rotate(-90.0) translate(0,-10.0)"><line style="" x1="0" x2="200.0" y1="0" y2="0"></line><g><text style="dominant-baseline:alphabetic;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(0.0,-6)"><tspan style="dominant-baseline:inherit">0.0</tspan></text><text style="dominant-baseline:alphabetic;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(100.0,-6)"><tspan style="dominant-baseline:inherit">0.5</tspan></text><text style="dominant-baseline:alphabetic;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(200.0,-6)"><tspan style="dominant-baseline:inherit">1.0</tspan></text></g></g></g></svg><div class="toyplot-controls"><ul class="toyplot-mark-popup" onmouseleave="this.style.visibility='hidden'" style="background:rgba(0%,0%,0%,0.75);border:0;border-radius:6px;color:white;cursor:default;list-style:none;margin:0;padding:5px;position:fixed;visibility:hidden"><li class="toyplot-mark-popup-title" style="color:lightgray;cursor:default;padding:5px;list-style:none;margin:0;"></li><li class="toyplot-mark-popup-save-csv" onmouseout="this.style.color='white';this.style.background='steelblue'" onmouseover="this.style.color='steelblue';this.style.background='white'" style="border-radius:3px;padding:5px;list-style:none;margin:0;">Save as .csv</li></ul><script>
-    (function()
+    <div class="toyplot" id="te5b99c72e3814228b0f91b40ce0741b5" style="text-align:center"><svg class="toyplot-canvas-Canvas" height="300.0px" id="taa58950e63c443e1849c8577537af78d" preserveAspectRatio="xMidYMid meet" style="background-color:transparent;fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:Helvetica;font-size:12px;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0;stroke-width:1.0" viewBox="0 0 600.0 300.0" width="600.0px" xmlns="http://www.w3.org/2000/svg" xmlns:toyplot="http://www.sandia.gov/toyplot" xmlns:xlink="http://www.w3.org/1999/xlink"><g class="toyplot-coordinates-Cartesian" id="t9fbe9a487c9843fd9530a8d644347bae"><clipPath id="t973ba2baddbb4154822ef7882fba9a23"><rect height="220.0" width="220.0" x="40.0" y="40.0"></rect></clipPath><g clip-path="url(#t973ba2baddbb4154822ef7882fba9a23)"><g class="toyplot-mark-Scatterplot" id="t3ab9ebf42a844de7b675a11afe0b4dbb"><g class="toyplot-Series"><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(50.0, 250.0)"><line transform="rotate(45)" y1="-5.0" y2="5.0"></line><line transform="rotate(-45)" y1="-5.0" y2="5.0"></line></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(60.0, 249.4459833795014)"><line transform="rotate(45)" y1="-5.0" y2="5.0"></line><line transform="rotate(-45)" y1="-5.0" y2="5.0"></line></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(70.0, 247.78393351800551)"><line transform="rotate(45)" y1="-5.0" y2="5.0"></line><line transform="rotate(-45)" y1="-5.0" y2="5.0"></line></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(80.0, 245.01385041551248)"><line transform="rotate(45)" y1="-5.0" y2="5.0"></line><line transform="rotate(-45)" y1="-5.0" y2="5.0"></line></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(90.0, 241.13573407202216)"><line transform="rotate(45)" y1="-5.0" y2="5.0"></line><line transform="rotate(-45)" y1="-5.0" y2="5.0"></line></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(100.0, 236.14958448753461)"><line transform="rotate(45)" y1="-5.0" y2="5.0"></line><line transform="rotate(-45)" y1="-5.0" y2="5.0"></line></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(110.0, 230.05540166204986)"><line transform="rotate(45)" y1="-5.0" y2="5.0"></line><line transform="rotate(-45)" y1="-5.0" y2="5.0"></line></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(120.0, 222.85318559556785)"><line transform="rotate(45)" y1="-5.0" y2="5.0"></line><line transform="rotate(-45)" y1="-5.0" y2="5.0"></line></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(130.0, 214.54293628808864)"><line transform="rotate(45)" y1="-5.0" y2="5.0"></line><line transform="rotate(-45)" y1="-5.0" y2="5.0"></line></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(140.0, 205.1246537396122)"><line transform="rotate(45)" y1="-5.0" y2="5.0"></line><line transform="rotate(-45)" y1="-5.0" y2="5.0"></line></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(150.0, 194.5983379501385)"><line transform="rotate(45)" y1="-5.0" y2="5.0"></line><line transform="rotate(-45)" y1="-5.0" y2="5.0"></line></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(160.0, 182.96398891966757)"><line transform="rotate(45)" y1="-5.0" y2="5.0"></line><line transform="rotate(-45)" y1="-5.0" y2="5.0"></line></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(170.0, 170.22160664819947)"><line transform="rotate(45)" y1="-5.0" y2="5.0"></line><line transform="rotate(-45)" y1="-5.0" y2="5.0"></line></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(180.0, 156.37119113573411)"><line transform="rotate(45)" y1="-5.0" y2="5.0"></line><line transform="rotate(-45)" y1="-5.0" y2="5.0"></line></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(190.0, 141.41274238227149)"><line transform="rotate(45)" y1="-5.0" y2="5.0"></line><line transform="rotate(-45)" y1="-5.0" y2="5.0"></line></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(200.0, 125.34626038781163)"><line transform="rotate(45)" y1="-5.0" y2="5.0"></line><line transform="rotate(-45)" y1="-5.0" y2="5.0"></line></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(210.0, 108.17174515235459)"><line transform="rotate(45)" y1="-5.0" y2="5.0"></line><line transform="rotate(-45)" y1="-5.0" y2="5.0"></line></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(220.0, 89.889196675900322)"><line transform="rotate(45)" y1="-5.0" y2="5.0"></line><line transform="rotate(-45)" y1="-5.0" y2="5.0"></line></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(230.0, 70.498614958448783)"><line transform="rotate(45)" y1="-5.0" y2="5.0"></line><line transform="rotate(-45)" y1="-5.0" y2="5.0"></line></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(240.0, 50.0)"><line transform="rotate(45)" y1="-5.0" y2="5.0"></line><line transform="rotate(-45)" y1="-5.0" y2="5.0"></line></g></g></g></g><g class="toyplot-coordinates-Axis" id="t9024dbb3b3064c5188c7b3a63e48fd25" transform="translate(50.0,250.0)translate(0,10.0)"><line style="" x1="0" x2="190.0" y1="0" y2="0"></line><g><g transform="translate(0.0,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-2.78" y="8.555">0</text></g><g transform="translate(50.0,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-2.78" y="8.555">5</text></g><g transform="translate(100.0,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-5.56" y="8.555">10</text></g><g transform="translate(150.0,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-5.56" y="8.555">15</text></g><g transform="translate(200.0,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-5.56" y="8.555">20</text></g></g><g class="toyplot-coordinates-Axis-coordinates" style="visibility:hidden" transform=""><line style="stroke:rgb(43.9%,50.2%,56.5%);stroke-opacity:1.0;stroke-width:1.0" x1="0" x2="0" y1="-3.0" y2="4.5"></line><text style="alignment-baseline:alphabetic;fill:rgb(43.9%,50.2%,56.5%);fill-opacity:1.0;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" x="0" y="-6"></text></g></g><g class="toyplot-coordinates-Axis" id="tdb66f128d2cd42df80fc07c9ca05afec" transform="translate(50.0,250.0)rotate(-90.0)translate(0,-10.0)"><line style="" x1="0" x2="200.0" y1="0" y2="0"></line><g><g transform="translate(0.0,-6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-6.95" y="-4.4408920985e-16">0.0</text></g><g transform="translate(100.0,-6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-6.95" y="-4.4408920985e-16">0.5</text></g><g transform="translate(200.0,-6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-6.95" y="-4.4408920985e-16">1.0</text></g></g><g class="toyplot-coordinates-Axis-coordinates" style="visibility:hidden" transform=""><line style="stroke:rgb(43.9%,50.2%,56.5%);stroke-opacity:1.0;stroke-width:1.0" x1="0" x2="0" y1="3.0" y2="-4.5"></line><text style="alignment-baseline:hanging;fill:rgb(43.9%,50.2%,56.5%);fill-opacity:1.0;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" x="0" y="6"></text></g></g></g><g class="toyplot-coordinates-Cartesian" id="t4e9023b65be3411ea0a69c884abc7514"><clipPath id="t60fb82ef8ac1434a93b40514c81fe337"><rect height="220.0" width="220.0" x="340.0" y="40.0"></rect></clipPath><g clip-path="url(#t60fb82ef8ac1434a93b40514c81fe337)"><g class="toyplot-mark-Scatterplot" id="t6c160f99be4a4da6ab587c049c044751"><g class="toyplot-Series"><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0" transform="translate(350.0, 250.0)"><polygon points="-5.0,5.0 0,-5.0 5.0,5.0"></polygon></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0" transform="translate(360.0, 249.4459833795014)"><polygon points="-5.0,5.0 0,-5.0 5.0,5.0"></polygon></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0" transform="translate(370.0, 247.78393351800551)"><polygon points="-5.0,5.0 0,-5.0 5.0,5.0"></polygon></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0" transform="translate(380.0, 245.01385041551248)"><polygon points="-5.0,5.0 0,-5.0 5.0,5.0"></polygon></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0" transform="translate(390.0, 241.13573407202216)"><polygon points="-5.0,5.0 0,-5.0 5.0,5.0"></polygon></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0" transform="translate(400.0, 236.14958448753461)"><polygon points="-5.0,5.0 0,-5.0 5.0,5.0"></polygon></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0" transform="translate(410.0, 230.05540166204986)"><polygon points="-5.0,5.0 0,-5.0 5.0,5.0"></polygon></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0" transform="translate(420.0, 222.85318559556785)"><polygon points="-5.0,5.0 0,-5.0 5.0,5.0"></polygon></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0" transform="translate(430.0, 214.54293628808864)"><polygon points="-5.0,5.0 0,-5.0 5.0,5.0"></polygon></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0" transform="translate(440.0, 205.1246537396122)"><polygon points="-5.0,5.0 0,-5.0 5.0,5.0"></polygon></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0" transform="translate(450.0, 194.5983379501385)"><polygon points="-5.0,5.0 0,-5.0 5.0,5.0"></polygon></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0" transform="translate(460.0, 182.96398891966757)"><polygon points="-5.0,5.0 0,-5.0 5.0,5.0"></polygon></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0" transform="translate(470.0, 170.22160664819947)"><polygon points="-5.0,5.0 0,-5.0 5.0,5.0"></polygon></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0" transform="translate(480.0, 156.37119113573411)"><polygon points="-5.0,5.0 0,-5.0 5.0,5.0"></polygon></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0" transform="translate(490.0, 141.41274238227149)"><polygon points="-5.0,5.0 0,-5.0 5.0,5.0"></polygon></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0" transform="translate(500.0, 125.34626038781163)"><polygon points="-5.0,5.0 0,-5.0 5.0,5.0"></polygon></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0" transform="translate(510.0, 108.17174515235459)"><polygon points="-5.0,5.0 0,-5.0 5.0,5.0"></polygon></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0" transform="translate(520.0, 89.889196675900322)"><polygon points="-5.0,5.0 0,-5.0 5.0,5.0"></polygon></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0" transform="translate(530.0, 70.498614958448783)"><polygon points="-5.0,5.0 0,-5.0 5.0,5.0"></polygon></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0" transform="translate(540.0, 50.0)"><polygon points="-5.0,5.0 0,-5.0 5.0,5.0"></polygon></g></g></g></g><g class="toyplot-coordinates-Axis" id="tbb1be860242d493d842a63cee92f6116" transform="translate(350.0,250.0)translate(0,10.0)"><line style="" x1="0" x2="190.0" y1="0" y2="0"></line><g><g transform="translate(0.0,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-2.78" y="8.555">0</text></g><g transform="translate(50.0,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-2.78" y="8.555">5</text></g><g transform="translate(100.0,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-5.56" y="8.555">10</text></g><g transform="translate(150.0,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-5.56" y="8.555">15</text></g><g transform="translate(200.0,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-5.56" y="8.555">20</text></g></g><g class="toyplot-coordinates-Axis-coordinates" style="visibility:hidden" transform=""><line style="stroke:rgb(43.9%,50.2%,56.5%);stroke-opacity:1.0;stroke-width:1.0" x1="0" x2="0" y1="-3.0" y2="4.5"></line><text style="alignment-baseline:alphabetic;fill:rgb(43.9%,50.2%,56.5%);fill-opacity:1.0;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" x="0" y="-6"></text></g></g><g class="toyplot-coordinates-Axis" id="te1eecf8cc6fb4d4a8f8471ef97afce90" transform="translate(350.0,250.0)rotate(-90.0)translate(0,-10.0)"><line style="" x1="0" x2="200.0" y1="0" y2="0"></line><g><g transform="translate(0.0,-6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-6.95" y="-4.4408920985e-16">0.0</text></g><g transform="translate(100.0,-6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-6.95" y="-4.4408920985e-16">0.5</text></g><g transform="translate(200.0,-6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-6.95" y="-4.4408920985e-16">1.0</text></g></g><g class="toyplot-coordinates-Axis-coordinates" style="visibility:hidden" transform=""><line style="stroke:rgb(43.9%,50.2%,56.5%);stroke-opacity:1.0;stroke-width:1.0" x1="0" x2="0" y1="3.0" y2="-4.5"></line><text style="alignment-baseline:hanging;fill:rgb(43.9%,50.2%,56.5%);fill-opacity:1.0;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" x="0" y="6"></text></g></g></g></svg><div class="toyplot-behavior"><script>(function()
     {
-      var data_tables = [{"data": [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19], [0.0, 0.0027700831024930744, 0.011080332409972297, 0.02493074792243767, 0.04432132963988919, 0.06925207756232686, 0.09972299168975068, 0.13573407202216065, 0.17728531855955676, 0.22437673130193903, 0.27700831024930744, 0.33518005540166207, 0.39889196675900274, 0.4681440443213295, 0.5429362880886426, 0.6232686980609419, 0.709141274238227, 0.8005540166204984, 0.8975069252077561, 1.0]], "title": "Scatterplot Data", "names": ["x", "y0"], "id": "t3c8790d13e7b451d995e2bc27c5dc4f3", "filename": "toyplot"}, {"data": [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19], [0.0, 0.0027700831024930744, 0.011080332409972297, 0.02493074792243767, 0.04432132963988919, 0.06925207756232686, 0.09972299168975068, 0.13573407202216065, 0.17728531855955676, 0.22437673130193903, 0.27700831024930744, 0.33518005540166207, 0.39889196675900274, 0.4681440443213295, 0.5429362880886426, 0.6232686980609419, 0.709141274238227, 0.8005540166204984, 0.8975069252077561, 1.0]], "title": "Scatterplot Data", "names": ["x", "y0"], "id": "t60285f90875848f195411aee69ef696a", "filename": "toyplot"}];
-    
-      function save_csv(data_table)
-      {
-        var uri = "data:text/csv;charset=utf-8,";
-        uri += data_table.names.join(",") + "\n";
-        for(var i = 0; i != data_table.data[0].length; ++i)
+    var modules={};
+    modules["toyplot/tables"] = (function()
         {
-          for(var j = 0; j != data_table.data.length; ++j)
-          {
-            if(j)
-              uri += ",";
-            uri += data_table.data[j][i];
-          }
-          uri += "\n";
-        }
-        uri = encodeURI(uri);
+            var tables = [];
     
-        var link = document.createElement("a");
-        if(typeof link.download != "undefined")
-        {
-          link.href = uri;
-          link.style = "visibility:hidden";
-          link.download = data_table.filename + ".csv";
+            var module = {};
     
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-        }
-        else
-        {
-          window.open(uri);
-        }
-      }
-    
-      function open_popup(data_table)
-      {
-        return function(e)
-        {
-          var popup = document.querySelector("#t21aa1112be0d43fb8f61120bc5d2cc49 .toyplot-mark-popup");
-          popup.querySelector(".toyplot-mark-popup-title").innerHTML = data_table.title;
-          popup.querySelector(".toyplot-mark-popup-save-csv").onclick = function() { popup.style.visibility = "hidden"; save_csv(data_table); }
-          popup.style.left = (e.clientX - 50) + "px";
-          popup.style.top = (e.clientY - 20) + "px";
-          popup.style.visibility = "visible";
-          e.stopPropagation();
-          e.preventDefault();
-        }
-    
-      }
-    
-      for(var i = 0; i != data_tables.length; ++i)
-      {
-        var data_table = data_tables[i];
-        var event_target = document.querySelector("#" + data_table.id);
-        event_target.oncontextmenu = open_popup(data_table);
-      }
-    })();
-    </script><script>
-    (function()
-    {
-      var axes = {"t28c2b0bcae0c45a4b5fd1f3d3c7f0fd9": {"x": [{"domain": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 20.0, "min": 0.0}, "range": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 250.0, "min": 50.0}, "scale": "linear"}], "y": [{"domain": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 1.0, "min": 0.0}, "range": {"bounds": {"max": -Infinity, "min": Infinity}, "max": 50.0, "min": 250.0}, "scale": "linear"}]}, "t5afae70226154dc180e3edc03708f457": {"x": [{"domain": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 20.0, "min": 0.0}, "range": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 550.0, "min": 350.0}, "scale": "linear"}], "y": [{"domain": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 1.0, "min": 0.0}, "range": {"bounds": {"max": -Infinity, "min": Infinity}, "max": 50.0, "min": 250.0}, "scale": "linear"}]}};
-    
-      function sign(x)
-      {
-        return x < 0 ? -1 : x > 0 ? 1 : 0;
-      }
-    
-      function _mix(a, b, amount)
-      {
-        return ((1.0 - amount) * a) + (amount * b);
-      }
-    
-      function _log(x, base)
-      {
-        return Math.log(Math.abs(x)) / Math.log(base);
-      }
-    
-      function _in_range(a, x, b)
-      {
-        var left = Math.min(a, b);
-        var right = Math.max(a, b);
-        return left <= x && x <= right;
-      }
-    
-      function to_domain(projection, range)
-      {
-        for(var i = 0; i != projection.length; ++i)
-        {
-          var segment = projection[i];
-          if(_in_range(segment.range.bounds.min, range, segment.range.bounds.max))
-          {
-            if(segment.scale == "linear")
+            module.set = function(owner, key, names, columns)
             {
-              var amount = (range - segment.range.min) / (segment.range.max - segment.range.min);
-              return _mix(segment.domain.min, segment.domain.max, amount)
+                tables.push({owner: owner, key: key, names: names, columns: columns});
             }
-            else if(segment.scale[0] == "log")
+    
+            module.get = function(owner, key)
             {
-              var amount = (range - segment.range.min) / (segment.range.max - segment.range.min);
-              var base = segment.scale[1];
-              return sign(segment.domain.min) * Math.pow(base, _mix(_log(segment.domain.min, base), _log(segment.domain.max, base), amount));
+                for(var i = 0; i != tables.length; ++i)
+                {
+                    var table = tables[i];
+                    if(table.owner != owner)
+                        continue;
+                    if(table.key != key)
+                        continue;
+                    return {names: table.names, columns: table.columns};
+                }
             }
-          }
-        }
-      }
     
-      // Compute mouse coordinates relative to a DOM object, with thanks to d3js.org, where this code originated.
-      function d3_mousePoint(container, e)
-      {
-        if (e.changedTouches) e = e.changedTouches[0];
-        var svg = container.ownerSVGElement || container;
-        if (svg.createSVGPoint) {
-          var point = svg.createSVGPoint();
-          point.x = e.clientX, point.y = e.clientY;
-          point = point.matrixTransform(container.getScreenCTM().inverse());
-          return [point.x, point.y];
-        }
-        var rect = container.getBoundingClientRect();
-        return [e.clientX - rect.left - container.clientLeft, e.clientY - rect.top - container.clientTop];
-      };
+            module.get_csv = function(owner, key)
+            {
+                var table = module.get(owner, key);
+                if(table != undefined)
+                {
+                    var csv = "";
+                    csv += table.names.join(",") + "\n";
+                    for(var i = 0; i != table.columns[0].length; ++i)
+                    {
+                      for(var j = 0; j != table.columns.length; ++j)
+                      {
+                        if(j)
+                          csv += ",";
+                        csv += table.columns[j][i];
+                      }
+                      csv += "\n";
+                    }
+                    return csv;
+                }
+            }
     
-      function display_coordinates(e)
-      {
-        var dom_axes = e.currentTarget.parentElement;
-        var data = axes[dom_axes.id];
-    
-        point = d3_mousePoint(e.target, e);
-        var x = Number(to_domain(data["x"], point[0])).toFixed(2);
-        var y = Number(to_domain(data["y"], point[1])).toFixed(2);
-    
-        var coordinates = dom_axes.querySelectorAll(".toyplot-coordinates");
-        for(var i = 0; i != coordinates.length; ++i)
+            return module;
+        })();
+    modules["toyplot/root/id"] = "te5b99c72e3814228b0f91b40ce0741b5";
+    modules["toyplot/root"] = (function(root_id)
         {
-          coordinates[i].style.visibility = "visible";
-          coordinates[i].querySelector("text").textContent = "x=" + x + " y=" + y;
-        }
-      }
+            return document.querySelector("#" + root_id);
+        })(modules["toyplot/root/id"]);
+    modules["toyplot/canvas/id"] = "taa58950e63c443e1849c8577537af78d";
+    modules["toyplot/canvas"] = (function(canvas_id)
+        {
+            return document.querySelector("#" + canvas_id);
+        })(modules["toyplot/canvas/id"]);
+    modules["toyplot/menus/context"] = (function(root, canvas)
+        {
+            var wrapper = document.createElement("div");
+            wrapper.innerHTML = "<ul class='toyplot-context-menu' style='background:#eee; border:1px solid #b8b8b8; border-radius:5px; box-shadow: 0px 0px 8px rgba(0%,0%,0%,0.25); margin:0; padding:3px 0; position:fixed; visibility:hidden;'></ul>"
+            var menu = wrapper.firstChild;
     
-      function clear_coordinates(e)
-      {
-        var dom_axes = e.currentTarget.parentElement;
-        var coordinates = dom_axes.querySelectorAll(".toyplot-coordinates");
-        for(var i = 0; i != coordinates.length; ++i)
-          coordinates[i].style.visibility = "hidden";
-      }
+            root.appendChild(menu);
     
-      for(var axes_id in axes)
-      {
-        var event_target = document.querySelector("#" + axes_id + " .toyplot-coordinate-events");
-        event_target.onmousemove = display_coordinates;
-        event_target.onmouseout = clear_coordinates;
-      }
-    })();
-    </script></div></div>
+            var items = [];
+    
+            var ignore_mouseup = null;
+            function open_menu(e)
+            {
+                var show_menu = false;
+                for(var index=0; index != items.length; ++index)
+                {
+                    var item = items[index];
+                    if(item.show(e))
+                    {
+                        item.item.style.display = "block";
+                        show_menu = true;
+                    }
+                    else
+                    {
+                        item.item.style.display = "none";
+                    }
+                }
+    
+                if(show_menu)
+                {
+                    ignore_mouseup = true;
+                    menu.style.left = (e.clientX + 1) + "px";
+                    menu.style.top = (e.clientY - 5) + "px";
+                    menu.style.visibility = "visible";
+                    e.stopPropagation();
+                    e.preventDefault();
+                }
+            }
+    
+            function close_menu()
+            {
+                menu.style.visibility = "hidden";
+            }
+    
+            function contextmenu(e)
+            {
+                open_menu(e);
+            }
+    
+            function mousemove(e)
+            {
+                ignore_mouseup = false;
+            }
+    
+            function mouseup(e)
+            {
+                if(ignore_mouseup)
+                {
+                    ignore_mouseup = false;
+                    return;
+                }
+                close_menu();
+            }
+    
+            function keydown(e)
+            {
+                if(e.key == "Escape" || e.key == "Esc" || e.keyCode == 27)
+                {
+                    close_menu();
+                }
+            }
+    
+            canvas.addEventListener("contextmenu", contextmenu);
+            canvas.addEventListener("mousemove", mousemove);
+            document.addEventListener("mouseup", mouseup);
+            document.addEventListener("keydown", keydown);
+    
+            var module = {};
+            module.add_item = function(label, show, activate)
+            {
+                var wrapper = document.createElement("div");
+                wrapper.innerHTML = "<li class='toyplot-context-menu-item' style='background:#eee; color:#333; padding:2px 20px; list-style:none; margin:0; text-align:left;'>" + label + "</li>"
+                var item = wrapper.firstChild;
+    
+                items.push({item: item, show: show});
+    
+                function mouseover()
+                {
+                    this.style.background = "steelblue";
+                    this.style.color = "white";
+                }
+    
+                function mouseout()
+                {
+                    this.style.background = "#eee";
+                    this.style.color = "#333";
+                }
+    
+                function choose_item(e)
+                {
+                    close_menu();
+                    activate();
+    
+                    e.stopPropagation();
+                    e.preventDefault();
+                }
+    
+                item.addEventListener("mouseover", mouseover);
+                item.addEventListener("mouseout", mouseout);
+                item.addEventListener("mouseup", choose_item);
+                item.addEventListener("contextmenu", choose_item);
+    
+                menu.appendChild(item);
+            };
+            return module;
+        })(modules["toyplot/root"],modules["toyplot/canvas"]);
+    modules["toyplot/io"] = (function()
+        {
+            var module = {};
+            module.save_file = function(mime_type, charset, data, filename)
+            {
+                var uri = "data:" + mime_type + ";charset=" + charset + "," + data;
+                uri = encodeURI(uri);
+    
+                var link = document.createElement("a");
+                if(typeof link.download != "undefined")
+                {
+                  link.href = uri;
+                  link.style = "visibility:hidden";
+                  link.download = filename;
+    
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+                }
+                else
+                {
+                  window.open(uri);
+                }
+            };
+            return module;
+        })();
+    modules["toyplot.coordinates.Axis"] = (
+            function(canvas)
+            {
+                function sign(x)
+                {
+                    return x < 0 ? -1 : x > 0 ? 1 : 0;
+                }
+    
+                function mix(a, b, amount)
+                {
+                    return ((1.0 - amount) * a) + (amount * b);
+                }
+    
+                function log(x, base)
+                {
+                    return Math.log(Math.abs(x)) / Math.log(base);
+                }
+    
+                function in_range(a, x, b)
+                {
+                    var left = Math.min(a, b);
+                    var right = Math.max(a, b);
+                    return left <= x && x <= right;
+                }
+    
+                function inside(range, projection)
+                {
+                    for(var i = 0; i != projection.length; ++i)
+                    {
+                        var segment = projection[i];
+                        if(in_range(segment.range.min, range, segment.range.max))
+                            return true;
+                    }
+                    return false;
+                }
+    
+                function to_domain(range, projection)
+                {
+                    for(var i = 0; i != projection.length; ++i)
+                    {
+                        var segment = projection[i];
+                        if(in_range(segment.range.bounds.min, range, segment.range.bounds.max))
+                        {
+                            if(segment.scale == "linear")
+                            {
+                                var amount = (range - segment.range.min) / (segment.range.max - segment.range.min);
+                                return mix(segment.domain.min, segment.domain.max, amount)
+                            }
+                            else if(segment.scale[0] == "log")
+                            {
+                                var amount = (range - segment.range.min) / (segment.range.max - segment.range.min);
+                                var base = segment.scale[1];
+                                return sign(segment.domain.min) * Math.pow(base, mix(log(segment.domain.min, base), log(segment.domain.max, base), amount));
+                            }
+                        }
+                    }
+                }
+    
+                var axes = {};
+    
+                function display_coordinates(e)
+                {
+                    var current = canvas.createSVGPoint();
+                    current.x = e.clientX;
+                    current.y = e.clientY;
+    
+                    for(var axis_id in axes)
+                    {
+                        var axis = document.querySelector("#" + axis_id);
+                        var coordinates = axis.querySelector(".toyplot-coordinates-Axis-coordinates");
+                        if(coordinates)
+                        {
+                            var projection = axes[axis_id];
+                            var local = current.matrixTransform(axis.getScreenCTM().inverse());
+                            if(inside(local.x, projection))
+                            {
+                                var domain = to_domain(local.x, projection);
+                                coordinates.style.visibility = "visible";
+                                coordinates.setAttribute("transform", "translate(" + local.x + ")");
+                                var text = coordinates.querySelector("text");
+                                text.textContent = domain.toFixed(2);
+                            }
+                            else
+                            {
+                                coordinates.style.visibility= "hidden";
+                            }
+                        }
+                    }
+                }
+    
+                canvas.addEventListener("click", display_coordinates);
+    
+                var module = {};
+                module.show_coordinates = function(axis_id, projection)
+                {
+                    axes[axis_id] = projection;
+                }
+    
+                return module;
+            })(modules["toyplot/canvas"]);
+    (function(tables, context_menu, io, owner_id, key, label, names, columns, filename)
+            {
+                tables.set(owner_id, key, names, columns);
+    
+                var owner = document.querySelector("#" + owner_id);
+                function show_item(e)
+                {
+                    return owner.contains(e.target);
+                }
+    
+                function choose_item()
+                {
+                    io.save_file("text/csv", "utf-8", tables.get_csv(owner_id, key), filename + ".csv");
+                }
+    
+                context_menu.add_item("Save " + label + " as CSV", show_item, choose_item);
+            })(modules["toyplot/tables"],modules["toyplot/menus/context"],modules["toyplot/io"],"t3ab9ebf42a844de7b675a11afe0b4dbb","data","scatterplot",["x", "y0"],[[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19], [0.0, 0.0027700831024930744, 0.011080332409972297, 0.02493074792243767, 0.04432132963988919, 0.06925207756232686, 0.09972299168975068, 0.13573407202216065, 0.17728531855955676, 0.22437673130193903, 0.27700831024930744, 0.33518005540166207, 0.39889196675900274, 0.4681440443213295, 0.5429362880886426, 0.6232686980609419, 0.709141274238227, 0.8005540166204984, 0.8975069252077561, 1.0]],"toyplot");
+    (function(axis, axis_id, projection)
+            {
+                axis.show_coordinates(axis_id, projection);
+            })(modules["toyplot.coordinates.Axis"],"t9024dbb3b3064c5188c7b3a63e48fd25",[{"domain": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 20.0, "min": 0.0}, "range": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 200.0, "min": 0.0}, "scale": "linear"}]);
+    (function(axis, axis_id, projection)
+            {
+                axis.show_coordinates(axis_id, projection);
+            })(modules["toyplot.coordinates.Axis"],"tdb66f128d2cd42df80fc07c9ca05afec",[{"domain": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 1.0, "min": 0.0}, "range": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 200.0, "min": 0.0}, "scale": "linear"}]);
+    (function(tables, context_menu, io, owner_id, key, label, names, columns, filename)
+            {
+                tables.set(owner_id, key, names, columns);
+    
+                var owner = document.querySelector("#" + owner_id);
+                function show_item(e)
+                {
+                    return owner.contains(e.target);
+                }
+    
+                function choose_item()
+                {
+                    io.save_file("text/csv", "utf-8", tables.get_csv(owner_id, key), filename + ".csv");
+                }
+    
+                context_menu.add_item("Save " + label + " as CSV", show_item, choose_item);
+            })(modules["toyplot/tables"],modules["toyplot/menus/context"],modules["toyplot/io"],"t6c160f99be4a4da6ab587c049c044751","data","scatterplot",["x", "y0"],[[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19], [0.0, 0.0027700831024930744, 0.011080332409972297, 0.02493074792243767, 0.04432132963988919, 0.06925207756232686, 0.09972299168975068, 0.13573407202216065, 0.17728531855955676, 0.22437673130193903, 0.27700831024930744, 0.33518005540166207, 0.39889196675900274, 0.4681440443213295, 0.5429362880886426, 0.6232686980609419, 0.709141274238227, 0.8005540166204984, 0.8975069252077561, 1.0]],"toyplot");
+    (function(axis, axis_id, projection)
+            {
+                axis.show_coordinates(axis_id, projection);
+            })(modules["toyplot.coordinates.Axis"],"tbb1be860242d493d842a63cee92f6116",[{"domain": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 20.0, "min": 0.0}, "range": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 200.0, "min": 0.0}, "scale": "linear"}]);
+    (function(axis, axis_id, projection)
+            {
+                axis.show_coordinates(axis_id, projection);
+            })(modules["toyplot.coordinates.Axis"],"te1eecf8cc6fb4d4a8f8471ef97afce90",[{"domain": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 1.0, "min": 0.0}, "range": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 200.0, "min": 0.0}, "scale": "linear"}]);
+    })();</script></div></div>
 
 
 Note the use of the *mstyle* argument to override the appearance of the
@@ -714,535 +1472,1426 @@ the lines and the markers separately:
 .. code:: python
 
     canvas = toyplot.Canvas(600, 300)
-    canvas.axes(grid=(1, 2, 0)).plot(y, marker="o", size=8, style={"stroke":"darkgreen"})
-    canvas.axes(grid=(1, 2, 1)).plot(y, marker="o", size=8, mstyle={"stroke":"darkgreen"});
+    canvas.cartesian(grid=(1, 2, 0)).plot(y, marker="o", size=8, style={"stroke":"darkgreen"})
+    canvas.cartesian(grid=(1, 2, 1)).plot(y, marker="o", size=8, mstyle={"stroke":"darkgreen"});
 
 
 
 .. raw:: html
 
-    <div align="center" class="toyplot" id="tb07cdd65f1cf4bc5803ba11d7bd51765"><svg height="300.0px" id="ta3a268627b1b4078afe749ba3b6590de" preserveAspectRatio="xMidYMid meet" style="background-color:transparent;fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:Helvetica;font-size:12px;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0;stroke-width:1.0" viewBox="0 0 600.0 300.0" width="600.0px" xmlns="http://www.w3.org/2000/svg" xmlns:toyplot="http://www.sandia.gov/toyplot"><g class="toyplot-axes-Cartesian" id="t2f9dd8ce9a3d446da60bd738085d0d9e"><clipPath id="t130cbe1105954a7da4806f6a1823fb61"><rect height="220.0" width="220.0" x="40.0" y="40.0"></rect></clipPath><g class="toyplot-coordinate-events" clip-path="url(#t130cbe1105954a7da4806f6a1823fb61)" style="cursor:crosshair"><rect height="220.0" style="pointer-events:all;visibility:hidden" width="220.0" x="40.0" y="40.0"></rect><g class="toyplot-mark-Plot" id="tc7a6e8fbfb274154b402e4b8eb7c2a07" style="fill:none;stroke:rgb(0%,39.2%,0%);stroke-opacity:1.0"><g class="toyplot-Series"><path d="M 50.0 250.0 L 60.0 249.4459833795014 L 70.0 247.78393351800551 L 80.0 245.01385041551248 L 90.0 241.13573407202216 L 100.0 236.14958448753461 L 110.0 230.05540166204986 L 120.0 222.85318559556785 L 130.0 214.54293628808864 L 140.0 205.1246537396122 L 150.0 194.5983379501385 L 160.0 182.96398891966757 L 170.0 170.22160664819947 L 180.0 156.37119113573411 L 190.0 141.41274238227149 L 200.0 125.34626038781163 L 210.0 108.17174515235459 L 220.0 89.889196675900322 L 230.0 70.498614958448783 L 240.0 50.0" style="stroke:rgb(0%,39.2%,0%);stroke-opacity:1.0;stroke-width:2.0"></path><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="50.0" cy="250.0" r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="60.0" cy="249.4459833795014" r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="70.0" cy="247.78393351800551" r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="80.0" cy="245.01385041551248" r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="90.0" cy="241.13573407202216" r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="100.0" cy="236.14958448753461" r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="110.0" cy="230.05540166204986" r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="120.0" cy="222.85318559556785" r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="130.0" cy="214.54293628808864" r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="140.0" cy="205.1246537396122" r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="150.0" cy="194.5983379501385" r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="160.0" cy="182.96398891966757" r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="170.0" cy="170.22160664819947" r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="180.0" cy="156.37119113573411" r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="190.0" cy="141.41274238227149" r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="200.0" cy="125.34626038781163" r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="210.0" cy="108.17174515235459" r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="220.0" cy="89.889196675900322" r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="230.0" cy="70.498614958448783" r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="240.0" cy="50.0" r="4.0"></circle></g></g></g></g><g class="toyplot-coordinates" style="visibility:hidden"><rect height="14.0" style="fill:rgb(100%,100%,100%);fill-opacity:1.0;opacity:0.75;stroke:none" width="90.0" x="150.0" y="60.0"></rect><text style="alignment-baseline:middle;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" x="195.0" y="67.0"></text></g><g class="toyplot-axes-Axis" id="t3c728f71c35044fb941f774fcf7c4444" transform="translate(50.0,250.0) rotate(0.0) translate(0,10.0)"><line style="" x1="0" x2="190.0" y1="0" y2="0"></line><g><text style="dominant-baseline:hanging;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(0.0,6)"><tspan style="dominant-baseline:inherit">0</tspan></text><text style="dominant-baseline:hanging;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(50.0,6)"><tspan style="dominant-baseline:inherit">5</tspan></text><text style="dominant-baseline:hanging;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(100.0,6)"><tspan style="dominant-baseline:inherit">10</tspan></text><text style="dominant-baseline:hanging;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(150.0,6)"><tspan style="dominant-baseline:inherit">15</tspan></text><text style="dominant-baseline:hanging;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(200.0,6)"><tspan style="dominant-baseline:inherit">20</tspan></text></g></g><g class="toyplot-axes-Axis" id="ta31177517ecc4b95b79f8a1ee84a8762" transform="translate(50.0,250.0) rotate(-90.0) translate(0,-10.0)"><line style="" x1="0" x2="200.0" y1="0" y2="0"></line><g><text style="dominant-baseline:alphabetic;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(0.0,-6)"><tspan style="dominant-baseline:inherit">0.0</tspan></text><text style="dominant-baseline:alphabetic;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(100.0,-6)"><tspan style="dominant-baseline:inherit">0.5</tspan></text><text style="dominant-baseline:alphabetic;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(200.0,-6)"><tspan style="dominant-baseline:inherit">1.0</tspan></text></g></g></g><g class="toyplot-axes-Cartesian" id="tcca002a5c75a4040ab7fdbd35a3312bb"><clipPath id="tdded0c1399594d959c4a5d34a803a12a"><rect height="220.0" width="220.0" x="340.0" y="40.0"></rect></clipPath><g class="toyplot-coordinate-events" clip-path="url(#tdded0c1399594d959c4a5d34a803a12a)" style="cursor:crosshair"><rect height="220.0" style="pointer-events:all;visibility:hidden" width="220.0" x="340.0" y="40.0"></rect><g class="toyplot-mark-Plot" id="t6b0e7e2434574edda978c95058accff5" style="fill:none"><g class="toyplot-Series"><path d="M 350.0 250.0 L 360.0 249.4459833795014 L 370.0 247.78393351800551 L 380.0 245.01385041551248 L 390.0 241.13573407202216 L 400.0 236.14958448753461 L 410.0 230.05540166204986 L 420.0 222.85318559556785 L 430.0 214.54293628808864 L 440.0 205.1246537396122 L 450.0 194.5983379501385 L 460.0 182.96398891966757 L 470.0 170.22160664819947 L 480.0 156.37119113573411 L 490.0 141.41274238227149 L 500.0 125.34626038781163 L 510.0 108.17174515235459 L 520.0 89.889196675900322 L 530.0 70.498614958448783 L 540.0 50.0" style="stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0;stroke-width:2.0"></path><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(0%,39.2%,0%);stroke-opacity:1.0"><circle cx="350.0" cy="250.0" r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(0%,39.2%,0%);stroke-opacity:1.0"><circle cx="360.0" cy="249.4459833795014" r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(0%,39.2%,0%);stroke-opacity:1.0"><circle cx="370.0" cy="247.78393351800551" r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(0%,39.2%,0%);stroke-opacity:1.0"><circle cx="380.0" cy="245.01385041551248" r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(0%,39.2%,0%);stroke-opacity:1.0"><circle cx="390.0" cy="241.13573407202216" r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(0%,39.2%,0%);stroke-opacity:1.0"><circle cx="400.0" cy="236.14958448753461" r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(0%,39.2%,0%);stroke-opacity:1.0"><circle cx="410.0" cy="230.05540166204986" r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(0%,39.2%,0%);stroke-opacity:1.0"><circle cx="420.0" cy="222.85318559556785" r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(0%,39.2%,0%);stroke-opacity:1.0"><circle cx="430.0" cy="214.54293628808864" r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(0%,39.2%,0%);stroke-opacity:1.0"><circle cx="440.0" cy="205.1246537396122" r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(0%,39.2%,0%);stroke-opacity:1.0"><circle cx="450.0" cy="194.5983379501385" r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(0%,39.2%,0%);stroke-opacity:1.0"><circle cx="460.0" cy="182.96398891966757" r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(0%,39.2%,0%);stroke-opacity:1.0"><circle cx="470.0" cy="170.22160664819947" r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(0%,39.2%,0%);stroke-opacity:1.0"><circle cx="480.0" cy="156.37119113573411" r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(0%,39.2%,0%);stroke-opacity:1.0"><circle cx="490.0" cy="141.41274238227149" r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(0%,39.2%,0%);stroke-opacity:1.0"><circle cx="500.0" cy="125.34626038781163" r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(0%,39.2%,0%);stroke-opacity:1.0"><circle cx="510.0" cy="108.17174515235459" r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(0%,39.2%,0%);stroke-opacity:1.0"><circle cx="520.0" cy="89.889196675900322" r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(0%,39.2%,0%);stroke-opacity:1.0"><circle cx="530.0" cy="70.498614958448783" r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(0%,39.2%,0%);stroke-opacity:1.0"><circle cx="540.0" cy="50.0" r="4.0"></circle></g></g></g></g><g class="toyplot-coordinates" style="visibility:hidden"><rect height="14.0" style="fill:rgb(100%,100%,100%);fill-opacity:1.0;opacity:0.75;stroke:none" width="90.0" x="450.0" y="60.0"></rect><text style="alignment-baseline:middle;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" x="495.0" y="67.0"></text></g><g class="toyplot-axes-Axis" id="taf7b4ed943664cbab6480167bcdee64c" transform="translate(350.0,250.0) rotate(0.0) translate(0,10.0)"><line style="" x1="0" x2="190.0" y1="0" y2="0"></line><g><text style="dominant-baseline:hanging;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(0.0,6)"><tspan style="dominant-baseline:inherit">0</tspan></text><text style="dominant-baseline:hanging;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(50.0,6)"><tspan style="dominant-baseline:inherit">5</tspan></text><text style="dominant-baseline:hanging;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(100.0,6)"><tspan style="dominant-baseline:inherit">10</tspan></text><text style="dominant-baseline:hanging;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(150.0,6)"><tspan style="dominant-baseline:inherit">15</tspan></text><text style="dominant-baseline:hanging;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(200.0,6)"><tspan style="dominant-baseline:inherit">20</tspan></text></g></g><g class="toyplot-axes-Axis" id="tc7353f678492419fb102ee7641561898" transform="translate(350.0,250.0) rotate(-90.0) translate(0,-10.0)"><line style="" x1="0" x2="200.0" y1="0" y2="0"></line><g><text style="dominant-baseline:alphabetic;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(0.0,-6)"><tspan style="dominant-baseline:inherit">0.0</tspan></text><text style="dominant-baseline:alphabetic;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(100.0,-6)"><tspan style="dominant-baseline:inherit">0.5</tspan></text><text style="dominant-baseline:alphabetic;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(200.0,-6)"><tspan style="dominant-baseline:inherit">1.0</tspan></text></g></g></g></svg><div class="toyplot-controls"><ul class="toyplot-mark-popup" onmouseleave="this.style.visibility='hidden'" style="background:rgba(0%,0%,0%,0.75);border:0;border-radius:6px;color:white;cursor:default;list-style:none;margin:0;padding:5px;position:fixed;visibility:hidden"><li class="toyplot-mark-popup-title" style="color:lightgray;cursor:default;padding:5px;list-style:none;margin:0;"></li><li class="toyplot-mark-popup-save-csv" onmouseout="this.style.color='white';this.style.background='steelblue'" onmouseover="this.style.color='steelblue';this.style.background='white'" style="border-radius:3px;padding:5px;list-style:none;margin:0;">Save as .csv</li></ul><script>
-    (function()
+    <div class="toyplot" id="t9b4e695ddee240fdac0c9adf4533aac4" style="text-align:center"><svg class="toyplot-canvas-Canvas" height="300.0px" id="te5878a7f0b1c49b39d998f2ea71fccf4" preserveAspectRatio="xMidYMid meet" style="background-color:transparent;fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:Helvetica;font-size:12px;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0;stroke-width:1.0" viewBox="0 0 600.0 300.0" width="600.0px" xmlns="http://www.w3.org/2000/svg" xmlns:toyplot="http://www.sandia.gov/toyplot" xmlns:xlink="http://www.w3.org/1999/xlink"><g class="toyplot-coordinates-Cartesian" id="t47faa21c446f4822974fa22b53551bb9"><clipPath id="t4473168ed9394ab68ee0c084b13e9bbc"><rect height="220.0" width="220.0" x="40.0" y="40.0"></rect></clipPath><g clip-path="url(#t4473168ed9394ab68ee0c084b13e9bbc)"><g class="toyplot-mark-Plot" id="ta98f2d38c7bc436896d0125c7565c3f2" style="fill:none;stroke:rgb(0%,39.2%,0%);stroke-opacity:1.0"><g class="toyplot-Series"><path d="M 50.0 250.0 L 60.0 249.4459833795014 L 70.0 247.78393351800551 L 80.0 245.01385041551248 L 90.0 241.13573407202216 L 100.0 236.14958448753461 L 110.0 230.05540166204986 L 120.0 222.85318559556785 L 130.0 214.54293628808864 L 140.0 205.1246537396122 L 150.0 194.5983379501385 L 160.0 182.96398891966757 L 170.0 170.22160664819947 L 180.0 156.37119113573411 L 190.0 141.41274238227149 L 200.0 125.34626038781163 L 210.0 108.17174515235459 L 220.0 89.889196675900322 L 230.0 70.498614958448783 L 240.0 50.0" style="stroke:rgb(0%,39.2%,0%);stroke-opacity:1.0;stroke-width:2.0"></path><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(50.0, 250.0)"><circle r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(60.0, 249.4459833795014)"><circle r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(70.0, 247.78393351800551)"><circle r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(80.0, 245.01385041551248)"><circle r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(90.0, 241.13573407202216)"><circle r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(100.0, 236.14958448753461)"><circle r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(110.0, 230.05540166204986)"><circle r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(120.0, 222.85318559556785)"><circle r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(130.0, 214.54293628808864)"><circle r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(140.0, 205.1246537396122)"><circle r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(150.0, 194.5983379501385)"><circle r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(160.0, 182.96398891966757)"><circle r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(170.0, 170.22160664819947)"><circle r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(180.0, 156.37119113573411)"><circle r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(190.0, 141.41274238227149)"><circle r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(200.0, 125.34626038781163)"><circle r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(210.0, 108.17174515235459)"><circle r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(220.0, 89.889196675900322)"><circle r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(230.0, 70.498614958448783)"><circle r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(240.0, 50.0)"><circle r="4.0"></circle></g></g></g></g><g class="toyplot-coordinates-Axis" id="t10867c7b429c4757845e9bc1a9af0891" transform="translate(50.0,250.0)translate(0,10.0)"><line style="" x1="0" x2="190.0" y1="0" y2="0"></line><g><g transform="translate(0.0,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-2.78" y="8.555">0</text></g><g transform="translate(50.0,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-2.78" y="8.555">5</text></g><g transform="translate(100.0,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-5.56" y="8.555">10</text></g><g transform="translate(150.0,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-5.56" y="8.555">15</text></g><g transform="translate(200.0,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-5.56" y="8.555">20</text></g></g><g class="toyplot-coordinates-Axis-coordinates" style="visibility:hidden" transform=""><line style="stroke:rgb(43.9%,50.2%,56.5%);stroke-opacity:1.0;stroke-width:1.0" x1="0" x2="0" y1="-3.0" y2="4.5"></line><text style="alignment-baseline:alphabetic;fill:rgb(43.9%,50.2%,56.5%);fill-opacity:1.0;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" x="0" y="-6"></text></g></g><g class="toyplot-coordinates-Axis" id="t33553740c45149acb6ab0e0788cab861" transform="translate(50.0,250.0)rotate(-90.0)translate(0,-10.0)"><line style="" x1="0" x2="200.0" y1="0" y2="0"></line><g><g transform="translate(0.0,-6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-6.95" y="-4.4408920985e-16">0.0</text></g><g transform="translate(100.0,-6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-6.95" y="-4.4408920985e-16">0.5</text></g><g transform="translate(200.0,-6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-6.95" y="-4.4408920985e-16">1.0</text></g></g><g class="toyplot-coordinates-Axis-coordinates" style="visibility:hidden" transform=""><line style="stroke:rgb(43.9%,50.2%,56.5%);stroke-opacity:1.0;stroke-width:1.0" x1="0" x2="0" y1="3.0" y2="-4.5"></line><text style="alignment-baseline:hanging;fill:rgb(43.9%,50.2%,56.5%);fill-opacity:1.0;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" x="0" y="6"></text></g></g></g><g class="toyplot-coordinates-Cartesian" id="te0d9828d067343f9a40afdc83c01be94"><clipPath id="t4983183b2c78416ba6a3946f5884e909"><rect height="220.0" width="220.0" x="340.0" y="40.0"></rect></clipPath><g clip-path="url(#t4983183b2c78416ba6a3946f5884e909)"><g class="toyplot-mark-Plot" id="t40d8a27ce1dd48c7b25a9cb6d58b9437" style="fill:none"><g class="toyplot-Series"><path d="M 350.0 250.0 L 360.0 249.4459833795014 L 370.0 247.78393351800551 L 380.0 245.01385041551248 L 390.0 241.13573407202216 L 400.0 236.14958448753461 L 410.0 230.05540166204986 L 420.0 222.85318559556785 L 430.0 214.54293628808864 L 440.0 205.1246537396122 L 450.0 194.5983379501385 L 460.0 182.96398891966757 L 470.0 170.22160664819947 L 480.0 156.37119113573411 L 490.0 141.41274238227149 L 500.0 125.34626038781163 L 510.0 108.17174515235459 L 520.0 89.889196675900322 L 530.0 70.498614958448783 L 540.0 50.0" style="stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0;stroke-width:2.0"></path><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(0%,39.2%,0%);stroke-opacity:1.0" transform="translate(350.0, 250.0)"><circle r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(0%,39.2%,0%);stroke-opacity:1.0" transform="translate(360.0, 249.4459833795014)"><circle r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(0%,39.2%,0%);stroke-opacity:1.0" transform="translate(370.0, 247.78393351800551)"><circle r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(0%,39.2%,0%);stroke-opacity:1.0" transform="translate(380.0, 245.01385041551248)"><circle r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(0%,39.2%,0%);stroke-opacity:1.0" transform="translate(390.0, 241.13573407202216)"><circle r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(0%,39.2%,0%);stroke-opacity:1.0" transform="translate(400.0, 236.14958448753461)"><circle r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(0%,39.2%,0%);stroke-opacity:1.0" transform="translate(410.0, 230.05540166204986)"><circle r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(0%,39.2%,0%);stroke-opacity:1.0" transform="translate(420.0, 222.85318559556785)"><circle r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(0%,39.2%,0%);stroke-opacity:1.0" transform="translate(430.0, 214.54293628808864)"><circle r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(0%,39.2%,0%);stroke-opacity:1.0" transform="translate(440.0, 205.1246537396122)"><circle r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(0%,39.2%,0%);stroke-opacity:1.0" transform="translate(450.0, 194.5983379501385)"><circle r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(0%,39.2%,0%);stroke-opacity:1.0" transform="translate(460.0, 182.96398891966757)"><circle r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(0%,39.2%,0%);stroke-opacity:1.0" transform="translate(470.0, 170.22160664819947)"><circle r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(0%,39.2%,0%);stroke-opacity:1.0" transform="translate(480.0, 156.37119113573411)"><circle r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(0%,39.2%,0%);stroke-opacity:1.0" transform="translate(490.0, 141.41274238227149)"><circle r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(0%,39.2%,0%);stroke-opacity:1.0" transform="translate(500.0, 125.34626038781163)"><circle r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(0%,39.2%,0%);stroke-opacity:1.0" transform="translate(510.0, 108.17174515235459)"><circle r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(0%,39.2%,0%);stroke-opacity:1.0" transform="translate(520.0, 89.889196675900322)"><circle r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(0%,39.2%,0%);stroke-opacity:1.0" transform="translate(530.0, 70.498614958448783)"><circle r="4.0"></circle></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(0%,39.2%,0%);stroke-opacity:1.0" transform="translate(540.0, 50.0)"><circle r="4.0"></circle></g></g></g></g><g class="toyplot-coordinates-Axis" id="tc4551380533141398490d339513a0dda" transform="translate(350.0,250.0)translate(0,10.0)"><line style="" x1="0" x2="190.0" y1="0" y2="0"></line><g><g transform="translate(0.0,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-2.78" y="8.555">0</text></g><g transform="translate(50.0,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-2.78" y="8.555">5</text></g><g transform="translate(100.0,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-5.56" y="8.555">10</text></g><g transform="translate(150.0,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-5.56" y="8.555">15</text></g><g transform="translate(200.0,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-5.56" y="8.555">20</text></g></g><g class="toyplot-coordinates-Axis-coordinates" style="visibility:hidden" transform=""><line style="stroke:rgb(43.9%,50.2%,56.5%);stroke-opacity:1.0;stroke-width:1.0" x1="0" x2="0" y1="-3.0" y2="4.5"></line><text style="alignment-baseline:alphabetic;fill:rgb(43.9%,50.2%,56.5%);fill-opacity:1.0;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" x="0" y="-6"></text></g></g><g class="toyplot-coordinates-Axis" id="t84370c8deafd4c7f9f7f4ac8c4dab19f" transform="translate(350.0,250.0)rotate(-90.0)translate(0,-10.0)"><line style="" x1="0" x2="200.0" y1="0" y2="0"></line><g><g transform="translate(0.0,-6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-6.95" y="-4.4408920985e-16">0.0</text></g><g transform="translate(100.0,-6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-6.95" y="-4.4408920985e-16">0.5</text></g><g transform="translate(200.0,-6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-6.95" y="-4.4408920985e-16">1.0</text></g></g><g class="toyplot-coordinates-Axis-coordinates" style="visibility:hidden" transform=""><line style="stroke:rgb(43.9%,50.2%,56.5%);stroke-opacity:1.0;stroke-width:1.0" x1="0" x2="0" y1="3.0" y2="-4.5"></line><text style="alignment-baseline:hanging;fill:rgb(43.9%,50.2%,56.5%);fill-opacity:1.0;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" x="0" y="6"></text></g></g></g></svg><div class="toyplot-behavior"><script>(function()
     {
-      var data_tables = [{"data": [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19], [0.0, 0.0027700831024930744, 0.011080332409972297, 0.02493074792243767, 0.04432132963988919, 0.06925207756232686, 0.09972299168975068, 0.13573407202216065, 0.17728531855955676, 0.22437673130193903, 0.27700831024930744, 0.33518005540166207, 0.39889196675900274, 0.4681440443213295, 0.5429362880886426, 0.6232686980609419, 0.709141274238227, 0.8005540166204984, 0.8975069252077561, 1.0]], "title": "Plot Data", "names": ["x", "y0"], "id": "tc7a6e8fbfb274154b402e4b8eb7c2a07", "filename": "toyplot"}, {"data": [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19], [0.0, 0.0027700831024930744, 0.011080332409972297, 0.02493074792243767, 0.04432132963988919, 0.06925207756232686, 0.09972299168975068, 0.13573407202216065, 0.17728531855955676, 0.22437673130193903, 0.27700831024930744, 0.33518005540166207, 0.39889196675900274, 0.4681440443213295, 0.5429362880886426, 0.6232686980609419, 0.709141274238227, 0.8005540166204984, 0.8975069252077561, 1.0]], "title": "Plot Data", "names": ["x", "y0"], "id": "t6b0e7e2434574edda978c95058accff5", "filename": "toyplot"}];
-    
-      function save_csv(data_table)
-      {
-        var uri = "data:text/csv;charset=utf-8,";
-        uri += data_table.names.join(",") + "\n";
-        for(var i = 0; i != data_table.data[0].length; ++i)
+    var modules={};
+    modules["toyplot/tables"] = (function()
         {
-          for(var j = 0; j != data_table.data.length; ++j)
-          {
-            if(j)
-              uri += ",";
-            uri += data_table.data[j][i];
-          }
-          uri += "\n";
-        }
-        uri = encodeURI(uri);
+            var tables = [];
     
-        var link = document.createElement("a");
-        if(typeof link.download != "undefined")
-        {
-          link.href = uri;
-          link.style = "visibility:hidden";
-          link.download = data_table.filename + ".csv";
+            var module = {};
     
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-        }
-        else
-        {
-          window.open(uri);
-        }
-      }
-    
-      function open_popup(data_table)
-      {
-        return function(e)
-        {
-          var popup = document.querySelector("#tb07cdd65f1cf4bc5803ba11d7bd51765 .toyplot-mark-popup");
-          popup.querySelector(".toyplot-mark-popup-title").innerHTML = data_table.title;
-          popup.querySelector(".toyplot-mark-popup-save-csv").onclick = function() { popup.style.visibility = "hidden"; save_csv(data_table); }
-          popup.style.left = (e.clientX - 50) + "px";
-          popup.style.top = (e.clientY - 20) + "px";
-          popup.style.visibility = "visible";
-          e.stopPropagation();
-          e.preventDefault();
-        }
-    
-      }
-    
-      for(var i = 0; i != data_tables.length; ++i)
-      {
-        var data_table = data_tables[i];
-        var event_target = document.querySelector("#" + data_table.id);
-        event_target.oncontextmenu = open_popup(data_table);
-      }
-    })();
-    </script><script>
-    (function()
-    {
-      var axes = {"t2f9dd8ce9a3d446da60bd738085d0d9e": {"x": [{"domain": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 20.0, "min": 0.0}, "range": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 250.0, "min": 50.0}, "scale": "linear"}], "y": [{"domain": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 1.0, "min": 0.0}, "range": {"bounds": {"max": -Infinity, "min": Infinity}, "max": 50.0, "min": 250.0}, "scale": "linear"}]}, "tcca002a5c75a4040ab7fdbd35a3312bb": {"x": [{"domain": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 20.0, "min": 0.0}, "range": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 550.0, "min": 350.0}, "scale": "linear"}], "y": [{"domain": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 1.0, "min": 0.0}, "range": {"bounds": {"max": -Infinity, "min": Infinity}, "max": 50.0, "min": 250.0}, "scale": "linear"}]}};
-    
-      function sign(x)
-      {
-        return x < 0 ? -1 : x > 0 ? 1 : 0;
-      }
-    
-      function _mix(a, b, amount)
-      {
-        return ((1.0 - amount) * a) + (amount * b);
-      }
-    
-      function _log(x, base)
-      {
-        return Math.log(Math.abs(x)) / Math.log(base);
-      }
-    
-      function _in_range(a, x, b)
-      {
-        var left = Math.min(a, b);
-        var right = Math.max(a, b);
-        return left <= x && x <= right;
-      }
-    
-      function to_domain(projection, range)
-      {
-        for(var i = 0; i != projection.length; ++i)
-        {
-          var segment = projection[i];
-          if(_in_range(segment.range.bounds.min, range, segment.range.bounds.max))
-          {
-            if(segment.scale == "linear")
+            module.set = function(owner, key, names, columns)
             {
-              var amount = (range - segment.range.min) / (segment.range.max - segment.range.min);
-              return _mix(segment.domain.min, segment.domain.max, amount)
+                tables.push({owner: owner, key: key, names: names, columns: columns});
             }
-            else if(segment.scale[0] == "log")
+    
+            module.get = function(owner, key)
             {
-              var amount = (range - segment.range.min) / (segment.range.max - segment.range.min);
-              var base = segment.scale[1];
-              return sign(segment.domain.min) * Math.pow(base, _mix(_log(segment.domain.min, base), _log(segment.domain.max, base), amount));
+                for(var i = 0; i != tables.length; ++i)
+                {
+                    var table = tables[i];
+                    if(table.owner != owner)
+                        continue;
+                    if(table.key != key)
+                        continue;
+                    return {names: table.names, columns: table.columns};
+                }
             }
-          }
-        }
-      }
     
-      // Compute mouse coordinates relative to a DOM object, with thanks to d3js.org, where this code originated.
-      function d3_mousePoint(container, e)
-      {
-        if (e.changedTouches) e = e.changedTouches[0];
-        var svg = container.ownerSVGElement || container;
-        if (svg.createSVGPoint) {
-          var point = svg.createSVGPoint();
-          point.x = e.clientX, point.y = e.clientY;
-          point = point.matrixTransform(container.getScreenCTM().inverse());
-          return [point.x, point.y];
-        }
-        var rect = container.getBoundingClientRect();
-        return [e.clientX - rect.left - container.clientLeft, e.clientY - rect.top - container.clientTop];
-      };
+            module.get_csv = function(owner, key)
+            {
+                var table = module.get(owner, key);
+                if(table != undefined)
+                {
+                    var csv = "";
+                    csv += table.names.join(",") + "\n";
+                    for(var i = 0; i != table.columns[0].length; ++i)
+                    {
+                      for(var j = 0; j != table.columns.length; ++j)
+                      {
+                        if(j)
+                          csv += ",";
+                        csv += table.columns[j][i];
+                      }
+                      csv += "\n";
+                    }
+                    return csv;
+                }
+            }
     
-      function display_coordinates(e)
-      {
-        var dom_axes = e.currentTarget.parentElement;
-        var data = axes[dom_axes.id];
-    
-        point = d3_mousePoint(e.target, e);
-        var x = Number(to_domain(data["x"], point[0])).toFixed(2);
-        var y = Number(to_domain(data["y"], point[1])).toFixed(2);
-    
-        var coordinates = dom_axes.querySelectorAll(".toyplot-coordinates");
-        for(var i = 0; i != coordinates.length; ++i)
+            return module;
+        })();
+    modules["toyplot/root/id"] = "t9b4e695ddee240fdac0c9adf4533aac4";
+    modules["toyplot/root"] = (function(root_id)
         {
-          coordinates[i].style.visibility = "visible";
-          coordinates[i].querySelector("text").textContent = "x=" + x + " y=" + y;
-        }
-      }
+            return document.querySelector("#" + root_id);
+        })(modules["toyplot/root/id"]);
+    modules["toyplot/canvas/id"] = "te5878a7f0b1c49b39d998f2ea71fccf4";
+    modules["toyplot/canvas"] = (function(canvas_id)
+        {
+            return document.querySelector("#" + canvas_id);
+        })(modules["toyplot/canvas/id"]);
+    modules["toyplot/menus/context"] = (function(root, canvas)
+        {
+            var wrapper = document.createElement("div");
+            wrapper.innerHTML = "<ul class='toyplot-context-menu' style='background:#eee; border:1px solid #b8b8b8; border-radius:5px; box-shadow: 0px 0px 8px rgba(0%,0%,0%,0.25); margin:0; padding:3px 0; position:fixed; visibility:hidden;'></ul>"
+            var menu = wrapper.firstChild;
     
-      function clear_coordinates(e)
-      {
-        var dom_axes = e.currentTarget.parentElement;
-        var coordinates = dom_axes.querySelectorAll(".toyplot-coordinates");
-        for(var i = 0; i != coordinates.length; ++i)
-          coordinates[i].style.visibility = "hidden";
-      }
+            root.appendChild(menu);
     
-      for(var axes_id in axes)
-      {
-        var event_target = document.querySelector("#" + axes_id + " .toyplot-coordinate-events");
-        event_target.onmousemove = display_coordinates;
-        event_target.onmouseout = clear_coordinates;
-      }
-    })();
-    </script></div></div>
+            var items = [];
+    
+            var ignore_mouseup = null;
+            function open_menu(e)
+            {
+                var show_menu = false;
+                for(var index=0; index != items.length; ++index)
+                {
+                    var item = items[index];
+                    if(item.show(e))
+                    {
+                        item.item.style.display = "block";
+                        show_menu = true;
+                    }
+                    else
+                    {
+                        item.item.style.display = "none";
+                    }
+                }
+    
+                if(show_menu)
+                {
+                    ignore_mouseup = true;
+                    menu.style.left = (e.clientX + 1) + "px";
+                    menu.style.top = (e.clientY - 5) + "px";
+                    menu.style.visibility = "visible";
+                    e.stopPropagation();
+                    e.preventDefault();
+                }
+            }
+    
+            function close_menu()
+            {
+                menu.style.visibility = "hidden";
+            }
+    
+            function contextmenu(e)
+            {
+                open_menu(e);
+            }
+    
+            function mousemove(e)
+            {
+                ignore_mouseup = false;
+            }
+    
+            function mouseup(e)
+            {
+                if(ignore_mouseup)
+                {
+                    ignore_mouseup = false;
+                    return;
+                }
+                close_menu();
+            }
+    
+            function keydown(e)
+            {
+                if(e.key == "Escape" || e.key == "Esc" || e.keyCode == 27)
+                {
+                    close_menu();
+                }
+            }
+    
+            canvas.addEventListener("contextmenu", contextmenu);
+            canvas.addEventListener("mousemove", mousemove);
+            document.addEventListener("mouseup", mouseup);
+            document.addEventListener("keydown", keydown);
+    
+            var module = {};
+            module.add_item = function(label, show, activate)
+            {
+                var wrapper = document.createElement("div");
+                wrapper.innerHTML = "<li class='toyplot-context-menu-item' style='background:#eee; color:#333; padding:2px 20px; list-style:none; margin:0; text-align:left;'>" + label + "</li>"
+                var item = wrapper.firstChild;
+    
+                items.push({item: item, show: show});
+    
+                function mouseover()
+                {
+                    this.style.background = "steelblue";
+                    this.style.color = "white";
+                }
+    
+                function mouseout()
+                {
+                    this.style.background = "#eee";
+                    this.style.color = "#333";
+                }
+    
+                function choose_item(e)
+                {
+                    close_menu();
+                    activate();
+    
+                    e.stopPropagation();
+                    e.preventDefault();
+                }
+    
+                item.addEventListener("mouseover", mouseover);
+                item.addEventListener("mouseout", mouseout);
+                item.addEventListener("mouseup", choose_item);
+                item.addEventListener("contextmenu", choose_item);
+    
+                menu.appendChild(item);
+            };
+            return module;
+        })(modules["toyplot/root"],modules["toyplot/canvas"]);
+    modules["toyplot/io"] = (function()
+        {
+            var module = {};
+            module.save_file = function(mime_type, charset, data, filename)
+            {
+                var uri = "data:" + mime_type + ";charset=" + charset + "," + data;
+                uri = encodeURI(uri);
+    
+                var link = document.createElement("a");
+                if(typeof link.download != "undefined")
+                {
+                  link.href = uri;
+                  link.style = "visibility:hidden";
+                  link.download = filename;
+    
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+                }
+                else
+                {
+                  window.open(uri);
+                }
+            };
+            return module;
+        })();
+    modules["toyplot.coordinates.Axis"] = (
+            function(canvas)
+            {
+                function sign(x)
+                {
+                    return x < 0 ? -1 : x > 0 ? 1 : 0;
+                }
+    
+                function mix(a, b, amount)
+                {
+                    return ((1.0 - amount) * a) + (amount * b);
+                }
+    
+                function log(x, base)
+                {
+                    return Math.log(Math.abs(x)) / Math.log(base);
+                }
+    
+                function in_range(a, x, b)
+                {
+                    var left = Math.min(a, b);
+                    var right = Math.max(a, b);
+                    return left <= x && x <= right;
+                }
+    
+                function inside(range, projection)
+                {
+                    for(var i = 0; i != projection.length; ++i)
+                    {
+                        var segment = projection[i];
+                        if(in_range(segment.range.min, range, segment.range.max))
+                            return true;
+                    }
+                    return false;
+                }
+    
+                function to_domain(range, projection)
+                {
+                    for(var i = 0; i != projection.length; ++i)
+                    {
+                        var segment = projection[i];
+                        if(in_range(segment.range.bounds.min, range, segment.range.bounds.max))
+                        {
+                            if(segment.scale == "linear")
+                            {
+                                var amount = (range - segment.range.min) / (segment.range.max - segment.range.min);
+                                return mix(segment.domain.min, segment.domain.max, amount)
+                            }
+                            else if(segment.scale[0] == "log")
+                            {
+                                var amount = (range - segment.range.min) / (segment.range.max - segment.range.min);
+                                var base = segment.scale[1];
+                                return sign(segment.domain.min) * Math.pow(base, mix(log(segment.domain.min, base), log(segment.domain.max, base), amount));
+                            }
+                        }
+                    }
+                }
+    
+                var axes = {};
+    
+                function display_coordinates(e)
+                {
+                    var current = canvas.createSVGPoint();
+                    current.x = e.clientX;
+                    current.y = e.clientY;
+    
+                    for(var axis_id in axes)
+                    {
+                        var axis = document.querySelector("#" + axis_id);
+                        var coordinates = axis.querySelector(".toyplot-coordinates-Axis-coordinates");
+                        if(coordinates)
+                        {
+                            var projection = axes[axis_id];
+                            var local = current.matrixTransform(axis.getScreenCTM().inverse());
+                            if(inside(local.x, projection))
+                            {
+                                var domain = to_domain(local.x, projection);
+                                coordinates.style.visibility = "visible";
+                                coordinates.setAttribute("transform", "translate(" + local.x + ")");
+                                var text = coordinates.querySelector("text");
+                                text.textContent = domain.toFixed(2);
+                            }
+                            else
+                            {
+                                coordinates.style.visibility= "hidden";
+                            }
+                        }
+                    }
+                }
+    
+                canvas.addEventListener("click", display_coordinates);
+    
+                var module = {};
+                module.show_coordinates = function(axis_id, projection)
+                {
+                    axes[axis_id] = projection;
+                }
+    
+                return module;
+            })(modules["toyplot/canvas"]);
+    (function(tables, context_menu, io, owner_id, key, label, names, columns, filename)
+            {
+                tables.set(owner_id, key, names, columns);
+    
+                var owner = document.querySelector("#" + owner_id);
+                function show_item(e)
+                {
+                    return owner.contains(e.target);
+                }
+    
+                function choose_item()
+                {
+                    io.save_file("text/csv", "utf-8", tables.get_csv(owner_id, key), filename + ".csv");
+                }
+    
+                context_menu.add_item("Save " + label + " as CSV", show_item, choose_item);
+            })(modules["toyplot/tables"],modules["toyplot/menus/context"],modules["toyplot/io"],"ta98f2d38c7bc436896d0125c7565c3f2","data","plot data",["x", "y0"],[[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19], [0.0, 0.0027700831024930744, 0.011080332409972297, 0.02493074792243767, 0.04432132963988919, 0.06925207756232686, 0.09972299168975068, 0.13573407202216065, 0.17728531855955676, 0.22437673130193903, 0.27700831024930744, 0.33518005540166207, 0.39889196675900274, 0.4681440443213295, 0.5429362880886426, 0.6232686980609419, 0.709141274238227, 0.8005540166204984, 0.8975069252077561, 1.0]],"toyplot");
+    (function(axis, axis_id, projection)
+            {
+                axis.show_coordinates(axis_id, projection);
+            })(modules["toyplot.coordinates.Axis"],"t10867c7b429c4757845e9bc1a9af0891",[{"domain": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 20.0, "min": 0.0}, "range": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 200.0, "min": 0.0}, "scale": "linear"}]);
+    (function(axis, axis_id, projection)
+            {
+                axis.show_coordinates(axis_id, projection);
+            })(modules["toyplot.coordinates.Axis"],"t33553740c45149acb6ab0e0788cab861",[{"domain": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 1.0, "min": 0.0}, "range": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 200.0, "min": 0.0}, "scale": "linear"}]);
+    (function(tables, context_menu, io, owner_id, key, label, names, columns, filename)
+            {
+                tables.set(owner_id, key, names, columns);
+    
+                var owner = document.querySelector("#" + owner_id);
+                function show_item(e)
+                {
+                    return owner.contains(e.target);
+                }
+    
+                function choose_item()
+                {
+                    io.save_file("text/csv", "utf-8", tables.get_csv(owner_id, key), filename + ".csv");
+                }
+    
+                context_menu.add_item("Save " + label + " as CSV", show_item, choose_item);
+            })(modules["toyplot/tables"],modules["toyplot/menus/context"],modules["toyplot/io"],"t40d8a27ce1dd48c7b25a9cb6d58b9437","data","plot data",["x", "y0"],[[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19], [0.0, 0.0027700831024930744, 0.011080332409972297, 0.02493074792243767, 0.04432132963988919, 0.06925207756232686, 0.09972299168975068, 0.13573407202216065, 0.17728531855955676, 0.22437673130193903, 0.27700831024930744, 0.33518005540166207, 0.39889196675900274, 0.4681440443213295, 0.5429362880886426, 0.6232686980609419, 0.709141274238227, 0.8005540166204984, 0.8975069252077561, 1.0]],"toyplot");
+    (function(axis, axis_id, projection)
+            {
+                axis.show_coordinates(axis_id, projection);
+            })(modules["toyplot.coordinates.Axis"],"tc4551380533141398490d339513a0dda",[{"domain": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 20.0, "min": 0.0}, "range": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 200.0, "min": 0.0}, "scale": "linear"}]);
+    (function(axis, axis_id, projection)
+            {
+                axis.show_coordinates(axis_id, projection);
+            })(modules["toyplot.coordinates.Axis"],"t84370c8deafd4c7f9f7f4ac8c4dab19f",[{"domain": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 1.0, "min": 0.0}, "range": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 200.0, "min": 0.0}, "scale": "linear"}]);
+    })();</script></div></div>
 
 
-So far, we've been using string codes to specify different marker
-shapes. Here is every builtin marker shape in Toyplot, with their string
-codes:
+Note that you can pass a sequence of shape codes to the *marker*
+argument, to specify markers on a per-series or per-datum basis.
+
+The string shape code is actually a shortcut for a full marker
+specification, which is an instance of :class:`toyplot.marker.Marker`
+that contains a set of explicit marker attributes:
+
+-  "shape" - marker shape code.
+-  "mstyle" - dictionary of CSS styles to apply to the marker *shape*.
+-  "size" - size of the marker.
+-  "angle" - angle (in degrees) to rotate the marker.
+-  "label" - text label superimposed on the marker.
+-  "lstyle" - dictionary of CSS styles to apply to the marker *label*.
+
+Using the full marker specification allows you to override the size,
+style, and appearance of individual markers in a series, if necessary.
+
+You can use :func:`toyplot.marker.create` to create instances of
+:class:`toyplot.marker.Marker`, as in the following examples:
 
 .. code:: python
 
-    markers = [None, "","|","-","+","x","*","^",">","v","<","s","d","o","oo","o|","o-","o+","ox","o*"]
-    labels = [repr(marker) for marker in markers]
-    mstyle = {"stroke":toyplot.color.near_black, "fill":"#feb"}
+    import toyplot.marker
     
-    canvas = toyplot.Canvas(700, 150)
-    axes = canvas.axes(xmin=-1, show=False)
-    axes.scatterplot(numpy.repeat(0, len(markers)), marker=markers, mstyle=mstyle, size=15)
-    axes.text(numpy.arange(len(markers)), numpy.repeat(-0.5, len(markers)), text=labels, color=toyplot.color.near_black, style={"font-size":"16px"});
-
-
-
-.. raw:: html
-
-    <div align="center" class="toyplot" id="t8145e405d6694bfc898c9f108e2625a2"><svg height="150.0px" id="t707c57b1b5044e92a978162fee0da8bc" preserveAspectRatio="xMidYMid meet" style="background-color:transparent;fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:Helvetica;font-size:12px;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0;stroke-width:1.0" viewBox="0 0 700.0 150.0" width="700.0px" xmlns="http://www.w3.org/2000/svg" xmlns:toyplot="http://www.sandia.gov/toyplot"><g class="toyplot-axes-Cartesian" id="tb43b35d41df84529a283be4a205bf070"><clipPath id="tf47f35e2e13945fc912ea10d64700d29"><rect height="70.0" width="620.0" x="40.0" y="40.0"></rect></clipPath><g class="toyplot-coordinate-events" clip-path="url(#tf47f35e2e13945fc912ea10d64700d29)" style="cursor:crosshair"><rect height="70.0" style="pointer-events:all;visibility:hidden" width="620.0" x="40.0" y="40.0"></rect><g class="toyplot-mark-Scatterplot" id="t4a5df40884c240aea6d9d37a5e72b88e" style=""><g class="toyplot-Series"><g class="toyplot-Datum" style="fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0"></g><g class="toyplot-Datum" style="fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0"><line transform="rotate(0, 135.65989847715736, 50.0)" x1="135.65989847715736" x2="135.65989847715736" y1="42.5" y2="57.5"></line></g><g class="toyplot-Datum" style="fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0"><line transform="rotate(-90, 164.21319796954316, 50.0)" x1="164.21319796954316" x2="164.21319796954316" y1="42.5" y2="57.5"></line></g><g class="toyplot-Datum" style="fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0"><line transform="rotate(0, 192.76649746192894, 50.0)" x1="192.76649746192894" x2="192.76649746192894" y1="42.5" y2="57.5"></line><line transform="rotate(0, 192.76649746192894, 50.0)" x1="185.26649746192894" x2="200.26649746192894" y1="50.0" y2="50.0"></line></g><g class="toyplot-Datum" style="fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0"><line transform="rotate(-45, 221.31979695431471, 50.0)" x1="221.31979695431471" x2="221.31979695431471" y1="42.5" y2="57.5"></line><line transform="rotate(-45, 221.31979695431471, 50.0)" x1="213.81979695431471" x2="228.81979695431471" y1="50.0" y2="50.0"></line></g><g class="toyplot-Datum" style="fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0"><line transform="rotate(0, 249.87309644670052, 50.0)" x1="249.87309644670052" x2="249.87309644670052" y1="42.5" y2="57.5"></line><line transform="rotate(60, 249.87309644670052, 50.0)" x1="249.87309644670052" x2="249.87309644670052" y1="42.5" y2="57.5"></line><line transform="rotate(-60, 249.87309644670052, 50.0)" x1="249.87309644670052" x2="249.87309644670052" y1="42.5" y2="57.5"></line></g><g class="toyplot-Datum" style="fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0"><polygon points="270.92639593908632,57.5 278.42639593908632,42.5 285.92639593908632,57.5" transform="rotate(0, 278.42639593908632, 50.0)"></polygon></g><g class="toyplot-Datum" style="fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0"><polygon points="299.47969543147212,57.5 306.97969543147212,42.5 314.47969543147212,57.5" transform="rotate(-90, 306.97969543147212, 50.0)"></polygon></g><g class="toyplot-Datum" style="fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0"><polygon points="328.03299492385787,57.5 335.53299492385787,42.5 343.03299492385787,57.5" transform="rotate(-180, 335.53299492385787, 50.0)"></polygon></g><g class="toyplot-Datum" style="fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0"><polygon points="356.58629441624367,57.5 364.08629441624367,42.5 371.58629441624367,57.5" transform="rotate(90, 364.08629441624367, 50.0)"></polygon></g><g class="toyplot-Datum" style="fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0"><rect height="15.0" transform="rotate(0, 392.63959390862942, 50.0)" width="15.0" x="385.13959390862942" y="42.5"></rect></g><g class="toyplot-Datum" style="fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0"><rect height="15.0" transform="rotate(-45, 421.19289340101523, 50.0)" width="15.0" x="413.69289340101523" y="42.5"></rect></g><g class="toyplot-Datum" style="fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0"><circle cx="449.74619289340103" cy="50.0" r="7.5"></circle></g><g class="toyplot-Datum" style="fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0"><circle cx="478.29949238578683" cy="50.0" r="7.5"></circle><circle cx="478.29949238578683" cy="50.0" r="3.75"></circle></g><g class="toyplot-Datum" style="fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0"><circle cx="506.85279187817258" cy="50.0" r="7.5"></circle><line transform="rotate(0, 506.85279187817258, 50.0)" x1="506.85279187817258" x2="506.85279187817258" y1="42.5" y2="57.5"></line></g><g class="toyplot-Datum" style="fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0"><circle cx="535.40609137055844" cy="50.0" r="7.5"></circle><line transform="rotate(-90, 535.40609137055844, 50.0)" x1="535.40609137055844" x2="535.40609137055844" y1="42.5" y2="57.5"></line></g><g class="toyplot-Datum" style="fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0"><circle cx="563.95939086294425" cy="50.0" r="7.5"></circle><line transform="rotate(0, 563.95939086294425, 50.0)" x1="563.95939086294425" x2="563.95939086294425" y1="42.5" y2="57.5"></line><line transform="rotate(0, 563.95939086294425, 50.0)" x1="556.45939086294425" x2="571.45939086294425" y1="50.0" y2="50.0"></line></g><g class="toyplot-Datum" style="fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0"><circle cx="592.51269035533005" cy="50.0" r="7.5"></circle><line transform="rotate(-45, 592.51269035533005, 50.0)" x1="592.51269035533005" x2="592.51269035533005" y1="42.5" y2="57.5"></line><line transform="rotate(-45, 592.51269035533005, 50.0)" x1="585.01269035533005" x2="600.01269035533005" y1="50.0" y2="50.0"></line></g><g class="toyplot-Datum" style="fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0"><circle cx="621.06598984771574" cy="50.0" r="7.5"></circle><line transform="rotate(0, 621.06598984771574, 50.0)" x1="621.06598984771574" x2="621.06598984771574" y1="42.5" y2="57.5"></line><line transform="rotate(60, 621.06598984771574, 50.0)" x1="621.06598984771574" x2="621.06598984771574" y1="42.5" y2="57.5"></line><line transform="rotate(-60, 621.06598984771574, 50.0)" x1="621.06598984771574" x2="621.06598984771574" y1="42.5" y2="57.5"></line></g></g></g><g class="toyplot-mark-Text" id="ta6ae3ef683894052a964d97bb4777396" style="alignment-baseline:middle;font-size:16px;font-weight:normal;stroke:none;text-anchor:middle"><g class="toyplot-Series"><text class="toyplot-Datum" style="dominant-baseline:middle;fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-size:16px;font-weight:normal;opacity:1.0;stroke:none;text-anchor:middle" transform="translate(78.55329949238579,91.666666666666671)"><tspan style="dominant-baseline:inherit">None</tspan></text><text class="toyplot-Datum" style="dominant-baseline:middle;fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-size:16px;font-weight:normal;opacity:1.0;stroke:none;text-anchor:middle" transform="translate(107.10659898477158,91.666666666666671)"><tspan style="dominant-baseline:inherit">''</tspan></text><text class="toyplot-Datum" style="dominant-baseline:middle;fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-size:16px;font-weight:normal;opacity:1.0;stroke:none;text-anchor:middle" transform="translate(135.65989847715736,91.666666666666671)"><tspan style="dominant-baseline:inherit">'|'</tspan></text><text class="toyplot-Datum" style="dominant-baseline:middle;fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-size:16px;font-weight:normal;opacity:1.0;stroke:none;text-anchor:middle" transform="translate(164.21319796954316,91.666666666666671)"><tspan style="dominant-baseline:inherit">'-'</tspan></text><text class="toyplot-Datum" style="dominant-baseline:middle;fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-size:16px;font-weight:normal;opacity:1.0;stroke:none;text-anchor:middle" transform="translate(192.76649746192894,91.666666666666671)"><tspan style="dominant-baseline:inherit">'+'</tspan></text><text class="toyplot-Datum" style="dominant-baseline:middle;fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-size:16px;font-weight:normal;opacity:1.0;stroke:none;text-anchor:middle" transform="translate(221.31979695431471,91.666666666666671)"><tspan style="dominant-baseline:inherit">'x'</tspan></text><text class="toyplot-Datum" style="dominant-baseline:middle;fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-size:16px;font-weight:normal;opacity:1.0;stroke:none;text-anchor:middle" transform="translate(249.87309644670052,91.666666666666671)"><tspan style="dominant-baseline:inherit">'*'</tspan></text><text class="toyplot-Datum" style="dominant-baseline:middle;fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-size:16px;font-weight:normal;opacity:1.0;stroke:none;text-anchor:middle" transform="translate(278.42639593908632,91.666666666666671)"><tspan style="dominant-baseline:inherit">'^'</tspan></text><text class="toyplot-Datum" style="dominant-baseline:middle;fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-size:16px;font-weight:normal;opacity:1.0;stroke:none;text-anchor:middle" transform="translate(306.97969543147212,91.666666666666671)"><tspan style="dominant-baseline:inherit">'&gt;'</tspan></text><text class="toyplot-Datum" style="dominant-baseline:middle;fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-size:16px;font-weight:normal;opacity:1.0;stroke:none;text-anchor:middle" transform="translate(335.53299492385787,91.666666666666671)"><tspan style="dominant-baseline:inherit">'v'</tspan></text><text class="toyplot-Datum" style="dominant-baseline:middle;fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-size:16px;font-weight:normal;opacity:1.0;stroke:none;text-anchor:middle" transform="translate(364.08629441624367,91.666666666666671)"><tspan style="dominant-baseline:inherit">'</tspan><tspan style="dominant-baseline:inherit">&lt;</tspan><tspan style="dominant-baseline:inherit">'</tspan></text><text class="toyplot-Datum" style="dominant-baseline:middle;fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-size:16px;font-weight:normal;opacity:1.0;stroke:none;text-anchor:middle" transform="translate(392.63959390862942,91.666666666666671)"><tspan style="dominant-baseline:inherit">'s'</tspan></text><text class="toyplot-Datum" style="dominant-baseline:middle;fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-size:16px;font-weight:normal;opacity:1.0;stroke:none;text-anchor:middle" transform="translate(421.19289340101523,91.666666666666671)"><tspan style="dominant-baseline:inherit">'d'</tspan></text><text class="toyplot-Datum" style="dominant-baseline:middle;fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-size:16px;font-weight:normal;opacity:1.0;stroke:none;text-anchor:middle" transform="translate(449.74619289340103,91.666666666666671)"><tspan style="dominant-baseline:inherit">'o'</tspan></text><text class="toyplot-Datum" style="dominant-baseline:middle;fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-size:16px;font-weight:normal;opacity:1.0;stroke:none;text-anchor:middle" transform="translate(478.29949238578683,91.666666666666671)"><tspan style="dominant-baseline:inherit">'oo'</tspan></text><text class="toyplot-Datum" style="dominant-baseline:middle;fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-size:16px;font-weight:normal;opacity:1.0;stroke:none;text-anchor:middle" transform="translate(506.85279187817258,91.666666666666671)"><tspan style="dominant-baseline:inherit">'o|'</tspan></text><text class="toyplot-Datum" style="dominant-baseline:middle;fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-size:16px;font-weight:normal;opacity:1.0;stroke:none;text-anchor:middle" transform="translate(535.40609137055844,91.666666666666671)"><tspan style="dominant-baseline:inherit">'o-'</tspan></text><text class="toyplot-Datum" style="dominant-baseline:middle;fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-size:16px;font-weight:normal;opacity:1.0;stroke:none;text-anchor:middle" transform="translate(563.95939086294425,91.666666666666671)"><tspan style="dominant-baseline:inherit">'o+'</tspan></text><text class="toyplot-Datum" style="dominant-baseline:middle;fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-size:16px;font-weight:normal;opacity:1.0;stroke:none;text-anchor:middle" transform="translate(592.51269035533005,91.666666666666671)"><tspan style="dominant-baseline:inherit">'ox'</tspan></text><text class="toyplot-Datum" style="dominant-baseline:middle;fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-size:16px;font-weight:normal;opacity:1.0;stroke:none;text-anchor:middle" transform="translate(621.06598984771574,91.666666666666671)"><tspan style="dominant-baseline:inherit">'o*'</tspan></text></g></g></g><g class="toyplot-coordinates" style="visibility:hidden"><rect height="14.0" style="fill:rgb(100%,100%,100%);fill-opacity:1.0;opacity:0.75;stroke:none" width="90.0" x="550.0" y="60.0"></rect><text style="alignment-baseline:middle;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" x="595.0" y="67.0"></text></g></g></svg><div class="toyplot-controls"><ul class="toyplot-mark-popup" onmouseleave="this.style.visibility='hidden'" style="background:rgba(0%,0%,0%,0.75);border:0;border-radius:6px;color:white;cursor:default;list-style:none;margin:0;padding:5px;position:fixed;visibility:hidden"><li class="toyplot-mark-popup-title" style="color:lightgray;cursor:default;padding:5px;list-style:none;margin:0;"></li><li class="toyplot-mark-popup-save-csv" onmouseout="this.style.color='white';this.style.background='steelblue'" onmouseover="this.style.color='steelblue';this.style.background='white'" style="border-radius:3px;padding:5px;list-style:none;margin:0;">Save as .csv</li></ul><script>
-    (function()
-    {
-      var data_tables = [{"data": [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]], "title": "Scatterplot Data", "names": ["x", "y0"], "id": "t4a5df40884c240aea6d9d37a5e72b88e", "filename": "toyplot"}];
+    marker_a = toyplot.marker.create(shape="^", angle=-30, size=15)
+    marker_b = toyplot.marker.create(shape="o", label="B", lstyle={"fill":"white"})
     
-      function save_csv(data_table)
-      {
-        var uri = "data:text/csv;charset=utf-8,";
-        uri += data_table.names.join(",") + "\n";
-        for(var i = 0; i != data_table.data[0].length; ++i)
-        {
-          for(var j = 0; j != data_table.data.length; ++j)
-          {
-            if(j)
-              uri += ",";
-            uri += data_table.data[j][i];
-          }
-          uri += "\n";
-        }
-        uri = encodeURI(uri);
-    
-        var link = document.createElement("a");
-        if(typeof link.download != "undefined")
-        {
-          link.href = uri;
-          link.style = "visibility:hidden";
-          link.download = data_table.filename + ".csv";
-    
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-        }
-        else
-        {
-          window.open(uri);
-        }
-      }
-    
-      function open_popup(data_table)
-      {
-        return function(e)
-        {
-          var popup = document.querySelector("#t8145e405d6694bfc898c9f108e2625a2 .toyplot-mark-popup");
-          popup.querySelector(".toyplot-mark-popup-title").innerHTML = data_table.title;
-          popup.querySelector(".toyplot-mark-popup-save-csv").onclick = function() { popup.style.visibility = "hidden"; save_csv(data_table); }
-          popup.style.left = (e.clientX - 50) + "px";
-          popup.style.top = (e.clientY - 20) + "px";
-          popup.style.visibility = "visible";
-          e.stopPropagation();
-          e.preventDefault();
-        }
-    
-      }
-    
-      for(var i = 0; i != data_tables.length; ++i)
-      {
-        var data_table = data_tables[i];
-        var event_target = document.querySelector("#" + data_table.id);
-        event_target.oncontextmenu = open_popup(data_table);
-      }
-    })();
-    </script><script>
-    (function()
-    {
-      var axes = {"tb43b35d41df84529a283be4a205bf070": {"x": [{"domain": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 20.013333333333332, "min": -1.0}, "range": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 650.0, "min": 50.0}, "scale": "linear"}], "y": [{"domain": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 0.0, "min": -0.60000000000000009}, "range": {"bounds": {"max": -Infinity, "min": Infinity}, "max": 50.0, "min": 100.0}, "scale": "linear"}]}};
-    
-      function sign(x)
-      {
-        return x < 0 ? -1 : x > 0 ? 1 : 0;
-      }
-    
-      function _mix(a, b, amount)
-      {
-        return ((1.0 - amount) * a) + (amount * b);
-      }
-    
-      function _log(x, base)
-      {
-        return Math.log(Math.abs(x)) / Math.log(base);
-      }
-    
-      function _in_range(a, x, b)
-      {
-        var left = Math.min(a, b);
-        var right = Math.max(a, b);
-        return left <= x && x <= right;
-      }
-    
-      function to_domain(projection, range)
-      {
-        for(var i = 0; i != projection.length; ++i)
-        {
-          var segment = projection[i];
-          if(_in_range(segment.range.bounds.min, range, segment.range.bounds.max))
-          {
-            if(segment.scale == "linear")
-            {
-              var amount = (range - segment.range.min) / (segment.range.max - segment.range.min);
-              return _mix(segment.domain.min, segment.domain.max, amount)
-            }
-            else if(segment.scale[0] == "log")
-            {
-              var amount = (range - segment.range.min) / (segment.range.max - segment.range.min);
-              var base = segment.scale[1];
-              return sign(segment.domain.min) * Math.pow(base, _mix(_log(segment.domain.min, base), _log(segment.domain.max, base), amount));
-            }
-          }
-        }
-      }
-    
-      // Compute mouse coordinates relative to a DOM object, with thanks to d3js.org, where this code originated.
-      function d3_mousePoint(container, e)
-      {
-        if (e.changedTouches) e = e.changedTouches[0];
-        var svg = container.ownerSVGElement || container;
-        if (svg.createSVGPoint) {
-          var point = svg.createSVGPoint();
-          point.x = e.clientX, point.y = e.clientY;
-          point = point.matrixTransform(container.getScreenCTM().inverse());
-          return [point.x, point.y];
-        }
-        var rect = container.getBoundingClientRect();
-        return [e.clientX - rect.left - container.clientLeft, e.clientY - rect.top - container.clientTop];
-      };
-    
-      function display_coordinates(e)
-      {
-        var dom_axes = e.currentTarget.parentElement;
-        var data = axes[dom_axes.id];
-    
-        point = d3_mousePoint(e.target, e);
-        var x = Number(to_domain(data["x"], point[0])).toFixed(2);
-        var y = Number(to_domain(data["y"], point[1])).toFixed(2);
-    
-        var coordinates = dom_axes.querySelectorAll(".toyplot-coordinates");
-        for(var i = 0; i != coordinates.length; ++i)
-        {
-          coordinates[i].style.visibility = "visible";
-          coordinates[i].querySelector("text").textContent = "x=" + x + " y=" + y;
-        }
-      }
-    
-      function clear_coordinates(e)
-      {
-        var dom_axes = e.currentTarget.parentElement;
-        var coordinates = dom_axes.querySelectorAll(".toyplot-coordinates");
-        for(var i = 0; i != coordinates.length; ++i)
-          coordinates[i].style.visibility = "hidden";
-      }
-    
-      for(var axes_id in axes)
-      {
-        var event_target = document.querySelector("#" + axes_id + " .toyplot-coordinate-events");
-        event_target.onmousemove = display_coordinates;
-        event_target.onmouseout = clear_coordinates;
-      }
-    })();
-    </script></div></div>
-
-
-There are several items worth noting - first, you can pass a sequence of
-marker codes to the *marker* argument, to specify markers on a
-per-series or per-datum basis. Second, you can pass an empty string or
-*None* to produce an invisible marker, if you need to hide a datum or
-declutter the display. Third, note that several of the marker shapes
-contain internal details that require a contrasting stroke and fill to
-be visible.
-
-So far, we've been using the marker shape code to specify our markers,
-but this is actually a shortcut. A full marker specification takes the
-form of a Python dictionary:
-
-.. code:: python
-
     canvas = toyplot.Canvas(600, 300)
-    canvas.axes(grid=(1, 2, 0)).scatterplot(y, marker={"shape":"|", "angle":45}, size=10)
-    canvas.axes(grid=(1, 2, 1)).scatterplot(y, marker={"shape":"o", "label":"A"}, size=15, mlstyle={"fill":"white"});
+    canvas.cartesian(grid=(1, 2, 0)).scatterplot(y, marker=marker_a, size=10)
+    canvas.cartesian(grid=(1, 2, 1)).scatterplot(y, marker=marker_b, size=15);
 
 
 
 .. raw:: html
 
-    <div align="center" class="toyplot" id="tbf4f98f15f064d23992b7c53b3217e86"><svg height="300.0px" id="t72bde21c93004c8190f840bfc98aeee5" preserveAspectRatio="xMidYMid meet" style="background-color:transparent;fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:Helvetica;font-size:12px;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0;stroke-width:1.0" viewBox="0 0 600.0 300.0" width="600.0px" xmlns="http://www.w3.org/2000/svg" xmlns:toyplot="http://www.sandia.gov/toyplot"><g class="toyplot-axes-Cartesian" id="t9c7bdbedfddf45a6a10b15ce5a3826f0"><clipPath id="tc556f3830798464183fcf98f1b882d68"><rect height="220.0" width="220.0" x="40.0" y="40.0"></rect></clipPath><g class="toyplot-coordinate-events" clip-path="url(#tc556f3830798464183fcf98f1b882d68)" style="cursor:crosshair"><rect height="220.0" style="pointer-events:all;visibility:hidden" width="220.0" x="40.0" y="40.0"></rect><g class="toyplot-mark-Scatterplot" id="tcb630903605a4ce5a2db22f5e0f0fddf" style=""><g class="toyplot-Series"><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><line transform="rotate(-45, 50.0, 250.0)" x1="50.0" x2="50.0" y1="245.0" y2="255.0"></line></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><line transform="rotate(-45, 60.0, 249.4459833795014)" x1="60.0" x2="60.0" y1="244.4459833795014" y2="254.4459833795014"></line></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><line transform="rotate(-45, 70.0, 247.78393351800551)" x1="70.0" x2="70.0" y1="242.78393351800551" y2="252.78393351800551"></line></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><line transform="rotate(-45, 80.0, 245.01385041551248)" x1="80.0" x2="80.0" y1="240.01385041551248" y2="250.01385041551248"></line></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><line transform="rotate(-45, 90.0, 241.13573407202216)" x1="90.0" x2="90.0" y1="236.13573407202216" y2="246.13573407202216"></line></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><line transform="rotate(-45, 100.0, 236.14958448753461)" x1="100.0" x2="100.0" y1="231.14958448753461" y2="241.14958448753461"></line></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><line transform="rotate(-45, 110.0, 230.05540166204986)" x1="110.0" x2="110.0" y1="225.05540166204986" y2="235.05540166204986"></line></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><line transform="rotate(-45, 120.0, 222.85318559556785)" x1="120.0" x2="120.0" y1="217.85318559556785" y2="227.85318559556785"></line></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><line transform="rotate(-45, 130.0, 214.54293628808864)" x1="130.0" x2="130.0" y1="209.54293628808864" y2="219.54293628808864"></line></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><line transform="rotate(-45, 140.0, 205.1246537396122)" x1="140.0" x2="140.0" y1="200.1246537396122" y2="210.1246537396122"></line></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><line transform="rotate(-45, 150.0, 194.5983379501385)" x1="150.0" x2="150.0" y1="189.5983379501385" y2="199.5983379501385"></line></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><line transform="rotate(-45, 160.0, 182.96398891966757)" x1="160.0" x2="160.0" y1="177.96398891966757" y2="187.96398891966757"></line></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><line transform="rotate(-45, 170.0, 170.22160664819947)" x1="170.0" x2="170.0" y1="165.22160664819947" y2="175.22160664819947"></line></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><line transform="rotate(-45, 180.0, 156.37119113573411)" x1="180.0" x2="180.0" y1="151.37119113573411" y2="161.37119113573411"></line></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><line transform="rotate(-45, 190.0, 141.41274238227149)" x1="190.0" x2="190.0" y1="136.41274238227149" y2="146.41274238227149"></line></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><line transform="rotate(-45, 200.0, 125.34626038781163)" x1="200.0" x2="200.0" y1="120.34626038781163" y2="130.34626038781164"></line></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><line transform="rotate(-45, 210.0, 108.17174515235459)" x1="210.0" x2="210.0" y1="103.17174515235459" y2="113.17174515235459"></line></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><line transform="rotate(-45, 220.0, 89.889196675900322)" x1="220.0" x2="220.0" y1="84.889196675900322" y2="94.889196675900322"></line></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><line transform="rotate(-45, 230.0, 70.498614958448783)" x1="230.0" x2="230.0" y1="65.498614958448783" y2="75.498614958448783"></line></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><line transform="rotate(-45, 240.0, 50.0)" x1="240.0" x2="240.0" y1="45.0" y2="55.0"></line></g></g></g></g><g class="toyplot-coordinates" style="visibility:hidden"><rect height="14.0" style="fill:rgb(100%,100%,100%);fill-opacity:1.0;opacity:0.75;stroke:none" width="90.0" x="150.0" y="60.0"></rect><text style="alignment-baseline:middle;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" x="195.0" y="67.0"></text></g><g class="toyplot-axes-Axis" id="tbf78872d3ec742a6aeb3c734085c3967" transform="translate(50.0,250.0) rotate(0.0) translate(0,10.0)"><line style="" x1="0" x2="190.0" y1="0" y2="0"></line><g><text style="dominant-baseline:hanging;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(0.0,6)"><tspan style="dominant-baseline:inherit">0</tspan></text><text style="dominant-baseline:hanging;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(50.0,6)"><tspan style="dominant-baseline:inherit">5</tspan></text><text style="dominant-baseline:hanging;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(100.0,6)"><tspan style="dominant-baseline:inherit">10</tspan></text><text style="dominant-baseline:hanging;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(150.0,6)"><tspan style="dominant-baseline:inherit">15</tspan></text><text style="dominant-baseline:hanging;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(200.0,6)"><tspan style="dominant-baseline:inherit">20</tspan></text></g></g><g class="toyplot-axes-Axis" id="t1bb414d758d14dc0bbd4cab6c90dec60" transform="translate(50.0,250.0) rotate(-90.0) translate(0,-10.0)"><line style="" x1="0" x2="200.0" y1="0" y2="0"></line><g><text style="dominant-baseline:alphabetic;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(0.0,-6)"><tspan style="dominant-baseline:inherit">0.0</tspan></text><text style="dominant-baseline:alphabetic;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(100.0,-6)"><tspan style="dominant-baseline:inherit">0.5</tspan></text><text style="dominant-baseline:alphabetic;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(200.0,-6)"><tspan style="dominant-baseline:inherit">1.0</tspan></text></g></g></g><g class="toyplot-axes-Cartesian" id="t7ddf0238e0c642bd98dc2e71efce884d"><clipPath id="t2733ea2610ca40d3a952dd0aed820edd"><rect height="220.0" width="220.0" x="340.0" y="40.0"></rect></clipPath><g class="toyplot-coordinate-events" clip-path="url(#t2733ea2610ca40d3a952dd0aed820edd)" style="cursor:crosshair"><rect height="220.0" style="pointer-events:all;visibility:hidden" width="220.0" x="340.0" y="40.0"></rect><g class="toyplot-mark-Scatterplot" id="t1193fa2ecb62437982bfea51049f26aa" style=""><g class="toyplot-Series"><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="350.0" cy="250.0" r="7.5"></circle><text style="dominant-baseline:middle;fill:rgb(100%,100%,100%);fill-opacity:1.0;font-size:11.25px;stroke:none;text-anchor:middle" transform="translate(350.0,250.0)"><tspan style="dominant-baseline:inherit">A</tspan></text></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="360.0" cy="249.4459833795014" r="7.5"></circle><text style="dominant-baseline:middle;fill:rgb(100%,100%,100%);fill-opacity:1.0;font-size:11.25px;stroke:none;text-anchor:middle" transform="translate(360.0,249.4459833795014)"><tspan style="dominant-baseline:inherit">A</tspan></text></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="370.0" cy="247.78393351800551" r="7.5"></circle><text style="dominant-baseline:middle;fill:rgb(100%,100%,100%);fill-opacity:1.0;font-size:11.25px;stroke:none;text-anchor:middle" transform="translate(370.0,247.78393351800551)"><tspan style="dominant-baseline:inherit">A</tspan></text></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="380.0" cy="245.01385041551248" r="7.5"></circle><text style="dominant-baseline:middle;fill:rgb(100%,100%,100%);fill-opacity:1.0;font-size:11.25px;stroke:none;text-anchor:middle" transform="translate(380.0,245.01385041551248)"><tspan style="dominant-baseline:inherit">A</tspan></text></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="390.0" cy="241.13573407202216" r="7.5"></circle><text style="dominant-baseline:middle;fill:rgb(100%,100%,100%);fill-opacity:1.0;font-size:11.25px;stroke:none;text-anchor:middle" transform="translate(390.0,241.13573407202216)"><tspan style="dominant-baseline:inherit">A</tspan></text></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="400.0" cy="236.14958448753461" r="7.5"></circle><text style="dominant-baseline:middle;fill:rgb(100%,100%,100%);fill-opacity:1.0;font-size:11.25px;stroke:none;text-anchor:middle" transform="translate(400.0,236.14958448753461)"><tspan style="dominant-baseline:inherit">A</tspan></text></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="410.0" cy="230.05540166204986" r="7.5"></circle><text style="dominant-baseline:middle;fill:rgb(100%,100%,100%);fill-opacity:1.0;font-size:11.25px;stroke:none;text-anchor:middle" transform="translate(410.0,230.05540166204986)"><tspan style="dominant-baseline:inherit">A</tspan></text></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="420.0" cy="222.85318559556785" r="7.5"></circle><text style="dominant-baseline:middle;fill:rgb(100%,100%,100%);fill-opacity:1.0;font-size:11.25px;stroke:none;text-anchor:middle" transform="translate(420.0,222.85318559556785)"><tspan style="dominant-baseline:inherit">A</tspan></text></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="430.0" cy="214.54293628808864" r="7.5"></circle><text style="dominant-baseline:middle;fill:rgb(100%,100%,100%);fill-opacity:1.0;font-size:11.25px;stroke:none;text-anchor:middle" transform="translate(430.0,214.54293628808864)"><tspan style="dominant-baseline:inherit">A</tspan></text></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="440.0" cy="205.1246537396122" r="7.5"></circle><text style="dominant-baseline:middle;fill:rgb(100%,100%,100%);fill-opacity:1.0;font-size:11.25px;stroke:none;text-anchor:middle" transform="translate(440.0,205.1246537396122)"><tspan style="dominant-baseline:inherit">A</tspan></text></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="450.0" cy="194.5983379501385" r="7.5"></circle><text style="dominant-baseline:middle;fill:rgb(100%,100%,100%);fill-opacity:1.0;font-size:11.25px;stroke:none;text-anchor:middle" transform="translate(450.0,194.5983379501385)"><tspan style="dominant-baseline:inherit">A</tspan></text></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="460.0" cy="182.96398891966757" r="7.5"></circle><text style="dominant-baseline:middle;fill:rgb(100%,100%,100%);fill-opacity:1.0;font-size:11.25px;stroke:none;text-anchor:middle" transform="translate(460.0,182.96398891966757)"><tspan style="dominant-baseline:inherit">A</tspan></text></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="470.0" cy="170.22160664819947" r="7.5"></circle><text style="dominant-baseline:middle;fill:rgb(100%,100%,100%);fill-opacity:1.0;font-size:11.25px;stroke:none;text-anchor:middle" transform="translate(470.0,170.22160664819947)"><tspan style="dominant-baseline:inherit">A</tspan></text></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="480.0" cy="156.37119113573411" r="7.5"></circle><text style="dominant-baseline:middle;fill:rgb(100%,100%,100%);fill-opacity:1.0;font-size:11.25px;stroke:none;text-anchor:middle" transform="translate(480.0,156.37119113573411)"><tspan style="dominant-baseline:inherit">A</tspan></text></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="490.0" cy="141.41274238227149" r="7.5"></circle><text style="dominant-baseline:middle;fill:rgb(100%,100%,100%);fill-opacity:1.0;font-size:11.25px;stroke:none;text-anchor:middle" transform="translate(490.0,141.41274238227149)"><tspan style="dominant-baseline:inherit">A</tspan></text></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="500.0" cy="125.34626038781163" r="7.5"></circle><text style="dominant-baseline:middle;fill:rgb(100%,100%,100%);fill-opacity:1.0;font-size:11.25px;stroke:none;text-anchor:middle" transform="translate(500.0,125.34626038781163)"><tspan style="dominant-baseline:inherit">A</tspan></text></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="510.0" cy="108.17174515235459" r="7.5"></circle><text style="dominant-baseline:middle;fill:rgb(100%,100%,100%);fill-opacity:1.0;font-size:11.25px;stroke:none;text-anchor:middle" transform="translate(510.0,108.17174515235459)"><tspan style="dominant-baseline:inherit">A</tspan></text></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="520.0" cy="89.889196675900322" r="7.5"></circle><text style="dominant-baseline:middle;fill:rgb(100%,100%,100%);fill-opacity:1.0;font-size:11.25px;stroke:none;text-anchor:middle" transform="translate(520.0,89.889196675900322)"><tspan style="dominant-baseline:inherit">A</tspan></text></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="530.0" cy="70.498614958448783" r="7.5"></circle><text style="dominant-baseline:middle;fill:rgb(100%,100%,100%);fill-opacity:1.0;font-size:11.25px;stroke:none;text-anchor:middle" transform="translate(530.0,70.498614958448783)"><tspan style="dominant-baseline:inherit">A</tspan></text></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0"><circle cx="540.0" cy="50.0" r="7.5"></circle><text style="dominant-baseline:middle;fill:rgb(100%,100%,100%);fill-opacity:1.0;font-size:11.25px;stroke:none;text-anchor:middle" transform="translate(540.0,50.0)"><tspan style="dominant-baseline:inherit">A</tspan></text></g></g></g></g><g class="toyplot-coordinates" style="visibility:hidden"><rect height="14.0" style="fill:rgb(100%,100%,100%);fill-opacity:1.0;opacity:0.75;stroke:none" width="90.0" x="450.0" y="60.0"></rect><text style="alignment-baseline:middle;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" x="495.0" y="67.0"></text></g><g class="toyplot-axes-Axis" id="t96278770e4e44edba18508aef9e75828" transform="translate(350.0,250.0) rotate(0.0) translate(0,10.0)"><line style="" x1="0" x2="190.0" y1="0" y2="0"></line><g><text style="dominant-baseline:hanging;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(0.0,6)"><tspan style="dominant-baseline:inherit">0</tspan></text><text style="dominant-baseline:hanging;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(50.0,6)"><tspan style="dominant-baseline:inherit">5</tspan></text><text style="dominant-baseline:hanging;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(100.0,6)"><tspan style="dominant-baseline:inherit">10</tspan></text><text style="dominant-baseline:hanging;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(150.0,6)"><tspan style="dominant-baseline:inherit">15</tspan></text><text style="dominant-baseline:hanging;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(200.0,6)"><tspan style="dominant-baseline:inherit">20</tspan></text></g></g><g class="toyplot-axes-Axis" id="td291ae0b19594532bb3f30c291dc6b28" transform="translate(350.0,250.0) rotate(-90.0) translate(0,-10.0)"><line style="" x1="0" x2="200.0" y1="0" y2="0"></line><g><text style="dominant-baseline:alphabetic;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(0.0,-6)"><tspan style="dominant-baseline:inherit">0.0</tspan></text><text style="dominant-baseline:alphabetic;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(100.0,-6)"><tspan style="dominant-baseline:inherit">0.5</tspan></text><text style="dominant-baseline:alphabetic;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" transform="translate(200.0,-6)"><tspan style="dominant-baseline:inherit">1.0</tspan></text></g></g></g></svg><div class="toyplot-controls"><ul class="toyplot-mark-popup" onmouseleave="this.style.visibility='hidden'" style="background:rgba(0%,0%,0%,0.75);border:0;border-radius:6px;color:white;cursor:default;list-style:none;margin:0;padding:5px;position:fixed;visibility:hidden"><li class="toyplot-mark-popup-title" style="color:lightgray;cursor:default;padding:5px;list-style:none;margin:0;"></li><li class="toyplot-mark-popup-save-csv" onmouseout="this.style.color='white';this.style.background='steelblue'" onmouseover="this.style.color='steelblue';this.style.background='white'" style="border-radius:3px;padding:5px;list-style:none;margin:0;">Save as .csv</li></ul><script>
-    (function()
+    <div class="toyplot" id="tf4e360fddbb244e5bc3239afd6b44277" style="text-align:center"><svg class="toyplot-canvas-Canvas" height="300.0px" id="t97b024e6072a431fa0b4f62d27435e42" preserveAspectRatio="xMidYMid meet" style="background-color:transparent;fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:Helvetica;font-size:12px;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0;stroke-width:1.0" viewBox="0 0 600.0 300.0" width="600.0px" xmlns="http://www.w3.org/2000/svg" xmlns:toyplot="http://www.sandia.gov/toyplot" xmlns:xlink="http://www.w3.org/1999/xlink"><g class="toyplot-coordinates-Cartesian" id="t6b67400679e34e4f8264fe89e7709f52"><clipPath id="t0dcf0c3134314f7cb21c3927dc368ebb"><rect height="220.0" width="220.0" x="40.0" y="40.0"></rect></clipPath><g clip-path="url(#t0dcf0c3134314f7cb21c3927dc368ebb)"><g class="toyplot-mark-Scatterplot" id="td4f94a8625334a0fb3c91281a94cfa6f"><g class="toyplot-Series"><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(50.0, 250.0) rotate(30)"><polygon points="-7.5,7.5 0,-7.5 7.5,7.5"></polygon></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(60.0, 249.4459833795014) rotate(30)"><polygon points="-7.5,7.5 0,-7.5 7.5,7.5"></polygon></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(70.0, 247.78393351800551) rotate(30)"><polygon points="-7.5,7.5 0,-7.5 7.5,7.5"></polygon></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(80.0, 245.01385041551248) rotate(30)"><polygon points="-7.5,7.5 0,-7.5 7.5,7.5"></polygon></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(90.0, 241.13573407202216) rotate(30)"><polygon points="-7.5,7.5 0,-7.5 7.5,7.5"></polygon></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(100.0, 236.14958448753461) rotate(30)"><polygon points="-7.5,7.5 0,-7.5 7.5,7.5"></polygon></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(110.0, 230.05540166204986) rotate(30)"><polygon points="-7.5,7.5 0,-7.5 7.5,7.5"></polygon></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(120.0, 222.85318559556785) rotate(30)"><polygon points="-7.5,7.5 0,-7.5 7.5,7.5"></polygon></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(130.0, 214.54293628808864) rotate(30)"><polygon points="-7.5,7.5 0,-7.5 7.5,7.5"></polygon></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(140.0, 205.1246537396122) rotate(30)"><polygon points="-7.5,7.5 0,-7.5 7.5,7.5"></polygon></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(150.0, 194.5983379501385) rotate(30)"><polygon points="-7.5,7.5 0,-7.5 7.5,7.5"></polygon></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(160.0, 182.96398891966757) rotate(30)"><polygon points="-7.5,7.5 0,-7.5 7.5,7.5"></polygon></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(170.0, 170.22160664819947) rotate(30)"><polygon points="-7.5,7.5 0,-7.5 7.5,7.5"></polygon></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(180.0, 156.37119113573411) rotate(30)"><polygon points="-7.5,7.5 0,-7.5 7.5,7.5"></polygon></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(190.0, 141.41274238227149) rotate(30)"><polygon points="-7.5,7.5 0,-7.5 7.5,7.5"></polygon></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(200.0, 125.34626038781163) rotate(30)"><polygon points="-7.5,7.5 0,-7.5 7.5,7.5"></polygon></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(210.0, 108.17174515235459) rotate(30)"><polygon points="-7.5,7.5 0,-7.5 7.5,7.5"></polygon></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(220.0, 89.889196675900322) rotate(30)"><polygon points="-7.5,7.5 0,-7.5 7.5,7.5"></polygon></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(230.0, 70.498614958448783) rotate(30)"><polygon points="-7.5,7.5 0,-7.5 7.5,7.5"></polygon></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(240.0, 50.0) rotate(30)"><polygon points="-7.5,7.5 0,-7.5 7.5,7.5"></polygon></g></g></g></g><g class="toyplot-coordinates-Axis" id="t8c080f15fcad4aebba4d0f0c48835545" transform="translate(50.0,250.0)translate(0,10.0)"><line style="" x1="0" x2="190.0" y1="0" y2="0"></line><g><g transform="translate(0.0,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-2.78" y="8.555">0</text></g><g transform="translate(50.0,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-2.78" y="8.555">5</text></g><g transform="translate(100.0,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-5.56" y="8.555">10</text></g><g transform="translate(150.0,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-5.56" y="8.555">15</text></g><g transform="translate(200.0,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-5.56" y="8.555">20</text></g></g><g class="toyplot-coordinates-Axis-coordinates" style="visibility:hidden" transform=""><line style="stroke:rgb(43.9%,50.2%,56.5%);stroke-opacity:1.0;stroke-width:1.0" x1="0" x2="0" y1="-3.0" y2="4.5"></line><text style="alignment-baseline:alphabetic;fill:rgb(43.9%,50.2%,56.5%);fill-opacity:1.0;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" x="0" y="-6"></text></g></g><g class="toyplot-coordinates-Axis" id="tae62dd799a684d5d9948e15131928e4c" transform="translate(50.0,250.0)rotate(-90.0)translate(0,-10.0)"><line style="" x1="0" x2="200.0" y1="0" y2="0"></line><g><g transform="translate(0.0,-6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-6.95" y="-4.4408920985e-16">0.0</text></g><g transform="translate(100.0,-6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-6.95" y="-4.4408920985e-16">0.5</text></g><g transform="translate(200.0,-6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-6.95" y="-4.4408920985e-16">1.0</text></g></g><g class="toyplot-coordinates-Axis-coordinates" style="visibility:hidden" transform=""><line style="stroke:rgb(43.9%,50.2%,56.5%);stroke-opacity:1.0;stroke-width:1.0" x1="0" x2="0" y1="3.0" y2="-4.5"></line><text style="alignment-baseline:hanging;fill:rgb(43.9%,50.2%,56.5%);fill-opacity:1.0;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" x="0" y="6"></text></g></g></g><g class="toyplot-coordinates-Cartesian" id="tf52201a9dede458aba07c2ec2ffb9957"><clipPath id="ta15b48048fef443d8085dfafb718c77e"><rect height="220.0" width="220.0" x="340.0" y="40.0"></rect></clipPath><g clip-path="url(#ta15b48048fef443d8085dfafb718c77e)"><g class="toyplot-mark-Scatterplot" id="te48967c97b90447d9ccc53c658ccb5b3"><g class="toyplot-Series"><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(350.0, 250.0)"><circle r="7.5"></circle><g><text style="fill:rgb(100%,100%,100%);fill-opacity:1.0;font-family:helvetica;font-size:11.25px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-3.751875" y="2.874375">B</text></g></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(360.0, 249.4459833795014)"><circle r="7.5"></circle><g><text style="fill:rgb(100%,100%,100%);fill-opacity:1.0;font-family:helvetica;font-size:11.25px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-3.751875" y="2.874375">B</text></g></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(370.0, 247.78393351800551)"><circle r="7.5"></circle><g><text style="fill:rgb(100%,100%,100%);fill-opacity:1.0;font-family:helvetica;font-size:11.25px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-3.751875" y="2.874375">B</text></g></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(380.0, 245.01385041551248)"><circle r="7.5"></circle><g><text style="fill:rgb(100%,100%,100%);fill-opacity:1.0;font-family:helvetica;font-size:11.25px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-3.751875" y="2.874375">B</text></g></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(390.0, 241.13573407202216)"><circle r="7.5"></circle><g><text style="fill:rgb(100%,100%,100%);fill-opacity:1.0;font-family:helvetica;font-size:11.25px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-3.751875" y="2.874375">B</text></g></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(400.0, 236.14958448753461)"><circle r="7.5"></circle><g><text style="fill:rgb(100%,100%,100%);fill-opacity:1.0;font-family:helvetica;font-size:11.25px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-3.751875" y="2.874375">B</text></g></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(410.0, 230.05540166204986)"><circle r="7.5"></circle><g><text style="fill:rgb(100%,100%,100%);fill-opacity:1.0;font-family:helvetica;font-size:11.25px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-3.751875" y="2.874375">B</text></g></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(420.0, 222.85318559556785)"><circle r="7.5"></circle><g><text style="fill:rgb(100%,100%,100%);fill-opacity:1.0;font-family:helvetica;font-size:11.25px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-3.751875" y="2.874375">B</text></g></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(430.0, 214.54293628808864)"><circle r="7.5"></circle><g><text style="fill:rgb(100%,100%,100%);fill-opacity:1.0;font-family:helvetica;font-size:11.25px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-3.751875" y="2.874375">B</text></g></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(440.0, 205.1246537396122)"><circle r="7.5"></circle><g><text style="fill:rgb(100%,100%,100%);fill-opacity:1.0;font-family:helvetica;font-size:11.25px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-3.751875" y="2.874375">B</text></g></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(450.0, 194.5983379501385)"><circle r="7.5"></circle><g><text style="fill:rgb(100%,100%,100%);fill-opacity:1.0;font-family:helvetica;font-size:11.25px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-3.751875" y="2.874375">B</text></g></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(460.0, 182.96398891966757)"><circle r="7.5"></circle><g><text style="fill:rgb(100%,100%,100%);fill-opacity:1.0;font-family:helvetica;font-size:11.25px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-3.751875" y="2.874375">B</text></g></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(470.0, 170.22160664819947)"><circle r="7.5"></circle><g><text style="fill:rgb(100%,100%,100%);fill-opacity:1.0;font-family:helvetica;font-size:11.25px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-3.751875" y="2.874375">B</text></g></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(480.0, 156.37119113573411)"><circle r="7.5"></circle><g><text style="fill:rgb(100%,100%,100%);fill-opacity:1.0;font-family:helvetica;font-size:11.25px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-3.751875" y="2.874375">B</text></g></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(490.0, 141.41274238227149)"><circle r="7.5"></circle><g><text style="fill:rgb(100%,100%,100%);fill-opacity:1.0;font-family:helvetica;font-size:11.25px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-3.751875" y="2.874375">B</text></g></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(500.0, 125.34626038781163)"><circle r="7.5"></circle><g><text style="fill:rgb(100%,100%,100%);fill-opacity:1.0;font-family:helvetica;font-size:11.25px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-3.751875" y="2.874375">B</text></g></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(510.0, 108.17174515235459)"><circle r="7.5"></circle><g><text style="fill:rgb(100%,100%,100%);fill-opacity:1.0;font-family:helvetica;font-size:11.25px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-3.751875" y="2.874375">B</text></g></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(520.0, 89.889196675900322)"><circle r="7.5"></circle><g><text style="fill:rgb(100%,100%,100%);fill-opacity:1.0;font-family:helvetica;font-size:11.25px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-3.751875" y="2.874375">B</text></g></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(530.0, 70.498614958448783)"><circle r="7.5"></circle><g><text style="fill:rgb(100%,100%,100%);fill-opacity:1.0;font-family:helvetica;font-size:11.25px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-3.751875" y="2.874375">B</text></g></g><g class="toyplot-Datum" style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;opacity:1.0;stroke:rgb(40%,76.1%,64.7%);stroke-opacity:1.0" transform="translate(540.0, 50.0)"><circle r="7.5"></circle><g><text style="fill:rgb(100%,100%,100%);fill-opacity:1.0;font-family:helvetica;font-size:11.25px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-3.751875" y="2.874375">B</text></g></g></g></g></g><g class="toyplot-coordinates-Axis" id="t18dc1573201c4b1a8f1dcb7511863c58" transform="translate(350.0,250.0)translate(0,10.0)"><line style="" x1="0" x2="190.0" y1="0" y2="0"></line><g><g transform="translate(0.0,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-2.78" y="8.555">0</text></g><g transform="translate(50.0,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-2.78" y="8.555">5</text></g><g transform="translate(100.0,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-5.56" y="8.555">10</text></g><g transform="translate(150.0,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-5.56" y="8.555">15</text></g><g transform="translate(200.0,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-5.56" y="8.555">20</text></g></g><g class="toyplot-coordinates-Axis-coordinates" style="visibility:hidden" transform=""><line style="stroke:rgb(43.9%,50.2%,56.5%);stroke-opacity:1.0;stroke-width:1.0" x1="0" x2="0" y1="-3.0" y2="4.5"></line><text style="alignment-baseline:alphabetic;fill:rgb(43.9%,50.2%,56.5%);fill-opacity:1.0;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" x="0" y="-6"></text></g></g><g class="toyplot-coordinates-Axis" id="t2a312e5083824aa9b2aa56b4ee0a3c22" transform="translate(350.0,250.0)rotate(-90.0)translate(0,-10.0)"><line style="" x1="0" x2="200.0" y1="0" y2="0"></line><g><g transform="translate(0.0,-6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-6.95" y="-4.4408920985e-16">0.0</text></g><g transform="translate(100.0,-6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-6.95" y="-4.4408920985e-16">0.5</text></g><g transform="translate(200.0,-6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-6.95" y="-4.4408920985e-16">1.0</text></g></g><g class="toyplot-coordinates-Axis-coordinates" style="visibility:hidden" transform=""><line style="stroke:rgb(43.9%,50.2%,56.5%);stroke-opacity:1.0;stroke-width:1.0" x1="0" x2="0" y1="3.0" y2="-4.5"></line><text style="alignment-baseline:hanging;fill:rgb(43.9%,50.2%,56.5%);fill-opacity:1.0;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" x="0" y="6"></text></g></g></g></svg><div class="toyplot-behavior"><script>(function()
     {
-      var data_tables = [{"data": [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19], [0.0, 0.0027700831024930744, 0.011080332409972297, 0.02493074792243767, 0.04432132963988919, 0.06925207756232686, 0.09972299168975068, 0.13573407202216065, 0.17728531855955676, 0.22437673130193903, 0.27700831024930744, 0.33518005540166207, 0.39889196675900274, 0.4681440443213295, 0.5429362880886426, 0.6232686980609419, 0.709141274238227, 0.8005540166204984, 0.8975069252077561, 1.0]], "title": "Scatterplot Data", "names": ["x", "y0"], "id": "tcb630903605a4ce5a2db22f5e0f0fddf", "filename": "toyplot"}, {"data": [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19], [0.0, 0.0027700831024930744, 0.011080332409972297, 0.02493074792243767, 0.04432132963988919, 0.06925207756232686, 0.09972299168975068, 0.13573407202216065, 0.17728531855955676, 0.22437673130193903, 0.27700831024930744, 0.33518005540166207, 0.39889196675900274, 0.4681440443213295, 0.5429362880886426, 0.6232686980609419, 0.709141274238227, 0.8005540166204984, 0.8975069252077561, 1.0]], "title": "Scatterplot Data", "names": ["x", "y0"], "id": "t1193fa2ecb62437982bfea51049f26aa", "filename": "toyplot"}];
-    
-      function save_csv(data_table)
-      {
-        var uri = "data:text/csv;charset=utf-8,";
-        uri += data_table.names.join(",") + "\n";
-        for(var i = 0; i != data_table.data[0].length; ++i)
+    var modules={};
+    modules["toyplot/tables"] = (function()
         {
-          for(var j = 0; j != data_table.data.length; ++j)
-          {
-            if(j)
-              uri += ",";
-            uri += data_table.data[j][i];
-          }
-          uri += "\n";
-        }
-        uri = encodeURI(uri);
+            var tables = [];
     
-        var link = document.createElement("a");
-        if(typeof link.download != "undefined")
-        {
-          link.href = uri;
-          link.style = "visibility:hidden";
-          link.download = data_table.filename + ".csv";
+            var module = {};
     
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-        }
-        else
-        {
-          window.open(uri);
-        }
-      }
-    
-      function open_popup(data_table)
-      {
-        return function(e)
-        {
-          var popup = document.querySelector("#tbf4f98f15f064d23992b7c53b3217e86 .toyplot-mark-popup");
-          popup.querySelector(".toyplot-mark-popup-title").innerHTML = data_table.title;
-          popup.querySelector(".toyplot-mark-popup-save-csv").onclick = function() { popup.style.visibility = "hidden"; save_csv(data_table); }
-          popup.style.left = (e.clientX - 50) + "px";
-          popup.style.top = (e.clientY - 20) + "px";
-          popup.style.visibility = "visible";
-          e.stopPropagation();
-          e.preventDefault();
-        }
-    
-      }
-    
-      for(var i = 0; i != data_tables.length; ++i)
-      {
-        var data_table = data_tables[i];
-        var event_target = document.querySelector("#" + data_table.id);
-        event_target.oncontextmenu = open_popup(data_table);
-      }
-    })();
-    </script><script>
-    (function()
-    {
-      var axes = {"t7ddf0238e0c642bd98dc2e71efce884d": {"x": [{"domain": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 20.0, "min": 0.0}, "range": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 550.0, "min": 350.0}, "scale": "linear"}], "y": [{"domain": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 1.0, "min": 0.0}, "range": {"bounds": {"max": -Infinity, "min": Infinity}, "max": 50.0, "min": 250.0}, "scale": "linear"}]}, "t9c7bdbedfddf45a6a10b15ce5a3826f0": {"x": [{"domain": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 20.0, "min": 0.0}, "range": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 250.0, "min": 50.0}, "scale": "linear"}], "y": [{"domain": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 1.0, "min": 0.0}, "range": {"bounds": {"max": -Infinity, "min": Infinity}, "max": 50.0, "min": 250.0}, "scale": "linear"}]}};
-    
-      function sign(x)
-      {
-        return x < 0 ? -1 : x > 0 ? 1 : 0;
-      }
-    
-      function _mix(a, b, amount)
-      {
-        return ((1.0 - amount) * a) + (amount * b);
-      }
-    
-      function _log(x, base)
-      {
-        return Math.log(Math.abs(x)) / Math.log(base);
-      }
-    
-      function _in_range(a, x, b)
-      {
-        var left = Math.min(a, b);
-        var right = Math.max(a, b);
-        return left <= x && x <= right;
-      }
-    
-      function to_domain(projection, range)
-      {
-        for(var i = 0; i != projection.length; ++i)
-        {
-          var segment = projection[i];
-          if(_in_range(segment.range.bounds.min, range, segment.range.bounds.max))
-          {
-            if(segment.scale == "linear")
+            module.set = function(owner, key, names, columns)
             {
-              var amount = (range - segment.range.min) / (segment.range.max - segment.range.min);
-              return _mix(segment.domain.min, segment.domain.max, amount)
+                tables.push({owner: owner, key: key, names: names, columns: columns});
             }
-            else if(segment.scale[0] == "log")
+    
+            module.get = function(owner, key)
             {
-              var amount = (range - segment.range.min) / (segment.range.max - segment.range.min);
-              var base = segment.scale[1];
-              return sign(segment.domain.min) * Math.pow(base, _mix(_log(segment.domain.min, base), _log(segment.domain.max, base), amount));
+                for(var i = 0; i != tables.length; ++i)
+                {
+                    var table = tables[i];
+                    if(table.owner != owner)
+                        continue;
+                    if(table.key != key)
+                        continue;
+                    return {names: table.names, columns: table.columns};
+                }
             }
-          }
-        }
-      }
     
-      // Compute mouse coordinates relative to a DOM object, with thanks to d3js.org, where this code originated.
-      function d3_mousePoint(container, e)
-      {
-        if (e.changedTouches) e = e.changedTouches[0];
-        var svg = container.ownerSVGElement || container;
-        if (svg.createSVGPoint) {
-          var point = svg.createSVGPoint();
-          point.x = e.clientX, point.y = e.clientY;
-          point = point.matrixTransform(container.getScreenCTM().inverse());
-          return [point.x, point.y];
-        }
-        var rect = container.getBoundingClientRect();
-        return [e.clientX - rect.left - container.clientLeft, e.clientY - rect.top - container.clientTop];
-      };
+            module.get_csv = function(owner, key)
+            {
+                var table = module.get(owner, key);
+                if(table != undefined)
+                {
+                    var csv = "";
+                    csv += table.names.join(",") + "\n";
+                    for(var i = 0; i != table.columns[0].length; ++i)
+                    {
+                      for(var j = 0; j != table.columns.length; ++j)
+                      {
+                        if(j)
+                          csv += ",";
+                        csv += table.columns[j][i];
+                      }
+                      csv += "\n";
+                    }
+                    return csv;
+                }
+            }
     
-      function display_coordinates(e)
-      {
-        var dom_axes = e.currentTarget.parentElement;
-        var data = axes[dom_axes.id];
-    
-        point = d3_mousePoint(e.target, e);
-        var x = Number(to_domain(data["x"], point[0])).toFixed(2);
-        var y = Number(to_domain(data["y"], point[1])).toFixed(2);
-    
-        var coordinates = dom_axes.querySelectorAll(".toyplot-coordinates");
-        for(var i = 0; i != coordinates.length; ++i)
+            return module;
+        })();
+    modules["toyplot/root/id"] = "tf4e360fddbb244e5bc3239afd6b44277";
+    modules["toyplot/root"] = (function(root_id)
         {
-          coordinates[i].style.visibility = "visible";
-          coordinates[i].querySelector("text").textContent = "x=" + x + " y=" + y;
-        }
-      }
+            return document.querySelector("#" + root_id);
+        })(modules["toyplot/root/id"]);
+    modules["toyplot/canvas/id"] = "t97b024e6072a431fa0b4f62d27435e42";
+    modules["toyplot/canvas"] = (function(canvas_id)
+        {
+            return document.querySelector("#" + canvas_id);
+        })(modules["toyplot/canvas/id"]);
+    modules["toyplot/menus/context"] = (function(root, canvas)
+        {
+            var wrapper = document.createElement("div");
+            wrapper.innerHTML = "<ul class='toyplot-context-menu' style='background:#eee; border:1px solid #b8b8b8; border-radius:5px; box-shadow: 0px 0px 8px rgba(0%,0%,0%,0.25); margin:0; padding:3px 0; position:fixed; visibility:hidden;'></ul>"
+            var menu = wrapper.firstChild;
     
-      function clear_coordinates(e)
-      {
-        var dom_axes = e.currentTarget.parentElement;
-        var coordinates = dom_axes.querySelectorAll(".toyplot-coordinates");
-        for(var i = 0; i != coordinates.length; ++i)
-          coordinates[i].style.visibility = "hidden";
-      }
+            root.appendChild(menu);
     
-      for(var axes_id in axes)
-      {
-        var event_target = document.querySelector("#" + axes_id + " .toyplot-coordinate-events");
-        event_target.onmousemove = display_coordinates;
-        event_target.onmouseout = clear_coordinates;
-      }
-    })();
-    </script></div></div>
+            var items = [];
+    
+            var ignore_mouseup = null;
+            function open_menu(e)
+            {
+                var show_menu = false;
+                for(var index=0; index != items.length; ++index)
+                {
+                    var item = items[index];
+                    if(item.show(e))
+                    {
+                        item.item.style.display = "block";
+                        show_menu = true;
+                    }
+                    else
+                    {
+                        item.item.style.display = "none";
+                    }
+                }
+    
+                if(show_menu)
+                {
+                    ignore_mouseup = true;
+                    menu.style.left = (e.clientX + 1) + "px";
+                    menu.style.top = (e.clientY - 5) + "px";
+                    menu.style.visibility = "visible";
+                    e.stopPropagation();
+                    e.preventDefault();
+                }
+            }
+    
+            function close_menu()
+            {
+                menu.style.visibility = "hidden";
+            }
+    
+            function contextmenu(e)
+            {
+                open_menu(e);
+            }
+    
+            function mousemove(e)
+            {
+                ignore_mouseup = false;
+            }
+    
+            function mouseup(e)
+            {
+                if(ignore_mouseup)
+                {
+                    ignore_mouseup = false;
+                    return;
+                }
+                close_menu();
+            }
+    
+            function keydown(e)
+            {
+                if(e.key == "Escape" || e.key == "Esc" || e.keyCode == 27)
+                {
+                    close_menu();
+                }
+            }
+    
+            canvas.addEventListener("contextmenu", contextmenu);
+            canvas.addEventListener("mousemove", mousemove);
+            document.addEventListener("mouseup", mouseup);
+            document.addEventListener("keydown", keydown);
+    
+            var module = {};
+            module.add_item = function(label, show, activate)
+            {
+                var wrapper = document.createElement("div");
+                wrapper.innerHTML = "<li class='toyplot-context-menu-item' style='background:#eee; color:#333; padding:2px 20px; list-style:none; margin:0; text-align:left;'>" + label + "</li>"
+                var item = wrapper.firstChild;
+    
+                items.push({item: item, show: show});
+    
+                function mouseover()
+                {
+                    this.style.background = "steelblue";
+                    this.style.color = "white";
+                }
+    
+                function mouseout()
+                {
+                    this.style.background = "#eee";
+                    this.style.color = "#333";
+                }
+    
+                function choose_item(e)
+                {
+                    close_menu();
+                    activate();
+    
+                    e.stopPropagation();
+                    e.preventDefault();
+                }
+    
+                item.addEventListener("mouseover", mouseover);
+                item.addEventListener("mouseout", mouseout);
+                item.addEventListener("mouseup", choose_item);
+                item.addEventListener("contextmenu", choose_item);
+    
+                menu.appendChild(item);
+            };
+            return module;
+        })(modules["toyplot/root"],modules["toyplot/canvas"]);
+    modules["toyplot/io"] = (function()
+        {
+            var module = {};
+            module.save_file = function(mime_type, charset, data, filename)
+            {
+                var uri = "data:" + mime_type + ";charset=" + charset + "," + data;
+                uri = encodeURI(uri);
+    
+                var link = document.createElement("a");
+                if(typeof link.download != "undefined")
+                {
+                  link.href = uri;
+                  link.style = "visibility:hidden";
+                  link.download = filename;
+    
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+                }
+                else
+                {
+                  window.open(uri);
+                }
+            };
+            return module;
+        })();
+    modules["toyplot.coordinates.Axis"] = (
+            function(canvas)
+            {
+                function sign(x)
+                {
+                    return x < 0 ? -1 : x > 0 ? 1 : 0;
+                }
+    
+                function mix(a, b, amount)
+                {
+                    return ((1.0 - amount) * a) + (amount * b);
+                }
+    
+                function log(x, base)
+                {
+                    return Math.log(Math.abs(x)) / Math.log(base);
+                }
+    
+                function in_range(a, x, b)
+                {
+                    var left = Math.min(a, b);
+                    var right = Math.max(a, b);
+                    return left <= x && x <= right;
+                }
+    
+                function inside(range, projection)
+                {
+                    for(var i = 0; i != projection.length; ++i)
+                    {
+                        var segment = projection[i];
+                        if(in_range(segment.range.min, range, segment.range.max))
+                            return true;
+                    }
+                    return false;
+                }
+    
+                function to_domain(range, projection)
+                {
+                    for(var i = 0; i != projection.length; ++i)
+                    {
+                        var segment = projection[i];
+                        if(in_range(segment.range.bounds.min, range, segment.range.bounds.max))
+                        {
+                            if(segment.scale == "linear")
+                            {
+                                var amount = (range - segment.range.min) / (segment.range.max - segment.range.min);
+                                return mix(segment.domain.min, segment.domain.max, amount)
+                            }
+                            else if(segment.scale[0] == "log")
+                            {
+                                var amount = (range - segment.range.min) / (segment.range.max - segment.range.min);
+                                var base = segment.scale[1];
+                                return sign(segment.domain.min) * Math.pow(base, mix(log(segment.domain.min, base), log(segment.domain.max, base), amount));
+                            }
+                        }
+                    }
+                }
+    
+                var axes = {};
+    
+                function display_coordinates(e)
+                {
+                    var current = canvas.createSVGPoint();
+                    current.x = e.clientX;
+                    current.y = e.clientY;
+    
+                    for(var axis_id in axes)
+                    {
+                        var axis = document.querySelector("#" + axis_id);
+                        var coordinates = axis.querySelector(".toyplot-coordinates-Axis-coordinates");
+                        if(coordinates)
+                        {
+                            var projection = axes[axis_id];
+                            var local = current.matrixTransform(axis.getScreenCTM().inverse());
+                            if(inside(local.x, projection))
+                            {
+                                var domain = to_domain(local.x, projection);
+                                coordinates.style.visibility = "visible";
+                                coordinates.setAttribute("transform", "translate(" + local.x + ")");
+                                var text = coordinates.querySelector("text");
+                                text.textContent = domain.toFixed(2);
+                            }
+                            else
+                            {
+                                coordinates.style.visibility= "hidden";
+                            }
+                        }
+                    }
+                }
+    
+                canvas.addEventListener("click", display_coordinates);
+    
+                var module = {};
+                module.show_coordinates = function(axis_id, projection)
+                {
+                    axes[axis_id] = projection;
+                }
+    
+                return module;
+            })(modules["toyplot/canvas"]);
+    (function(tables, context_menu, io, owner_id, key, label, names, columns, filename)
+            {
+                tables.set(owner_id, key, names, columns);
+    
+                var owner = document.querySelector("#" + owner_id);
+                function show_item(e)
+                {
+                    return owner.contains(e.target);
+                }
+    
+                function choose_item()
+                {
+                    io.save_file("text/csv", "utf-8", tables.get_csv(owner_id, key), filename + ".csv");
+                }
+    
+                context_menu.add_item("Save " + label + " as CSV", show_item, choose_item);
+            })(modules["toyplot/tables"],modules["toyplot/menus/context"],modules["toyplot/io"],"td4f94a8625334a0fb3c91281a94cfa6f","data","scatterplot",["x", "y0"],[[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19], [0.0, 0.0027700831024930744, 0.011080332409972297, 0.02493074792243767, 0.04432132963988919, 0.06925207756232686, 0.09972299168975068, 0.13573407202216065, 0.17728531855955676, 0.22437673130193903, 0.27700831024930744, 0.33518005540166207, 0.39889196675900274, 0.4681440443213295, 0.5429362880886426, 0.6232686980609419, 0.709141274238227, 0.8005540166204984, 0.8975069252077561, 1.0]],"toyplot");
+    (function(axis, axis_id, projection)
+            {
+                axis.show_coordinates(axis_id, projection);
+            })(modules["toyplot.coordinates.Axis"],"t8c080f15fcad4aebba4d0f0c48835545",[{"domain": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 20.0, "min": 0.0}, "range": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 200.0, "min": 0.0}, "scale": "linear"}]);
+    (function(axis, axis_id, projection)
+            {
+                axis.show_coordinates(axis_id, projection);
+            })(modules["toyplot.coordinates.Axis"],"tae62dd799a684d5d9948e15131928e4c",[{"domain": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 1.0, "min": 0.0}, "range": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 200.0, "min": 0.0}, "scale": "linear"}]);
+    (function(tables, context_menu, io, owner_id, key, label, names, columns, filename)
+            {
+                tables.set(owner_id, key, names, columns);
+    
+                var owner = document.querySelector("#" + owner_id);
+                function show_item(e)
+                {
+                    return owner.contains(e.target);
+                }
+    
+                function choose_item()
+                {
+                    io.save_file("text/csv", "utf-8", tables.get_csv(owner_id, key), filename + ".csv");
+                }
+    
+                context_menu.add_item("Save " + label + " as CSV", show_item, choose_item);
+            })(modules["toyplot/tables"],modules["toyplot/menus/context"],modules["toyplot/io"],"te48967c97b90447d9ccc53c658ccb5b3","data","scatterplot",["x", "y0"],[[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19], [0.0, 0.0027700831024930744, 0.011080332409972297, 0.02493074792243767, 0.04432132963988919, 0.06925207756232686, 0.09972299168975068, 0.13573407202216065, 0.17728531855955676, 0.22437673130193903, 0.27700831024930744, 0.33518005540166207, 0.39889196675900274, 0.4681440443213295, 0.5429362880886426, 0.6232686980609419, 0.709141274238227, 0.8005540166204984, 0.8975069252077561, 1.0]],"toyplot");
+    (function(axis, axis_id, projection)
+            {
+                axis.show_coordinates(axis_id, projection);
+            })(modules["toyplot.coordinates.Axis"],"t18dc1573201c4b1a8f1dcb7511863c58",[{"domain": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 20.0, "min": 0.0}, "range": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 200.0, "min": 0.0}, "scale": "linear"}]);
+    (function(axis, axis_id, projection)
+            {
+                axis.show_coordinates(axis_id, projection);
+            })(modules["toyplot.coordinates.Axis"],"t2a312e5083824aa9b2aa56b4ee0a3c22",[{"domain": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 1.0, "min": 0.0}, "range": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 200.0, "min": 0.0}, "scale": "linear"}]);
+    })();</script></div></div>
 
 
-Using the full marker specification allows you to control additional
-parameters such as the marker angle and label. Also note the *mlstyle*
-argument which controls the style of the marker label, independently of
-the marker itself.
+In addition to using markers in plots and scatterplots, markers can be
+embedded in any figure text, using custom HTML markup. The markup itself
+can be fairly verbose, so :class:`toyplot.marker.Marker` provides API
+to make it easier:
+
+.. code:: python
+
+    marker_a = toyplot.marker.create(shape="s", label="A", mstyle={"fill":"none"})
+    marker_b = toyplot.marker.create(shape="*")
+    text = marker_a + " is a marker and so is " + marker_b
+    
+    style = {"font-size": "18px"}
+    
+    canvas = toyplot.Canvas(width="5in", height="1.25in")
+    axes = canvas.cartesian(show=False)
+    axes.text(0, 0, text=text, style=style);
+
+
+
+.. raw:: html
+
+    <div class="toyplot" id="t2372afc4f25544c0b7e2a62394813c81" style="text-align:center"><svg class="toyplot-canvas-Canvas" height="120.0px" id="t885fadc0b6c64a478103742cab17a391" preserveAspectRatio="xMidYMid meet" style="background-color:transparent;fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:Helvetica;font-size:12px;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0;stroke-width:1.0" viewBox="0 0 480.0 120.0" width="480.0px" xmlns="http://www.w3.org/2000/svg" xmlns:toyplot="http://www.sandia.gov/toyplot" xmlns:xlink="http://www.w3.org/1999/xlink"><g class="toyplot-coordinates-Cartesian" id="t14b569178a6f4d56a82e78562aae75f3"><clipPath id="t30a4d9cc8f86446d86e0fd35608e0301"><rect height="40.0" width="400.0" x="40.0" y="40.0"></rect></clipPath><g clip-path="url(#t30a4d9cc8f86446d86e0fd35608e0301)"><g class="toyplot-mark-Text" id="t987d15b89e8740a78ea20c2fd6e26138"><g class="toyplot-Series"><g class="toyplot-Datum" transform="translate(240.0,60.0)"><g style="fill:none" transform="translate(-96.353999999999999, 0.0)"><rect height="16.65" width="16.65" x="-8.325" y="-8.325"></rect><g><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:12.4875px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-4.16458125" y="3.19055625">A</text></g></g><text style="fill:rgb(40%,76.1%,64.7%);fill-opacity:1.0;font-family:helvetica;font-size:18.0px;font-weight:normal;opacity:1.0;stroke:none;vertical-align:baseline;white-space:pre" x="-88.029" y="4.599"> is a marker and so is </text><g transform="translate(96.353999999999999, 0.0)"><line y1="-8.325" y2="8.325"></line><line transform="rotate(60)" y1="-8.325" y2="8.325"></line><line transform="rotate(-60)" y1="-8.325" y2="8.325"></line></g></g></g></g></g></g></svg><div class="toyplot-behavior"><script>(function()
+    {
+    var modules={};
+    })();</script></div></div>
+
+
+You can also convert markers to HTML explicitly, if you prefer:
+
+.. code:: python
+
+    print marker_a.to_html()
+
+
+.. parsed-literal::
+
+    <marker shape='s' mstyle='fill:none' label='A'/>
+
+
+This makes it easy to create a table documenting all of the available
+marker shape codes:
+
+.. code:: python
+
+    markers = [None, "|","/","-","\\","+","x","*","^",">","v","<","s","d",
+               "o","oo","o|", "o/", "o-", "o\\", "o+","ox","o*","r3x1","r2x1","r1x1", "r1x2", "r0.5x1.5"]
+    mstyle = {"stroke":toyplot.color.near_black, "fill":"#feb"}
+    labels = [str(marker) for marker in markers]
+    markers = [toyplot.marker.create(shape=marker, mstyle=mstyle, size=15).to_html() for marker in markers]
+    
+    # This is necessary because "<" and ">" are interpreted as tags when rendering text.
+    from xml.sax.saxutils import escape
+    labels = [escape(label) for label in labels]
+    
+    canvas, table = toyplot.table(trows=1, rows=len(markers), columns=2, width=400, height=1200)
+    table.cells.grid.vlines[...,1] = "single"
+    table.cells.grid.hlines[1,...] = "single"
+    table.top.cell[0,...].data = ["Shape Code", "Marker"]
+    table.top.cell[0,...].lstyle = {"font-size":"16px", "font-weight":"bold"}
+    table.body.column[0].data = labels
+    table.body.column[0].lstyle = {"font-size":"16px", "font-family":"monospace"}
+    table.body.column[1].data = markers
+
+
+
+.. raw:: html
+
+    <div class="toyplot" id="te920203719eb457fa68e3201a9323dbf" style="text-align:center"><svg class="toyplot-canvas-Canvas" height="1200.0px" id="t8236c84ffde240b2ad704e150f889f3b" preserveAspectRatio="xMidYMid meet" style="background-color:transparent;fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:Helvetica;font-size:12px;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0;stroke-width:1.0" viewBox="0 0 400.0 1200.0" width="400.0px" xmlns="http://www.w3.org/2000/svg" xmlns:toyplot="http://www.sandia.gov/toyplot" xmlns:xlink="http://www.w3.org/1999/xlink"><g class="toyplot-coordinates-Table" id="t6eb0eecd290e43bea2577bbe30e62ae9"><g transform="translate(125.0,68.965517241379303)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:16.0px;font-weight:bold;stroke:none;vertical-align:baseline;white-space:pre" x="-46.232" y="4.088">Shape Code</text></g><g transform="translate(275.0,68.965517241379303)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:16.0px;font-weight:bold;stroke:none;vertical-align:baseline;white-space:pre" x="-26.232" y="4.088">Marker</text></g><g transform="translate(125.0,106.89655172413794)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:monospace;font-size:16.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-19.2" y="3.776">None</text></g><g transform="translate(275.0,106.89655172413794)"><g style="fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0" transform="translate(0.0, -4.4408920985006262e-16)"></g></g><g transform="translate(125.0,144.82758620689657)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:monospace;font-size:16.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-4.8" y="3.776">|</text></g><g transform="translate(275.0,144.82758620689657)"><g style="fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0" transform="translate(0.0, -4.4408920985006262e-16)"><line y1="-7.5" y2="7.5"></line></g></g><g transform="translate(125.0,182.75862068965517)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:monospace;font-size:16.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-4.8" y="3.776">/</text></g><g transform="translate(275.0,182.75862068965517)"><g style="fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0" transform="translate(0.0, -4.4408920985006262e-16)"><line transform="rotate(45)" y1="-7.5" y2="7.5"></line></g></g><g transform="translate(125.0,220.68965517241378)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:monospace;font-size:16.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-4.8" y="3.776">-</text></g><g transform="translate(275.0,220.68965517241378)"><g style="fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0" transform="translate(0.0, -4.4408920985006262e-16)"><line transform="rotate(-90)" y1="-7.5" y2="7.5"></line></g></g><g transform="translate(125.0,258.62068965517238)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:monospace;font-size:16.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-4.8" y="3.776">\</text></g><g transform="translate(275.0,258.62068965517238)"><g style="fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0" transform="translate(0.0, -4.4408920985006262e-16)"><line transform="rotate(-45)" y1="-7.5" y2="7.5"></line></g></g><g transform="translate(125.0,296.55172413793099)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:monospace;font-size:16.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-4.8" y="3.776">+</text></g><g transform="translate(275.0,296.55172413793099)"><g style="fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0" transform="translate(0.0, -4.4408920985006262e-16)"><line y1="-7.5" y2="7.5"></line><line transform="rotate(-90)" y1="-7.5" y2="7.5"></line></g></g><g transform="translate(125.0,334.48275862068959)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:monospace;font-size:16.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-4.8" y="3.776">x</text></g><g transform="translate(275.0,334.48275862068959)"><g style="fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0" transform="translate(0.0, -4.4408920985006262e-16)"><line transform="rotate(45)" y1="-7.5" y2="7.5"></line><line transform="rotate(-45)" y1="-7.5" y2="7.5"></line></g></g><g transform="translate(125.0,372.4137931034482)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:monospace;font-size:16.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-4.8" y="3.776">*</text></g><g transform="translate(275.0,372.4137931034482)"><g style="fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0" transform="translate(0.0, -4.4408920985006262e-16)"><line y1="-7.5" y2="7.5"></line><line transform="rotate(60)" y1="-7.5" y2="7.5"></line><line transform="rotate(-60)" y1="-7.5" y2="7.5"></line></g></g><g transform="translate(125.0,410.3448275862068)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:monospace;font-size:16.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-4.8" y="3.776">^</text></g><g transform="translate(275.0,410.3448275862068)"><g style="fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0" transform="translate(0.0, -4.4408920985006262e-16)"><polygon points="-7.5,7.5 0,-7.5 7.5,7.5"></polygon></g></g><g transform="translate(125.0,448.27586206896541)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:monospace;font-size:16.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-4.8" y="3.776">&gt;</text></g><g transform="translate(275.0,448.27586206896541)"><g style="fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0" transform="translate(0.0, -4.4408920985006262e-16)"><polygon points="-7.5,7.5 0,-7.5 7.5,7.5" transform="rotate(90)"></polygon></g></g><g transform="translate(125.0,486.20689655172401)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:monospace;font-size:16.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-4.8" y="3.776">v</text></g><g transform="translate(275.0,486.20689655172401)"><g style="fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0" transform="translate(0.0, -4.4408920985006262e-16)"><polygon points="-7.5,7.5 0,-7.5 7.5,7.5" transform="rotate(-180)"></polygon></g></g><g transform="translate(125.0,524.13793103448256)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:monospace;font-size:16.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-4.8" y="3.776">&lt;</text></g><g transform="translate(275.0,524.13793103448256)"><g style="fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0" transform="translate(0.0, -4.4408920985006262e-16)"><polygon points="-7.5,7.5 0,-7.5 7.5,7.5" transform="rotate(-90)"></polygon></g></g><g transform="translate(125.0,562.06896551724117)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:monospace;font-size:16.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-4.8" y="3.776">s</text></g><g transform="translate(275.0,562.06896551724117)"><g style="fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0" transform="translate(0.0, -4.4408920985006262e-16)"><rect height="15.0" width="15.0" x="-7.5" y="-7.5"></rect></g></g><g transform="translate(125.0,599.99999999999989)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:monospace;font-size:16.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-4.8" y="3.776">d</text></g><g transform="translate(275.0,599.99999999999989)"><g style="fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0" transform="translate(0.0, -4.4408920985006262e-16)"><rect height="15.0" transform="rotate(-45)" width="15.0" x="-7.5" y="-7.5"></rect></g></g><g transform="translate(125.0,637.93103448275849)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:monospace;font-size:16.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-4.8" y="3.776">o</text></g><g transform="translate(275.0,637.93103448275849)"><g style="fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0" transform="translate(0.0, -4.4408920985006262e-16)"><circle r="7.5"></circle></g></g><g transform="translate(125.0,675.8620689655171)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:monospace;font-size:16.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-9.6" y="3.776">oo</text></g><g transform="translate(275.0,675.8620689655171)"><g style="fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0" transform="translate(0.0, -4.4408920985006262e-16)"><circle r="7.5"></circle><circle r="3.75"></circle></g></g><g transform="translate(125.0,713.7931034482757)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:monospace;font-size:16.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-9.6" y="3.776">o|</text></g><g transform="translate(275.0,713.7931034482757)"><g style="fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0" transform="translate(0.0, -4.4408920985006262e-16)"><circle r="7.5"></circle><line y1="-7.5" y2="7.5"></line></g></g><g transform="translate(125.0,751.72413793103431)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:monospace;font-size:16.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-9.6" y="3.776">o/</text></g><g transform="translate(275.0,751.72413793103431)"><g style="fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0" transform="translate(0.0, -4.4408920985006262e-16)"><circle r="7.5"></circle><line transform="rotate(45)" y1="-7.5" y2="7.5"></line></g></g><g transform="translate(125.0,789.65517241379291)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:monospace;font-size:16.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-9.6" y="3.776">o-</text></g><g transform="translate(275.0,789.65517241379291)"><g style="fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0" transform="translate(0.0, -4.4408920985006262e-16)"><circle r="7.5"></circle><line transform="rotate(-90)" y1="-7.5" y2="7.5"></line></g></g><g transform="translate(125.0,827.58620689655152)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:monospace;font-size:16.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-9.6" y="3.776">o\</text></g><g transform="translate(275.0,827.58620689655152)"><g style="fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0" transform="translate(0.0, -4.4408920985006262e-16)"><circle r="7.5"></circle><line transform="rotate(-45)" y1="-7.5" y2="7.5"></line></g></g><g transform="translate(125.0,865.51724137931012)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:monospace;font-size:16.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-9.6" y="3.776">o+</text></g><g transform="translate(275.0,865.51724137931012)"><g style="fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0" transform="translate(0.0, -4.4408920985006262e-16)"><circle r="7.5"></circle><line y1="-7.5" y2="7.5"></line><line transform="rotate(-90)" y1="-7.5" y2="7.5"></line></g></g><g transform="translate(125.0,903.44827586206873)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:monospace;font-size:16.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-9.6" y="3.776">ox</text></g><g transform="translate(275.0,903.44827586206873)"><g style="fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0" transform="translate(0.0, -4.4408920985006262e-16)"><circle r="7.5"></circle><line transform="rotate(45)" y1="-7.5" y2="7.5"></line><line transform="rotate(-45)" y1="-7.5" y2="7.5"></line></g></g><g transform="translate(125.0,941.37931034482733)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:monospace;font-size:16.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-9.6" y="3.776">o*</text></g><g transform="translate(275.0,941.37931034482733)"><g style="fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0" transform="translate(0.0, -4.4408920985006262e-16)"><circle r="7.5"></circle><line y1="-7.5" y2="7.5"></line><line transform="rotate(60)" y1="-7.5" y2="7.5"></line><line transform="rotate(-60)" y1="-7.5" y2="7.5"></line></g></g><g transform="translate(125.0,979.31034482758594)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:monospace;font-size:16.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-19.2" y="3.776">r3x1</text></g><g transform="translate(275.0,979.31034482758594)"><g style="fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0" transform="translate(0.0, -4.4408920985006262e-16)"><rect height="15.0" width="45.0" x="-22.5" y="-7.5"></rect></g></g><g transform="translate(125.0,1017.2413793103444)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:monospace;font-size:16.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-19.2" y="3.776">r2x1</text></g><g transform="translate(275.0,1017.2413793103444)"><g style="fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0" transform="translate(0.0, -4.4408920985006262e-16)"><rect height="15.0" width="30.0" x="-15.0" y="-7.5"></rect></g></g><g transform="translate(125.0,1055.1724137931033)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:monospace;font-size:16.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-19.2" y="3.776">r1x1</text></g><g transform="translate(275.0,1055.1724137931033)"><g style="fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0" transform="translate(0.0, -4.4408920985006262e-16)"><rect height="15.0" width="15.0" x="-7.5" y="-7.5"></rect></g></g><g transform="translate(125.0,1093.1034482758619)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:monospace;font-size:16.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-19.2" y="3.776">r1x2</text></g><g transform="translate(275.0,1093.1034482758619)"><g style="fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0" transform="translate(0.0, -4.4408920985006262e-16)"><rect height="30.0" width="15.0" x="-7.5" y="-15.0"></rect></g></g><g transform="translate(125.0,1131.0344827586205)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:monospace;font-size:16.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-38.4" y="3.776">r0.5x1.5</text></g><g transform="translate(275.0,1131.0344827586205)"><g style="fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0" transform="translate(0.0, -4.4408920985006262e-16)"><rect height="22.5" width="7.5" x="-3.75" y="-11.25"></rect></g></g><line style="stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0;stroke-width:0.5" x1="50.0" x2="350.0" y1="87.931034482758619" y2="87.931034482758619"></line><line style="stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0;stroke-width:0.5" x1="200.0" x2="200.0" y1="50.0" y2="1149.9999999999998"></line></g></svg><div class="toyplot-behavior"><script>(function()
+    {
+    var modules={};
+    modules["toyplot/tables"] = (function()
+        {
+            var tables = [];
+    
+            var module = {};
+    
+            module.set = function(owner, key, names, columns)
+            {
+                tables.push({owner: owner, key: key, names: names, columns: columns});
+            }
+    
+            module.get = function(owner, key)
+            {
+                for(var i = 0; i != tables.length; ++i)
+                {
+                    var table = tables[i];
+                    if(table.owner != owner)
+                        continue;
+                    if(table.key != key)
+                        continue;
+                    return {names: table.names, columns: table.columns};
+                }
+            }
+    
+            module.get_csv = function(owner, key)
+            {
+                var table = module.get(owner, key);
+                if(table != undefined)
+                {
+                    var csv = "";
+                    csv += table.names.join(",") + "\n";
+                    for(var i = 0; i != table.columns[0].length; ++i)
+                    {
+                      for(var j = 0; j != table.columns.length; ++j)
+                      {
+                        if(j)
+                          csv += ",";
+                        csv += table.columns[j][i];
+                      }
+                      csv += "\n";
+                    }
+                    return csv;
+                }
+            }
+    
+            return module;
+        })();
+    modules["toyplot/root/id"] = "te920203719eb457fa68e3201a9323dbf";
+    modules["toyplot/root"] = (function(root_id)
+        {
+            return document.querySelector("#" + root_id);
+        })(modules["toyplot/root/id"]);
+    modules["toyplot/canvas/id"] = "t8236c84ffde240b2ad704e150f889f3b";
+    modules["toyplot/canvas"] = (function(canvas_id)
+        {
+            return document.querySelector("#" + canvas_id);
+        })(modules["toyplot/canvas/id"]);
+    modules["toyplot/menus/context"] = (function(root, canvas)
+        {
+            var wrapper = document.createElement("div");
+            wrapper.innerHTML = "<ul class='toyplot-context-menu' style='background:#eee; border:1px solid #b8b8b8; border-radius:5px; box-shadow: 0px 0px 8px rgba(0%,0%,0%,0.25); margin:0; padding:3px 0; position:fixed; visibility:hidden;'></ul>"
+            var menu = wrapper.firstChild;
+    
+            root.appendChild(menu);
+    
+            var items = [];
+    
+            var ignore_mouseup = null;
+            function open_menu(e)
+            {
+                var show_menu = false;
+                for(var index=0; index != items.length; ++index)
+                {
+                    var item = items[index];
+                    if(item.show(e))
+                    {
+                        item.item.style.display = "block";
+                        show_menu = true;
+                    }
+                    else
+                    {
+                        item.item.style.display = "none";
+                    }
+                }
+    
+                if(show_menu)
+                {
+                    ignore_mouseup = true;
+                    menu.style.left = (e.clientX + 1) + "px";
+                    menu.style.top = (e.clientY - 5) + "px";
+                    menu.style.visibility = "visible";
+                    e.stopPropagation();
+                    e.preventDefault();
+                }
+            }
+    
+            function close_menu()
+            {
+                menu.style.visibility = "hidden";
+            }
+    
+            function contextmenu(e)
+            {
+                open_menu(e);
+            }
+    
+            function mousemove(e)
+            {
+                ignore_mouseup = false;
+            }
+    
+            function mouseup(e)
+            {
+                if(ignore_mouseup)
+                {
+                    ignore_mouseup = false;
+                    return;
+                }
+                close_menu();
+            }
+    
+            function keydown(e)
+            {
+                if(e.key == "Escape" || e.key == "Esc" || e.keyCode == 27)
+                {
+                    close_menu();
+                }
+            }
+    
+            canvas.addEventListener("contextmenu", contextmenu);
+            canvas.addEventListener("mousemove", mousemove);
+            document.addEventListener("mouseup", mouseup);
+            document.addEventListener("keydown", keydown);
+    
+            var module = {};
+            module.add_item = function(label, show, activate)
+            {
+                var wrapper = document.createElement("div");
+                wrapper.innerHTML = "<li class='toyplot-context-menu-item' style='background:#eee; color:#333; padding:2px 20px; list-style:none; margin:0; text-align:left;'>" + label + "</li>"
+                var item = wrapper.firstChild;
+    
+                items.push({item: item, show: show});
+    
+                function mouseover()
+                {
+                    this.style.background = "steelblue";
+                    this.style.color = "white";
+                }
+    
+                function mouseout()
+                {
+                    this.style.background = "#eee";
+                    this.style.color = "#333";
+                }
+    
+                function choose_item(e)
+                {
+                    close_menu();
+                    activate();
+    
+                    e.stopPropagation();
+                    e.preventDefault();
+                }
+    
+                item.addEventListener("mouseover", mouseover);
+                item.addEventListener("mouseout", mouseout);
+                item.addEventListener("mouseup", choose_item);
+                item.addEventListener("contextmenu", choose_item);
+    
+                menu.appendChild(item);
+            };
+            return module;
+        })(modules["toyplot/root"],modules["toyplot/canvas"]);
+    modules["toyplot/io"] = (function()
+        {
+            var module = {};
+            module.save_file = function(mime_type, charset, data, filename)
+            {
+                var uri = "data:" + mime_type + ";charset=" + charset + "," + data;
+                uri = encodeURI(uri);
+    
+                var link = document.createElement("a");
+                if(typeof link.download != "undefined")
+                {
+                  link.href = uri;
+                  link.style = "visibility:hidden";
+                  link.download = filename;
+    
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+                }
+                else
+                {
+                  window.open(uri);
+                }
+            };
+            return module;
+        })();
+    (function(tables, context_menu, io, owner_id, key, label, names, columns, filename)
+            {
+                tables.set(owner_id, key, names, columns);
+    
+                var owner = document.querySelector("#" + owner_id);
+                function show_item(e)
+                {
+                    return owner.contains(e.target);
+                }
+    
+                function choose_item()
+                {
+                    io.save_file("text/csv", "utf-8", tables.get_csv(owner_id, key), filename + ".csv");
+                }
+    
+                context_menu.add_item("Save " + label + " as CSV", show_item, choose_item);
+            })(modules["toyplot/tables"],modules["toyplot/menus/context"],modules["toyplot/io"],"t6eb0eecd290e43bea2577bbe30e62ae9","data","table data",["Shape Code", "Marker"],[["None", "|", "/", "-", "\\", "+", "x", "*", "^", "&gt;", "v", "&lt;", "s", "d", "o", "oo", "o|", "o/", "o-", "o\\", "o+", "ox", "o*", "r3x1", "r2x1", "r1x1", "r1x2", "r0.5x1.5"], ["<marker mstyle='fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0' size='15'/>", "<marker shape='|' mstyle='fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0' size='15'/>", "<marker shape='/' mstyle='fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0' size='15'/>", "<marker shape='-' mstyle='fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0' size='15'/>", "<marker shape='\\' mstyle='fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0' size='15'/>", "<marker shape='+' mstyle='fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0' size='15'/>", "<marker shape='x' mstyle='fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0' size='15'/>", "<marker shape='*' mstyle='fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0' size='15'/>", "<marker shape='^' mstyle='fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0' size='15'/>", "<marker shape='&gt;' mstyle='fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0' size='15'/>", "<marker shape='v' mstyle='fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0' size='15'/>", "<marker shape='&lt;' mstyle='fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0' size='15'/>", "<marker shape='s' mstyle='fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0' size='15'/>", "<marker shape='d' mstyle='fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0' size='15'/>", "<marker shape='o' mstyle='fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0' size='15'/>", "<marker shape='oo' mstyle='fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0' size='15'/>", "<marker shape='o|' mstyle='fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0' size='15'/>", "<marker shape='o/' mstyle='fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0' size='15'/>", "<marker shape='o-' mstyle='fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0' size='15'/>", "<marker shape='o\\' mstyle='fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0' size='15'/>", "<marker shape='o+' mstyle='fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0' size='15'/>", "<marker shape='ox' mstyle='fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0' size='15'/>", "<marker shape='o*' mstyle='fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0' size='15'/>", "<marker shape='r3x1' mstyle='fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0' size='15'/>", "<marker shape='r2x1' mstyle='fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0' size='15'/>", "<marker shape='r1x1' mstyle='fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0' size='15'/>", "<marker shape='r1x2' mstyle='fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0' size='15'/>", "<marker shape='r0.5x1.5' mstyle='fill:rgb(100%,93.3%,73.3%);fill-opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0' size='15'/>"]],"toyplot");
+    })();</script></div></div>
+
+
+There are several items here worth noting - first, you can pass *None*
+or an empty string to produce an invisible marker, if you need to hide a
+datum or declutter the display. Second, observe that several of the
+marker shapes contain internal details that require a contrasting stroke
+and fill to be visible. Finally, the rectangular ``rWxH`` markers can be
+specified using any values (including floating point values) for their
+width and height.
+
+Keep in mind that you can embed markers in *any* text string in Toyplot,
+including labels, tick marks, and more. And because
+:class:`toyplot.mark.Mark` objects have a public ``markers`` attribute
+that is used when creating legends, you can be very creative when
+annotating figures:
+
+.. code:: python
+
+    import toyplot.data
+    data = toyplot.data.read_csv("deliveries.csv")
+    
+    canvas = toyplot.Canvas(width=600, height=300)
+    axes = canvas.cartesian(xlabel="Date", ylabel="Deliveries", ymin=0)
+    deliveries = axes.plot(data["Delivered"], color="darkred")
+    
+    axes = axes.share("x", ylabel="On Time")
+    on_time = axes.plot(data["On Time"], color="steelblue")
+    
+    axes.label.text = "Deliveries (" + deliveries.markers[0] + ") vs. On Time (" + on_time.markers[0] + ")"
+
+
+
+.. raw:: html
+
+    <div class="toyplot" id="tef3f32e2effc4f44bc3de98ccef99a2e" style="text-align:center"><svg class="toyplot-canvas-Canvas" height="300.0px" id="t18a334ad9e7548529536708767be4544" preserveAspectRatio="xMidYMid meet" style="background-color:transparent;fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:Helvetica;font-size:12px;opacity:1.0;stroke:rgb(16.1%,15.3%,14.1%);stroke-opacity:1.0;stroke-width:1.0" viewBox="0 0 600.0 300.0" width="600.0px" xmlns="http://www.w3.org/2000/svg" xmlns:toyplot="http://www.sandia.gov/toyplot" xmlns:xlink="http://www.w3.org/1999/xlink"><g class="toyplot-coordinates-Cartesian" id="t495145e669554f319aaa38e5a233846d"><clipPath id="t2da7572d1cb4484f91a615b69c797623"><rect height="220.0" width="520.0" x="40.0" y="40.0"></rect></clipPath><g clip-path="url(#t2da7572d1cb4484f91a615b69c797623)"><g class="toyplot-mark-Plot" id="te67cf88d599e4bd1b1e3ca60ad4f2b91" style="fill:none"><g class="toyplot-Series"><path d="M 50.0 127.11111111111111 L 91.666666666666657 137.33333333333331 L 133.33333333333331 119.77777777777779 L 175.0 141.55555555555554 L 216.66666666666666 160.22222222222223 L 258.33333333333337 181.99999999999997 L 300.0 178.22222222222223 L 341.66666666666669 132.0 L 383.33333333333331 99.555555555555557 L 425.0 95.555555555555543 L 466.66666666666669 57.333333333333329 L 508.33333333333331 126.22222222222221" style="stroke:rgb(54.5%,0%,0%);stroke-opacity:1.0;stroke-width:2.0"></path></g></g></g><g class="toyplot-coordinates-Axis" id="t8e2d2c84a13e43a88511b94b1c4cdcb7" transform="translate(50.0,250.0)translate(0,10.0)"><line style="" x1="0" x2="458.3333333333333" y1="0" y2="0"></line><g><g transform="translate(0.0,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-2.78" y="8.555">0</text></g><g transform="translate(166.66666666666666,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-2.78" y="8.555">4</text></g><g transform="translate(333.3333333333333,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-2.78" y="8.555">8</text></g><g transform="translate(500.0,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-5.56" y="8.555">12</text></g></g><g class="toyplot-coordinates-Axis-coordinates" style="visibility:hidden" transform=""><line style="stroke:rgb(43.9%,50.2%,56.5%);stroke-opacity:1.0;stroke-width:1.0" x1="0" x2="0" y1="-3.0" y2="4.5"></line><text style="alignment-baseline:alphabetic;fill:rgb(43.9%,50.2%,56.5%);fill-opacity:1.0;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" x="0" y="-6"></text></g></g><g class="toyplot-coordinates-Axis" id="t6a6b99ef6b1a4543979b54b5802bcdb8" transform="translate(50.0,250.0)rotate(-90.0)translate(0,-10.0)"><line style="" x1="68.0" x2="192.66666666666669" y1="0" y2="0"></line><g><g transform="translate(0.0,-6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-2.78" y="-4.4408920985e-16">0</text></g><g transform="translate(66.66666666666666,-6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-8.34" y="-4.4408920985e-16">300</text></g><g transform="translate(133.33333333333331,-6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-8.34" y="-4.4408920985e-16">600</text></g><g transform="translate(200.0,-6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-8.34" y="-4.4408920985e-16">900</text></g></g><g transform="translate(100.0,-22)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:12.0px;font-weight:bold;stroke:none;vertical-align:baseline;white-space:pre" x="-28.35" y="0.0">Deliveries</text></g><g class="toyplot-coordinates-Axis-coordinates" style="visibility:hidden" transform=""><line style="stroke:rgb(43.9%,50.2%,56.5%);stroke-opacity:1.0;stroke-width:1.0" x1="0" x2="0" y1="3.0" y2="-4.5"></line><text style="alignment-baseline:hanging;fill:rgb(43.9%,50.2%,56.5%);fill-opacity:1.0;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" x="0" y="6"></text></g></g></g><g class="toyplot-coordinates-Cartesian" id="t7f79367a0d164240b4c3e79cd3758847"><clipPath id="tfd720bb65fa74fb295b26944ccceedec"><rect height="220.0" width="520.0" x="40.0" y="40.0"></rect></clipPath><g clip-path="url(#tfd720bb65fa74fb295b26944ccceedec)"><g class="toyplot-mark-Plot" id="td95fb44ea20b489a8704793c36847746" style="fill:none"><g class="toyplot-Series"><path d="M 50.0 50.0 L 91.666666666666657 50.0 L 133.33333333333331 50.0 L 175.0 50.0 L 216.66666666666666 50.0 L 258.33333333333337 50.0 L 300.0 74.643320363164605 L 341.66666666666669 60.635538261997389 L 383.33333333333331 153.76134889753581 L 425.0 147.53566796368352 L 466.66666666666669 250.0 L 508.33333333333331 79.053177691309969" style="stroke:rgb(27.5%,51%,70.6%);stroke-opacity:1.0;stroke-width:2.0"></path></g></g></g><g class="toyplot-coordinates-Axis" id="t8cc676d1992e4e749dcb21a0d27cd218" transform="translate(550.0,250.0)rotate(-90.0)translate(0,10.0)"><line style="" x1="0" x2="200.0" y1="0" y2="0"></line><g><g transform="translate(5.447470817120602,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-9.73" y="8.555">0.93</text></g><g transform="translate(70.29831387808049,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-9.73" y="8.555">0.95</text></g><g transform="translate(135.14915693904038,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-9.73" y="8.555">0.98</text></g><g transform="translate(200.0,6)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:10.0px;font-weight:normal;stroke:none;vertical-align:baseline;white-space:pre" x="-9.73" y="8.555">1.00</text></g></g><g transform="translate(100.0,22)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:12.0px;font-weight:bold;stroke:none;vertical-align:baseline;white-space:pre" x="-24.006" y="10.266">On Time</text></g><g class="toyplot-coordinates-Axis-coordinates" style="visibility:hidden" transform=""><line style="stroke:rgb(43.9%,50.2%,56.5%);stroke-opacity:1.0;stroke-width:1.0" x1="0" x2="0" y1="-3.0" y2="4.5"></line><text style="alignment-baseline:alphabetic;fill:rgb(43.9%,50.2%,56.5%);fill-opacity:1.0;font-size:10px;font-weight:normal;stroke:none;text-anchor:middle" x="0" y="-6"></text></g></g><g transform="translate(300.0,42.0)"><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:14.0px;font-weight:bold;stroke:none;vertical-align:baseline;white-space:pre" x="-100.87" y="-4.823">Deliveries (</text><g style="fill:rgb(54.5%,0%,0%);fill-opacity:1.0;stroke:rgb(54.5%,0%,0%);stroke-opacity:1.0;stroke-width:2.0" transform="translate(-19.690999999999995, -8.4000000000000004)"><line transform="rotate(45)" y1="-6.4750000000000005" y2="6.4750000000000005"></line></g><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:14.0px;font-weight:bold;stroke:none;vertical-align:baseline;white-space:pre" x="-13.216" y="-4.823">) vs. On Time (</text><g style="fill:rgb(27.5%,51%,70.6%);fill-opacity:1.0;stroke:rgb(27.5%,51%,70.6%);stroke-opacity:1.0;stroke-width:2.0" transform="translate(89.733000000000004, -8.4000000000000004)"><line transform="rotate(45)" y1="-6.4750000000000005" y2="6.4750000000000005"></line></g><text style="fill:rgb(16.1%,15.3%,14.1%);fill-opacity:1.0;font-family:helvetica;font-size:14.0px;font-weight:bold;stroke:none;vertical-align:baseline;white-space:pre" x="96.208" y="-4.823">)</text></g></g></svg><div class="toyplot-behavior"><script>(function()
+    {
+    var modules={};
+    modules["toyplot/tables"] = (function()
+        {
+            var tables = [];
+    
+            var module = {};
+    
+            module.set = function(owner, key, names, columns)
+            {
+                tables.push({owner: owner, key: key, names: names, columns: columns});
+            }
+    
+            module.get = function(owner, key)
+            {
+                for(var i = 0; i != tables.length; ++i)
+                {
+                    var table = tables[i];
+                    if(table.owner != owner)
+                        continue;
+                    if(table.key != key)
+                        continue;
+                    return {names: table.names, columns: table.columns};
+                }
+            }
+    
+            module.get_csv = function(owner, key)
+            {
+                var table = module.get(owner, key);
+                if(table != undefined)
+                {
+                    var csv = "";
+                    csv += table.names.join(",") + "\n";
+                    for(var i = 0; i != table.columns[0].length; ++i)
+                    {
+                      for(var j = 0; j != table.columns.length; ++j)
+                      {
+                        if(j)
+                          csv += ",";
+                        csv += table.columns[j][i];
+                      }
+                      csv += "\n";
+                    }
+                    return csv;
+                }
+            }
+    
+            return module;
+        })();
+    modules["toyplot/root/id"] = "tef3f32e2effc4f44bc3de98ccef99a2e";
+    modules["toyplot/root"] = (function(root_id)
+        {
+            return document.querySelector("#" + root_id);
+        })(modules["toyplot/root/id"]);
+    modules["toyplot/canvas/id"] = "t18a334ad9e7548529536708767be4544";
+    modules["toyplot/canvas"] = (function(canvas_id)
+        {
+            return document.querySelector("#" + canvas_id);
+        })(modules["toyplot/canvas/id"]);
+    modules["toyplot/menus/context"] = (function(root, canvas)
+        {
+            var wrapper = document.createElement("div");
+            wrapper.innerHTML = "<ul class='toyplot-context-menu' style='background:#eee; border:1px solid #b8b8b8; border-radius:5px; box-shadow: 0px 0px 8px rgba(0%,0%,0%,0.25); margin:0; padding:3px 0; position:fixed; visibility:hidden;'></ul>"
+            var menu = wrapper.firstChild;
+    
+            root.appendChild(menu);
+    
+            var items = [];
+    
+            var ignore_mouseup = null;
+            function open_menu(e)
+            {
+                var show_menu = false;
+                for(var index=0; index != items.length; ++index)
+                {
+                    var item = items[index];
+                    if(item.show(e))
+                    {
+                        item.item.style.display = "block";
+                        show_menu = true;
+                    }
+                    else
+                    {
+                        item.item.style.display = "none";
+                    }
+                }
+    
+                if(show_menu)
+                {
+                    ignore_mouseup = true;
+                    menu.style.left = (e.clientX + 1) + "px";
+                    menu.style.top = (e.clientY - 5) + "px";
+                    menu.style.visibility = "visible";
+                    e.stopPropagation();
+                    e.preventDefault();
+                }
+            }
+    
+            function close_menu()
+            {
+                menu.style.visibility = "hidden";
+            }
+    
+            function contextmenu(e)
+            {
+                open_menu(e);
+            }
+    
+            function mousemove(e)
+            {
+                ignore_mouseup = false;
+            }
+    
+            function mouseup(e)
+            {
+                if(ignore_mouseup)
+                {
+                    ignore_mouseup = false;
+                    return;
+                }
+                close_menu();
+            }
+    
+            function keydown(e)
+            {
+                if(e.key == "Escape" || e.key == "Esc" || e.keyCode == 27)
+                {
+                    close_menu();
+                }
+            }
+    
+            canvas.addEventListener("contextmenu", contextmenu);
+            canvas.addEventListener("mousemove", mousemove);
+            document.addEventListener("mouseup", mouseup);
+            document.addEventListener("keydown", keydown);
+    
+            var module = {};
+            module.add_item = function(label, show, activate)
+            {
+                var wrapper = document.createElement("div");
+                wrapper.innerHTML = "<li class='toyplot-context-menu-item' style='background:#eee; color:#333; padding:2px 20px; list-style:none; margin:0; text-align:left;'>" + label + "</li>"
+                var item = wrapper.firstChild;
+    
+                items.push({item: item, show: show});
+    
+                function mouseover()
+                {
+                    this.style.background = "steelblue";
+                    this.style.color = "white";
+                }
+    
+                function mouseout()
+                {
+                    this.style.background = "#eee";
+                    this.style.color = "#333";
+                }
+    
+                function choose_item(e)
+                {
+                    close_menu();
+                    activate();
+    
+                    e.stopPropagation();
+                    e.preventDefault();
+                }
+    
+                item.addEventListener("mouseover", mouseover);
+                item.addEventListener("mouseout", mouseout);
+                item.addEventListener("mouseup", choose_item);
+                item.addEventListener("contextmenu", choose_item);
+    
+                menu.appendChild(item);
+            };
+            return module;
+        })(modules["toyplot/root"],modules["toyplot/canvas"]);
+    modules["toyplot/io"] = (function()
+        {
+            var module = {};
+            module.save_file = function(mime_type, charset, data, filename)
+            {
+                var uri = "data:" + mime_type + ";charset=" + charset + "," + data;
+                uri = encodeURI(uri);
+    
+                var link = document.createElement("a");
+                if(typeof link.download != "undefined")
+                {
+                  link.href = uri;
+                  link.style = "visibility:hidden";
+                  link.download = filename;
+    
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+                }
+                else
+                {
+                  window.open(uri);
+                }
+            };
+            return module;
+        })();
+    modules["toyplot.coordinates.Axis"] = (
+            function(canvas)
+            {
+                function sign(x)
+                {
+                    return x < 0 ? -1 : x > 0 ? 1 : 0;
+                }
+    
+                function mix(a, b, amount)
+                {
+                    return ((1.0 - amount) * a) + (amount * b);
+                }
+    
+                function log(x, base)
+                {
+                    return Math.log(Math.abs(x)) / Math.log(base);
+                }
+    
+                function in_range(a, x, b)
+                {
+                    var left = Math.min(a, b);
+                    var right = Math.max(a, b);
+                    return left <= x && x <= right;
+                }
+    
+                function inside(range, projection)
+                {
+                    for(var i = 0; i != projection.length; ++i)
+                    {
+                        var segment = projection[i];
+                        if(in_range(segment.range.min, range, segment.range.max))
+                            return true;
+                    }
+                    return false;
+                }
+    
+                function to_domain(range, projection)
+                {
+                    for(var i = 0; i != projection.length; ++i)
+                    {
+                        var segment = projection[i];
+                        if(in_range(segment.range.bounds.min, range, segment.range.bounds.max))
+                        {
+                            if(segment.scale == "linear")
+                            {
+                                var amount = (range - segment.range.min) / (segment.range.max - segment.range.min);
+                                return mix(segment.domain.min, segment.domain.max, amount)
+                            }
+                            else if(segment.scale[0] == "log")
+                            {
+                                var amount = (range - segment.range.min) / (segment.range.max - segment.range.min);
+                                var base = segment.scale[1];
+                                return sign(segment.domain.min) * Math.pow(base, mix(log(segment.domain.min, base), log(segment.domain.max, base), amount));
+                            }
+                        }
+                    }
+                }
+    
+                var axes = {};
+    
+                function display_coordinates(e)
+                {
+                    var current = canvas.createSVGPoint();
+                    current.x = e.clientX;
+                    current.y = e.clientY;
+    
+                    for(var axis_id in axes)
+                    {
+                        var axis = document.querySelector("#" + axis_id);
+                        var coordinates = axis.querySelector(".toyplot-coordinates-Axis-coordinates");
+                        if(coordinates)
+                        {
+                            var projection = axes[axis_id];
+                            var local = current.matrixTransform(axis.getScreenCTM().inverse());
+                            if(inside(local.x, projection))
+                            {
+                                var domain = to_domain(local.x, projection);
+                                coordinates.style.visibility = "visible";
+                                coordinates.setAttribute("transform", "translate(" + local.x + ")");
+                                var text = coordinates.querySelector("text");
+                                text.textContent = domain.toFixed(2);
+                            }
+                            else
+                            {
+                                coordinates.style.visibility= "hidden";
+                            }
+                        }
+                    }
+                }
+    
+                canvas.addEventListener("click", display_coordinates);
+    
+                var module = {};
+                module.show_coordinates = function(axis_id, projection)
+                {
+                    axes[axis_id] = projection;
+                }
+    
+                return module;
+            })(modules["toyplot/canvas"]);
+    (function(tables, context_menu, io, owner_id, key, label, names, columns, filename)
+            {
+                tables.set(owner_id, key, names, columns);
+    
+                var owner = document.querySelector("#" + owner_id);
+                function show_item(e)
+                {
+                    return owner.contains(e.target);
+                }
+    
+                function choose_item()
+                {
+                    io.save_file("text/csv", "utf-8", tables.get_csv(owner_id, key), filename + ".csv");
+                }
+    
+                context_menu.add_item("Save " + label + " as CSV", show_item, choose_item);
+            })(modules["toyplot/tables"],modules["toyplot/menus/context"],modules["toyplot/io"],"te67cf88d599e4bd1b1e3ca60ad4f2b91","data","plot data",["x", "y0"],[[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], [553.0, 507.0, 586.0, 488.0, 404.0, 306.0, 323.0, 531.0, 677.0, 695.0, 867.0, 557.0]],"toyplot");
+    (function(axis, axis_id, projection)
+            {
+                axis.show_coordinates(axis_id, projection);
+            })(modules["toyplot.coordinates.Axis"],"t8e2d2c84a13e43a88511b94b1c4cdcb7",[{"domain": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 12.0, "min": 0.0}, "range": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 500.0, "min": 0.0}, "scale": "linear"}]);
+    (function(axis, axis_id, projection)
+            {
+                axis.show_coordinates(axis_id, projection);
+            })(modules["toyplot.coordinates.Axis"],"t6a6b99ef6b1a4543979b54b5802bcdb8",[{"domain": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 900.0, "min": 0.0}, "range": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 200.0, "min": 0.0}, "scale": "linear"}]);
+    (function(tables, context_menu, io, owner_id, key, label, names, columns, filename)
+            {
+                tables.set(owner_id, key, names, columns);
+    
+                var owner = document.querySelector("#" + owner_id);
+                function show_item(e)
+                {
+                    return owner.contains(e.target);
+                }
+    
+                function choose_item()
+                {
+                    io.save_file("text/csv", "utf-8", tables.get_csv(owner_id, key), filename + ".csv");
+                }
+    
+                context_menu.add_item("Save " + label + " as CSV", show_item, choose_item);
+            })(modules["toyplot/tables"],modules["toyplot/menus/context"],modules["toyplot/io"],"td95fb44ea20b489a8704793c36847746","data","plot data",["x", "y0"],[[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.9905, 0.9959, 0.96, 0.9624, 0.9229, 0.9888]],"toyplot");
+    (function(axis, axis_id, projection)
+            {
+                axis.show_coordinates(axis_id, projection);
+            })(modules["toyplot.coordinates.Axis"],"t8cc676d1992e4e749dcb21a0d27cd218",[{"domain": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 1.0, "min": 0.9229}, "range": {"bounds": {"max": Infinity, "min": -Infinity}, "max": 200.0, "min": 0.0}, "scale": "linear"}]);
+    })();</script></div></div>
+

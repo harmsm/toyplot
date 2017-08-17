@@ -2,12 +2,15 @@
 # DE-AC04-94AL85000 with Sandia Corporation, the U.S. Government retains certain
 # rights in this software.
 
-from __future__ import division
+from __future__ import absolute_import, division
 
-import collections
+import itertools
+
 import numpy
-import toyplot.require
 
+import toyplot.color
+import toyplot.marker
+import toyplot.require
 
 ##########################################################################
 # Basic Toyplot marks
@@ -17,16 +20,68 @@ class Mark(object):
     """Base class for all Toyplot marks.
     """
 
-    def __init__(self):
-        pass
+    def __init__(self, annotation=False):
+        self._annotation = False
+        self.annotation = annotation
 
+    @property
+    def annotation(self):
+        return self._annotation
+
+    @annotation.setter
+    def annotation(self, value):
+        self._annotation = True if value else False
+
+    def _finalize(self):
+        return self
+
+    def domain(self, axis): # pylint: disable=no-self-use
+        """Return minimum and maximum domain values for the mark along the given axis.
+
+        Parameters
+        ----------
+        axis: string, required
+            Name of an axis along which to return domain values.
+
+        Returns
+        -------
+        minimum: minimum domain value along the given axis, or `None`.
+        maximum: maximum domain value along the given axis, or `None`.
+        """
+        return (None, None)
+
+    def extents(self, axes): # pylint: disable=no-self-use
+        """Return range extents for the mark using the given axes.
+
+        Parameters
+        ----------
+        axes: sequence of strings, required
+            Specifies the order in which domain coordinates must be returned.
+
+        Returns
+        -------
+        coordinates: tuple containing arrays of coordinates, in the order specified by the `axes` parameter.
+        extents: (left, right, top, bottom) tuple of arrays containing the extents of each datum in range-space, relative to the domain coordinates.
+        """
+        empty = numpy.array([])
+        return tuple([empty] * len(axes)), tuple([empty] * 4)
+
+    @property
+    def markers(self): # pylint: disable=no-self-use
+        """Return an ordered set of in-use markers for this mark.
+
+        Returns
+        -------
+        markers: list of :class:`toyplot.marker.Marker` objects.
+        """
+        return []
 
 class AxisLines(Mark):
 
     """Render multiple lines parallel to an axis.
 
     Do not create AxisLines instances directly.  Use factory methods such as
-    :meth:`toyplot.axes.Cartesian.hlines` and :meth:`toyplot.axes.Cartesian.vlines` instead.
+    :meth:`toyplot.coordinates.Cartesian.hlines` and :meth:`toyplot.coordinates.Cartesian.vlines` instead.
     """
 
     def __init__(
@@ -38,8 +93,9 @@ class AxisLines(Mark):
             opacity,
             title,
             style,
+            annotation,
         ):
-        Mark.__init__(self)
+        Mark.__init__(self, annotation)
 
         # 1 axis identifier
         self._coordinate_axes = toyplot.require.string_vector(coordinate_axes, length=1)
@@ -54,8 +110,12 @@ class AxisLines(Mark):
         # 1 title column
         self._title = toyplot.require.table_keys(table, title, length=1)
         # Line style
-        self._style = toyplot.require.style(style, allowed=toyplot.require.style.line)
+        self._style = toyplot.style.require(style, allowed=toyplot.style.allowed.line)
 
+    def domain(self, axis):
+        if axis == self._coordinate_axes:
+            return toyplot.data.minimax([self._table[self._coordinates[0]]])
+        return (None, None)
 
 
 class BarBoundaries(Mark):
@@ -63,7 +123,7 @@ class BarBoundaries(Mark):
     """Render multiple stacked bars defined by bar boundaries.
 
     Do not create BarBoundaries instances directly.  Use factory methods such as
-    :func:`toyplot.bars` or :meth:`toyplot.axes.Cartesian.bars` instead.
+    :func:`toyplot.bars` or :meth:`toyplot.coordinates.Cartesian.bars` instead.
     """
 
     def __init__(
@@ -99,9 +159,34 @@ class BarBoundaries(Mark):
         # N-1 title columns
         self._title = toyplot.require.table_keys(table, title, length=len(boundaries) - 1)
         # Bar style
-        self._style = toyplot.require.style(style, allowed=toyplot.require.style.fill)
+        self._style = toyplot.style.require(style, allowed=toyplot.style.allowed.fill)
         # Export filename
         self._filename = toyplot.require.filename(filename)
+
+    def domain(self, axis):
+        if axis == self._coordinate_axes[0]:
+            return toyplot.data.minimax([self._table[self._left[0]], self._table[self._right[0]]])
+        if axis == self._coordinate_axes[1]:
+            return toyplot.data.minimax([self._table[key] for key in self._boundaries])
+
+    @property
+    def markers(self):
+        result = []
+
+        for fill, opacity in zip(
+                [self._table[key] for key in self._fill],
+                [self._table[key] for key in self._opacity],
+            ):
+            result.append(toyplot.marker.create(shape="s", mstyle=toyplot.style.combine(
+                {
+                    "fill": toyplot.color.to_css(fill[0]),
+                    "fill-opacity": opacity[0],
+                },
+                self._style,
+                ),
+            ))
+
+        return result
 
 
 class BarMagnitudes(Mark):
@@ -109,7 +194,7 @@ class BarMagnitudes(Mark):
     """Render multiple stacked bars defined by bar magnitudes.
 
     Do not create BarMagnitudes instances directly.  Use factory methods such as
-    :func:`toyplot.bars` or :meth:`toyplot.axes.Cartesian.bars` instead.
+    :func:`toyplot.bars` or :meth:`toyplot.coordinates.Cartesian.bars` instead.
     """
 
     def __init__(
@@ -147,9 +232,37 @@ class BarMagnitudes(Mark):
         # N title columns
         self._title = toyplot.require.table_keys(table, title, length=len(magnitudes))
         # Bar style
-        self._style = toyplot.require.style(style, allowed=toyplot.require.style.fill)
+        self._style = toyplot.style.require(style, allowed=toyplot.style.allowed.fill)
         # Export filename
         self._filename = toyplot.require.filename(filename)
+
+    def domain(self, axis):
+        if axis == self._coordinate_axes[0]:
+            return toyplot.data.minimax([self._table[self._left[0]], self._table[self._right[0]]])
+        if axis == self._coordinate_axes[1]:
+            boundaries = numpy.column_stack([self._table[key] for key in self._magnitudes])
+            boundaries = numpy.column_stack((self._table[self._baseline[0]], boundaries))
+            boundaries = numpy.cumsum(boundaries, axis=1)
+            return toyplot.data.minimax([boundaries])
+
+    @property
+    def markers(self):
+        result = []
+
+        for fill, opacity in zip(
+                [self._table[key] for key in self._fill],
+                [self._table[key] for key in self._opacity],
+            ):
+            result.append(toyplot.marker.create(shape="s", mstyle=toyplot.style.combine(
+                {
+                    "fill": toyplot.color.to_css(fill[0]),
+                    "fill-opacity": opacity[0],
+                },
+                self._style,
+                ),
+            ))
+
+        return result
 
 
 class FillBoundaries(Mark):
@@ -157,7 +270,7 @@ class FillBoundaries(Mark):
     """Render multiple stacked fill regions defined by boundaries.
 
     Do not create FillBoundaries instances directly.  Use factory methods such
-    as :func:`toyplot.fill` or :meth:`toyplot.axes.Cartesian.fill` instead.
+    as :func:`toyplot.fill` or :meth:`toyplot.coordinates.Cartesian.fill` instead.
     """
 
     def __init__(
@@ -170,9 +283,10 @@ class FillBoundaries(Mark):
             opacity,
             title,
             style,
+            annotation,
             filename,
         ):
-        Mark.__init__(self)
+        Mark.__init__(self, annotation)
 
         # 2 axis identifiers
         self._coordinate_axes = toyplot.require.string_vector(coordinate_axes, length=2)
@@ -190,9 +304,35 @@ class FillBoundaries(Mark):
         #self._title = toyplot.require.object_vector(title, length=len(boundaries) - 1)
         self._title = title
         # Fill style
-        self._style = toyplot.require.style(style, allowed=toyplot.require.style.fill)
+        self._style = toyplot.style.require(style, allowed=toyplot.style.allowed.fill)
         # Export filename
         self._filename = toyplot.require.filename(filename)
+
+    def domain(self, axis):
+        if axis == self._coordinate_axes[0]:
+            return toyplot.data.minimax([self._table[self._position[0]]])
+        if axis == self._coordinate_axes[1]:
+            return toyplot.data.minimax([self._table[key] for key in self._boundaries])
+
+    @property
+    def markers(self):
+        result = []
+
+        for fill, opacity in zip(
+                self._fill,
+                self._opacity,
+            ):
+
+            result.append(toyplot.marker.create(shape="s", mstyle=toyplot.style.combine(
+                    {
+                        "fill": toyplot.color.to_css(fill),
+                        "fill-opacity": opacity,
+                    },
+                    self._style,
+                ),
+            ))
+
+        return result
 
 
 class FillMagnitudes(Mark):
@@ -200,7 +340,7 @@ class FillMagnitudes(Mark):
     """Render multiple stacked fill regions defined by magnitudes.
 
     Do not create FillMagnitudes instances directly.  Use factory methods such
-    as :func:`toyplot.fill` or :meth:`toyplot.axes.Cartesian.fill` instead.
+    as :func:`toyplot.fill` or :meth:`toyplot.coordinates.Cartesian.fill` instead.
     """
 
     def __init__(
@@ -214,9 +354,10 @@ class FillMagnitudes(Mark):
             opacity,
             title,
             style,
+            annotation,
             filename,
         ):
-        Mark.__init__(self)
+        Mark.__init__(self, annotation)
 
         # 2 axis identifiers
         self._coordinate_axes = toyplot.require.string_vector(coordinate_axes, length=2)
@@ -237,9 +378,38 @@ class FillMagnitudes(Mark):
         #self._title = toyplot.require.object_vector(title, length=len(magnitudes))
         self._title = title
         # Fill style
-        self._style = toyplot.require.style(style, allowed=toyplot.require.style.fill)
+        self._style = toyplot.style.require(style, allowed=toyplot.style.allowed.fill)
         # Export filename
         self._filename = toyplot.require.filename(filename)
+
+    def domain(self, axis):
+        if axis == self._coordinate_axes[0]:
+            return toyplot.data.minimax([self._table[self._position[0]]])
+        if axis == self._coordinate_axes[1]:
+            boundaries = numpy.column_stack([self._table[key] for key in self._magnitudes])
+            boundaries = numpy.column_stack((self._table[self._baseline[0]], boundaries))
+            boundaries = numpy.cumsum(boundaries, axis=1)
+            return toyplot.data.minimax([boundaries])
+
+    @property
+    def markers(self):
+        result = []
+
+        for fill, opacity in zip(
+                self._fill,
+                self._opacity,
+            ):
+
+            result.append(toyplot.marker.create(shape="s", mstyle=toyplot.style.combine(
+                    {
+                        "fill": toyplot.color.to_css(fill),
+                        "fill-opacity": opacity,
+                    },
+                    self._style,
+                ),
+            ))
+
+        return result
 
 
 class Graph(Mark): # pragma: no cover
@@ -247,33 +417,39 @@ class Graph(Mark): # pragma: no cover
     """Plot a graph (collection of vertices and edges).
 
     Do not create Graph instances directly.  Use factory methods such as
-    :meth:`toyplot.axes.Cartesian.graph` instead.
+    :meth:`toyplot.coordinates.Cartesian.graph` instead.
     """
 
     def __init__(
             self,
             coordinate_axes,
-            vtable,
+            ecolor,
+            ecoordinates,
+            efilename,
+            eopacity,
+            eshape,
+            esource,
+            estyle,
+            etable,
+            etarget,
+            ewidth,
+            hmarker,
+            mmarker,
+            mposition,
+            tmarker,
+            vcolor,
+            vcoordinates,
+            vfilename,
             vid,
             vlabel,
-            vcoordinates,
-            vmarker,
-            vsize,
-            vcolor,
-            vopacity,
-            vtitle,
-            vstyle,
-            vlstyle,
             vlshow,
-            etable,
-            esource,
-            etarget,
-            eshape,
-            ecoordinates,
-            ecolor,
-            ewidth,
-            eopacity,
-            estyle,
+            vlstyle,
+            vmarker,
+            vopacity,
+            vsize,
+            vstyle,
+            vtable,
+            vtitle,
         ):
         Mark.__init__(self)
 
@@ -298,11 +474,13 @@ class Graph(Mark): # pragma: no cover
         # 1 vertex titles column
         self._vtitle = toyplot.require.table_keys(vtable, vtitle, length=1)
         # Vertex marker style
-        self._vstyle = toyplot.require.style(vstyle, allowed=toyplot.require.style.marker)
+        self._vstyle = toyplot.style.require(vstyle, allowed=toyplot.style.allowed.marker)
         # Vertex marker label style
-        self._vlstyle = toyplot.require.style(vlstyle, allowed=toyplot.require.style.text)
+        self._vlstyle = toyplot.style.require(vlstyle, allowed=toyplot.style.allowed.text)
         # Draw vertex labels
         self._vlshow = vlshow
+        # Export filename
+        self._vfilename = toyplot.require.filename(vfilename)
 
         self._etable = toyplot.require.instance(etable, toyplot.data.Table)
         # 1 edge source column
@@ -336,7 +514,22 @@ class Graph(Mark): # pragma: no cover
         # 1 edge opacity column
         self._eopacity = toyplot.require.table_keys(etable, eopacity, length=1)
         # Edge style
-        self._estyle = toyplot.require.style(estyle, allowed=toyplot.require.style.line)
+        self._estyle = toyplot.style.require(estyle, allowed=toyplot.style.allowed.line)
+        # Export filename
+        self._efilename = toyplot.require.filename(efilename)
+        # 1 head marker column
+        self._hmarker = toyplot.require.table_keys(etable, hmarker, length=1)
+        # 1 middle marker column
+        self._mmarker = toyplot.require.table_keys(etable, mmarker, length=1)
+        # 1 middle marker position column
+        self._mposition = toyplot.require.table_keys(etable, mposition, length=1)
+        # 1 tail marker column
+        self._tmarker = toyplot.require.table_keys(etable, tmarker, length=1)
+
+    def domain(self, axis):
+        index = numpy.flatnonzero(self._coordinate_axes == axis)[0]
+        return toyplot.data.minimax([self._vtable[self._vcoordinates[index]], self._ecoordinates[:, index]])
+
 
     @property
     def vcount(self):
@@ -379,14 +572,80 @@ class Graph(Mark): # pragma: no cover
         """Return the graph edges as a :math:`E \\times 2` matrix of source, target indices."""
         return numpy.column_stack((self._etable[self._esource[0]], self._etable[self._etarget[0]]))
 
+
+class Image(Mark):
+    """Plot a bitmap image.
+
+    Do not create Image instances directly.  Use factory methods such as
+    :func:`toyplot.image` and :func:`toyplot.canvas.Canvas.image` instead.
+    """
+    def __init__(
+            self,
+            xmin_range,
+            xmax_range,
+            ymin_range,
+            ymax_range,
+            data,
+        ):
+        Mark.__init__(self)
+
+        self._xmin_range = xmin_range
+        self._xmax_range = xmax_range
+        self._ymin_range = ymin_range
+        self._ymax_range = ymax_range
+
+        data = numpy.atleast_3d(data)
+
+        if data.ndim != 3:
+            raise ValueError("Image must be a 1D, 2D or 3D array.")
+        if data.shape[2] < 1 or data.shape[2] > 4:
+            raise ValueError("Image must contain 1, 2, 3, or 4 channels.")
+        if issubclass(data.dtype.type, (numpy.object_, numpy.complexfloating, numpy.flexible)) and data.dtype != toyplot.color.dtype:
+            raise ValueError("Unsupported image dtype: %s" % data.dtype)
+
+        self._data = data
+
+    def to_png(self):
+        import io
+        import png
+        stream = io.BytesIO()
+
+        data = self._data
+
+        toyplot.log.debug("Image data: %s %s", data.shape, data.dtype)
+
+        if data.dtype == toyplot.color.dtype:
+            data = numpy.dstack((data["r"], data["g"], data["b"], data["a"]))
+        if issubclass(data.dtype.type, numpy.bool_):
+            bitdepth = 1
+        elif issubclass(data.dtype.type, numpy.floating):
+            data = (data * 255.0).astype("uint8")
+            bitdepth = 8
+        else:
+            bitdepth = 8
+
+        width = data.shape[1]
+        height = data.shape[0]
+        greyscale = data.shape[2] < 3
+        alpha = data.shape[2] == 2 or data.shape[2] == 4
+
+        writer = png.Writer(width=width, height=height, greyscale=greyscale, alpha=alpha, bitdepth=bitdepth)
+        writer.write(stream, numpy.reshape(data, (-1, data.shape[1] * data.shape[2])))
+        return stream.getvalue()
+
+    def to_data_url(self):
+        import base64
+        return "data:image/png;base64," + base64.standard_b64encode(self.to_png()).decode("ascii")
+
+
 class Plot(Mark):
 
     """Plot multiple bivariate data series using lines and/or markers.
 
     Do not create Plot instances directly.  Use factory methods such as
     :func:`toyplot.plot`, :func:`toyplot.scatterplot`,
-    :meth:`toyplot.axes.Cartesian.plot` and
-    :meth:`toyplot.axes.Cartesian.scatterplot` instead.
+    :meth:`toyplot.coordinates.Cartesian.plot` and
+    :meth:`toyplot.coordinates.Cartesian.scatterplot` instead.
     """
 
     def __init__(
@@ -442,13 +701,37 @@ class Plot(Mark):
         # N marker title columns
         self._mtitle = toyplot.require.table_keys(table, mtitle, length=len(series))
         # Line style
-        self._style = toyplot.require.style(style, allowed=toyplot.require.style.line)
+        self._style = toyplot.style.require(style, allowed=toyplot.style.allowed.line)
         # Marker style
-        self._mstyle = toyplot.require.style(mstyle, allowed=toyplot.require.style.marker)
+        self._mstyle = toyplot.style.require(mstyle, allowed=toyplot.style.allowed.marker)
         # Marker label style
-        self._mlstyle = toyplot.require.style(mlstyle, allowed=toyplot.require.style.text)
+        self._mlstyle = toyplot.style.require(mlstyle, allowed=toyplot.style.allowed.text)
         # Export filename
         self._filename = toyplot.require.filename(filename)
+
+    def domain(self, axis):
+        if axis == self._coordinate_axes[0]:
+            return toyplot.data.minimax([self._table[self._coordinates[0]]])
+        if axis == self._coordinate_axes[1]:
+            return toyplot.data.minimax([self._table[key] for key in self._series])
+
+    @property
+    def markers(self):
+        result = []
+
+        for stroke, stroke_width, stroke_opacity in zip(self._stroke.T, self._stroke_width.T, self._stroke_opacity.T):
+            result.append(toyplot.marker.create(shape="/", mstyle=toyplot.style.combine(
+                    {
+                        "fill": toyplot.color.to_css(stroke),
+                        "stroke": toyplot.color.to_css(stroke),
+                        "stroke-width": stroke_width,
+                        "stroke-opacity": stroke_opacity,
+                    },
+                    self._style,
+                ),
+            ))
+
+        return result
 
 
 class Rect(Mark):
@@ -456,7 +739,7 @@ class Rect(Mark):
     """Plot axis-aligned rectangles.
 
     Do not create Rect instances directly.  Use factory methods such as
-    :meth:`toyplot.axes.Cartesian.rect` instead.
+    :meth:`toyplot.coordinates.Cartesian.rects` instead.
     """
 
     def __init__(
@@ -495,9 +778,15 @@ class Rect(Mark):
         # 1 title column
         self._title = toyplot.require.table_keys(table, title, length=1)
         # Rectangle style
-        self._style = toyplot.require.style(style, allowed=toyplot.require.style.fill)
+        self._style = toyplot.style.require(style, allowed=toyplot.style.allowed.fill)
         # Export filename
         self._filename = toyplot.require.filename(filename)
+
+    def domain(self, axis):
+        if axis == self._coordinate_axes[0]:
+            return toyplot.data.minimax([self._table[self._left[0]], self._table[self._right[0]]])
+        if axis == self._coordinate_axes[1]:
+            return toyplot.data.minimax([self._table[self._top[0]], self._table[self._bottom[0]]])
 
 
 class Scatterplot(Mark):
@@ -505,7 +794,7 @@ class Scatterplot(Mark):
     """Plot multivariate data series using markers.
 
     Do not create Scatterplot instances directly.  Use factory methods such as
-    :func:`toyplot.scatterplot` and :meth:`toyplot.axes.Cartesian.scatterplot`
+    :func:`toyplot.scatterplot` and :meth:`toyplot.coordinates.Cartesian.scatterplot`
     instead.
     """
 
@@ -520,7 +809,6 @@ class Scatterplot(Mark):
             mstroke,
             mopacity,
             mtitle,
-            style,
             mstyle,
             mlstyle,
             filename,
@@ -549,21 +837,52 @@ class Scatterplot(Mark):
         self._mopacity = toyplot.require.table_keys(table, mopacity, length=N)
         # N marker title columns
         self._mtitle = toyplot.require.table_keys(table, mtitle, length=N)
-        # Global style
-        self._style = toyplot.require.style(style, allowed=set())
         # Marker style
-        self._mstyle = toyplot.require.style(mstyle, allowed=toyplot.require.style.marker)
+        self._mstyle = toyplot.style.require(mstyle, allowed=toyplot.style.allowed.marker)
         # Marker label style
-        self._mlstyle = toyplot.require.style(mlstyle, allowed=toyplot.require.style.text)
+        self._mlstyle = toyplot.style.require(mlstyle, allowed=toyplot.style.allowed.text)
         # Export filename
         self._filename = toyplot.require.filename(filename)
+
+    def domain(self, axis):
+        columns = [coordinate_column for coordinate_axis, coordinate_column in zip(itertools.cycle(self._coordinate_axes), self._coordinates) if coordinate_axis == axis]
+        return toyplot.data.minimax([self._table[column] for column in columns])
+
+    @property
+    def markers(self):
+        result = []
+
+        for marker, mfill, mstroke, mopacity in zip(
+                [self._table[key] for key in self._marker],
+                [self._table[key] for key in self._mfill],
+                [self._table[key] for key in self._mstroke],
+                [self._table[key] for key in self._mopacity],
+            ):
+
+            for dmarker, dfill, dstroke, dopacity in zip(marker, mfill, mstroke, mopacity):
+                mstyle = toyplot.style.combine(
+                {
+                    "fill": toyplot.color.to_css(dfill),
+                    "stroke": toyplot.color.to_css(dstroke),
+                    "opacity": dopacity,
+                },
+                self._mstyle
+                )
+
+                dmarker = toyplot.marker.create(mstyle=mstyle, lstyle=self._mlstyle) + toyplot.marker.convert(dmarker)
+
+                result.append(dmarker)
+                break
+
+        return result
+
 
 class Text(Mark):
 
     """Render text.
 
     Do not create Text instances directly.  Use factory methods such as
-    :meth:`toyplot.canvas.Canvas.text` or :meth:`toyplot.axes.Cartesian.text` instead.
+    :meth:`toyplot.canvas.Canvas.text` or :meth:`toyplot.coordinates.Cartesian.text` instead.
     """
 
     def __init__(
@@ -577,9 +896,10 @@ class Text(Mark):
             opacity,
             title,
             style,
+            annotation,
             filename,
         ):
-        Mark.__init__(self)
+        Mark.__init__(self, annotation)
 
         # D axis identifiers
         self._coordinate_axes = toyplot.require.string_vector(coordinate_axes, min_length=1)
@@ -600,53 +920,25 @@ class Text(Mark):
         # Text style
         self._style = toyplot.style.combine(
             {
-                "alignment-baseline": "middle",
+                "-toyplot-vertical-align": "middle",
+                "font-family": "helvetica",
                 "font-size": "12px",
                 "font-weight": "normal",
                 "stroke": "none",
                 "text-anchor": "middle",
             },
-            toyplot.require.style(style, allowed=toyplot.require.style.text),
+            toyplot.style.require(style, allowed=toyplot.style.allowed.text),
             )
         # Export filename
         self._filename = toyplot.require.filename(filename)
 
-##########################################################################
-# More specialized marks
+    def domain(self, axis):
+        for index, coordinate_axis in enumerate(self._coordinate_axes):
+            if coordinate_axis == axis:
+                return toyplot.data.minimax(self._table[self._coordinates[index]])
 
-
-class Legend(Mark):
-
-    """Render a figure legend (a collection of markers and labels).
-
-    Do not create Legend instances directly.  Use factory methods such as
-    :meth:`toyplot.canvas.Canvas.legend` or :meth:`toyplot.axes.Cartesian.legend` instead.
-    """
-
-    def __init__(self, xmin, xmax, ymin, ymax, marks, style, lstyle):
-        Mark.__init__(self)
-        self._xmin = xmin
-        self._xmax = xmax
-        self._ymin = ymin
-        self._ymax = ymax
-        self._gutter = 10
-        self._marks = marks
-        # Styles the box surrounding the legend
-        self._style = toyplot.style.combine(
-            {
-                "fill": "none",
-                "stroke": "none",
-            },
-            toyplot.require.style(style, allowed=toyplot.require.style.fill),
-            )
-        # Styles the legend labels
-        self._lstyle = toyplot.style.combine(
-            {
-                "alignment-baseline": "middle",
-                "font-size":"12px",
-                "stroke":"none",
-            },
-            toyplot.require.style(lstyle, allowed=toyplot.require.style.text),
-            )
-
-
+    def extents(self, axes):
+        axis_map = {key: index for index, key in enumerate(self._coordinate_axes)}
+        coordinates = tuple([self._table[self._coordinates[axis_map[axis]]] for axis in axes])
+        extents = toyplot.text.extents(self._table[self._text[0]], self._table[self._angle[0]], self._style)
+        return coordinates, extents

@@ -42,18 +42,17 @@ def step_impl(context):
 @then(u'the color value can be rendered as ipython html')
 def step_impl(context):
     toyplot.testing.assert_html_equal(
-        toyplot.color._color_swatch(context.value), "color-swatch")
+        toyplot.color._jupyter_color_swatches(context.value), "color-swatch")
 
 
 @given(u'a collection of Color Brewer palettes')
 def step_impl(context):
-    context.palettes = {
-        name: toyplot.color.brewer(name) for name in toyplot.color.brewer.names()}
+    context.palettes = toyplot.color.brewer.palettes()
 
 
 @then(u'each palette can be rendered as ipython html')
 def step_impl(context):
-    for name, palette in context.palettes.items():
+    for name, palette in context.palettes:
         toyplot.testing.assert_html_equal(
             palette._repr_html_(), "color-brewer-%s" % name)
 
@@ -115,7 +114,7 @@ def step_impl(context):
 
 @when(u'the user creates a Color Brewer palette')
 def step_impl(context):
-    context.palette = toyplot.color.brewer("BlueYellowRed")
+    context.palette = toyplot.color.brewer.palette("BlueYellowRed")
 
 
 @then(u'the Color Brewer palette should have the maximum number of colors')
@@ -126,7 +125,7 @@ def step_impl(context):
 
 @when(u'the user creates a sized Color Brewer palette')
 def step_impl(context):
-    context.palette = toyplot.color.brewer("BlueYellowRed", 5)
+    context.palette = toyplot.color.brewer.palette("BlueYellowRed", 5)
 
 
 @then(u'the Color Brewer palette should have the requested number of colors')
@@ -137,7 +136,7 @@ def step_impl(context):
 
 @when(u'the user creates a reversed Color Brewer palette')
 def step_impl(context):
-    context.palette = toyplot.color.brewer("BlueYellowRed", 5, reverse=True)
+    context.palette = toyplot.color.brewer.palette("BlueYellowRed", 5, reverse=True)
 
 
 @then(u'the Color Brewer palette should have its colors reversed')
@@ -148,8 +147,7 @@ def step_impl(context):
 
 @given(u'a collection of diverging color maps')
 def step_impl(context):
-    context.color_maps = [(name, toyplot.color.diverging(name))
-                          for name in toyplot.color.diverging.names()]
+    context.color_maps = toyplot.color.diverging.maps()
 
 
 @then(u'each diverging color map can be rendered as ipython html')
@@ -205,15 +203,15 @@ def step_impl(context):
     u'individual values can be mapped to css colors by the diverging color map')
 def step_impl(context):
     nose.tools.assert_equal(
-        context.color_map.css(-1), "rgba(33.5%,28.3%,75.6%,1)")
+        context.color_map.css(-1), "rgba(33.5%,28.3%,75.6%,1.000)")
     nose.tools.assert_equal(
-        context.color_map.css(0), "rgba(33.5%,28.3%,75.6%,1)")
+        context.color_map.css(0), "rgba(33.5%,28.3%,75.6%,1.000)")
     nose.tools.assert_equal(
-        context.color_map.css(0.5), "rgba(86.5%,86.5%,86.5%,1)")
+        context.color_map.css(0.5), "rgba(86.5%,86.5%,86.5%,1.000)")
     nose.tools.assert_equal(
-        context.color_map.css(1), "rgba(69.5%,0.296%,15.5%,1)")
+        context.color_map.css(1), "rgba(69.5%,0.3%,15.5%,1.000)")
     nose.tools.assert_equal(
-        context.color_map.css(2), "rgba(69.5%,0.296%,15.5%,1)")
+        context.color_map.css(2), "rgba(69.5%,0.3%,15.5%,1.000)")
 
 
 @given(u'a linear color map')
@@ -244,11 +242,11 @@ def step_impl(context):
 
 @then(u'the linear color map can map scalar values to css colors')
 def step_impl(context):
-    nose.tools.assert_equal(context.color_map.css(-1), "rgba(100%,0%,0%,1)")
-    nose.tools.assert_equal(context.color_map.css(0), "rgba(100%,0%,0%,1)")
-    nose.tools.assert_equal(context.color_map.css(0.5), "rgba(50%,0%,50%,1)")
-    nose.tools.assert_equal(context.color_map.css(1), "rgba(0%,0%,100%,1)")
-    nose.tools.assert_equal(context.color_map.css(2), "rgba(0%,0%,100%,1)")
+    nose.tools.assert_equal(context.color_map.css(-1), "rgba(100.0%,0.0%,0.0%,1.000)")
+    nose.tools.assert_equal(context.color_map.css(0), "rgba(100.0%,0.0%,0.0%,1.000)")
+    nose.tools.assert_equal(context.color_map.css(0.5), "rgba(50.0%,0.0%,50.0%,1.000)")
+    nose.tools.assert_equal(context.color_map.css(1), "rgba(0.0%,0.0%,100.0%,1.000)")
+    nose.tools.assert_equal(context.color_map.css(2), "rgba(0.0%,0.0%,100.0%,1.000)")
 
 
 @then(u'the color map domain can be changed')
@@ -275,7 +273,7 @@ def step_impl(context):
 @given(u'two color palettes')
 def step_impl(context):
     context.palettes = [
-        toyplot.color.brewer("Reds"), toyplot.color.brewer("Blues")]
+        toyplot.color.brewer.palette("Reds"), toyplot.color.brewer.palette("Blues")]
 
 
 @then(u'the color palettes can be concatenated into a single palette')
@@ -287,12 +285,12 @@ def step_impl(context):
 
 @given(u'a color palette')
 def step_impl(context):
-    context.palette = toyplot.color.brewer("Reds")
+    context.palette = toyplot.color.brewer.palette("Reds")
 
 
 @then(u'another palette can be appended')
 def step_impl(context):
-    context.palette += toyplot.color.brewer("Blues")
+    context.palette += toyplot.color.brewer.palette("Blues")
     toyplot.testing.assert_html_equal(
         context.palette._repr_html_(), "color-palette-iadd")
 
@@ -377,13 +375,13 @@ def step_impl(context):
 @given(u'a color palette, colors can retrieve css colors by index')
 def step_impl(context):
     palette = toyplot.color.Palette([(1, 0, 0), (0, 1, 0), (0, 0, 1)])
-    nose.tools.assert_equal(palette.css(0), "rgba(100%,0%,0%,1)")
-    nose.tools.assert_equal(palette.css(-1), "rgba(0%,0%,100%,1)")
+    nose.tools.assert_equal(palette.css(0), "rgba(100.0%,0.0%,0.0%,1.000)")
+    nose.tools.assert_equal(palette.css(-1), "rgba(0.0%,0.0%,100.0%,1.000)")
 
 @given(u'a categorical color map, the map can be rendered as ipython html')
 def step_impl(context):
     colormap = toyplot.color.CategoricalMap(
-        toyplot.color.brewer("BlueGreenBrown", 3))
+        toyplot.color.brewer.palette("BlueGreenBrown", 3))
     toyplot.testing.assert_html_equal(colormap._repr_html_(), "color-categorical-map")
 
 @given(u'a categorical color map, multiple colors can be returned by index')
@@ -404,6 +402,6 @@ def step_impl(context):
 def step_impl(context):
     colormap = toyplot.color.CategoricalMap(
         toyplot.color.Palette(["red", "lime", "blue", (1, 1, 1)]))
-    nose.tools.assert_equal(colormap.css(0), "rgba(100%,0%,0%,1)")
-    nose.tools.assert_equal(colormap.css(-1), "rgba(100%,100%,100%,1)")
+    nose.tools.assert_equal(colormap.css(0), "rgba(100.0%,0.0%,0.0%,1.000)")
+    nose.tools.assert_equal(colormap.css(-1), "rgba(100.0%,100.0%,100.0%,1.000)")
 

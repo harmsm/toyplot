@@ -7,6 +7,120 @@
 Release Notes
 =============
 
+Toyplot 0.15.1 - July 27, 2017
+------------------------------
+
+* Markers can be embedded in any text, including tick marks, legends, labels, and table contents.
+* Hyperlinks can be embedded in any text using the <a href="..."> tag.
+* Legends are implemented using table coordinates, so legends can be customized using any table feature.
+* Started a new documentation section for case-studies, with graph community and neural network examples.
+* Started a new section in the documentation for projects using Toyplot.
+* Callers can define their own custom marks, and modify rendering for existing marks, using the new rendering API.
+* Defined a new API for embedding Javascript in HTML markup, for use with custom marks.
+* Graph visualizations can export vertex and edge data as CSV tables.
+* Added support for head, middle, and tail markers on graph edges.
+* Added an `offset` property for Cartesian axis labels.
+* Toyplot colors are allowed as style property values.
+* Per-series and per-datum colors can be specified using Python sequences as well as numpy arrays.
+* Error messages specify which CSS properties are allowed.
+* Deprecated the `gutter` parameter in favor of `margin`, which can specify separate left / right / top / bottom margins, if desired.
+* Added `toyplot.html.tostring()` to simplify generating HTML.
+* Added a style option to `toyplot.html.render()` and `toyplot.html.tostring()`.
+* Added a `palette` argument to override the default series palette when creating axes.
+* Text markup didn't include units for font-size, causing incorrect results on Firefox.
+
+Toyplot 0.14.0 - April 17, 2017
+-------------------------------
+
+* Completely new text layout that explicitly positions all text.
+* Experimental support for hyperlinks in table cells.
+* Return a scalar instead of an array when accessing toyplot.data.Table using a single column name and row index.
+* Correct a bug that caused text baselines to be computed incorrectly in PDF output.
+* Add pylint to the regression test suite.
+* Allow font-family to be used in inline rich text styles.
+* Created an API to retrieve font metrics.
+* Disable obnoxious colormath logging by default.
+* Mention XML escaping for rich text in the user guide.
+* The "<" and ">" markers were rendered reversed.
+* Eliminate warnings using a Pandas series as the baseline for a bar plot.
+* Make it easier to disable graph vertex labels.
+* Allow stroke-linecap for CSS line styles.
+* Improve rasterized PNG output quality.
+* Warn when using older versions of ghostscript that produce lower-quality PNG output.
+* Suppress the "No handlers could be found for logger toyplot" warning.
+* Rewrote the logic for detecting Ghostscript.
+
+Toyplot 0.13.0 - July 22, 2016
+------------------------------
+
+* Allow fill marks to be used as annotation.
+* Explicitly disable data export from annotation marks.
+* Add an experimental `<axis>.domain.show` parameter to control whether the domain is displayed using axis spines.
+* `toyplot.data.read_csv(convert=True)` will try to parse integer as well as floating-point types.
+* Completely rewrote the table coordinates implementation.
+* Table coordinates support advanced, numpy-style indexing for all rows, columns, cells, gridlines, and gaps.
+* Added API to delete table coordinate rows and columns.
+* Added API to insert table coordinate rows and columns.
+* By default, all table cells are vertically and horizontally centered with a default font.
+* Matrix visualizations no longer bold row and column indices by default.
+* End-users can export CSV data from table coordinates and matrix visualizations.
+* Added table-cell bar plots and line plots that use the data already contained in the table.
+
+Toyplot 0.12.0 - May 27, 2016
+-----------------------------
+
+* Pandas data frame indices (including hierarchical indices) can optionally be included when converting to `toyplot.data.Table`.
+* Fixed a Python 3 portability issue.
+* Table coordinates didn't format NaN values properly when using a custom formatting string.
+* The `arrow` module is only imported when needed.
+* New documentation on grouping table rows.
+* Documented platform-specific timezone naming issues.
+* Improved documentation of the color factory objects in `toyplot.color`.
+* Use consistent naming for numberline coordinates.
+* Made it easier to iterate over `toyplot.data.Table` rows.
+* Interactive mouse coordinates work correctly with numberlines and shared axes, and are only displayed by click / touch events.
+* Position ticks relative to axes with a `location` property, and deprecate the tick labels `location` property.
+* Fixed a problem rendering bars with a log scale and nonzero domain minimum.
+* Removed the API to change text during animation.
+* Significant cleanup and organization of HTML backend code and generated markup.
+* Renamed the `toyplot.axes` module to `toyplot.coordinates` for consistency, clarity.
+* Added `toyplot.canvas.Canvas.cartesian()` and deprecated `toyplot.canvas.Canvas.axes()`.
+* Added `toyplot.locator.Uniform` and deprecated `toyplot.locator.Basic`.
+* Added documentation links to external libraries, where practical.
+* Added `text-shadow` to the list of valid CSS text attributes.
+* Updated dependencies to require numpy >= 1.8.0, and eliminated code that inadvertently depended on numpy >= 1.9.
+* Experimental support for displaying `PIL` and `scikit-image` images.
+* Added a `style` property to `toyplot.canvas.Canvas`.
+* Deprecated implicit conversion from palettes to colormaps for matrix visualization.
+* Provide better error messages if a caller passes anything but a canvas to a rendering backend.
+* Add support for multi-series marks in legends.
+* Updated links to point to our new documentation domain, `http://toyplot.readthedocs.io`.
+* Axis labels support the same `location` and `offset` parameterization as axis ticks / tick labels.
+
+Toyplot 0.11.0 - February 18, 2016
+----------------------------------
+
+* Added more complex indexing / slicing options to toyplot.data.Table.
+* Deprecated `toyplot.data.Table.rows()` and `toyplot.data.Table.columns()`.
+* Removed support for custom markers.
+* `-toyplot-anchor-shift` didn't work correctly with rotated text.
+* Documented text alignment behavior for rotated text.
+* Added `location` parameter for axis labels.
+* Improved text alignment defaults for rotated and unrotated axis labels.
+* Don't alter the axis domain if tick labels aren't visible.
+* Change the default linear color map to a diverging blue-red palette.
+* Pandas data frames with duplicate column names can be converted to `toyplot.data.Table`.
+* Allow callers to suppress NaNs in table visualization cells.
+* Render color arrays as swatches in Jupyter notebooks.
+* Added `toyplot.color.brewer.palette()`, `toyplot.color.brewer.map()`, and `toyplot.color.diverging.map()`.
+* Deprecated `toyplot.color.brewer()` and `toyplot.color.diverging()`.
+* `toyplot.color.LinearMap` color stops can be explicitly positioned.
+* Added `toyplot.color.linear.map()` with "Blackbody", "ExtendedBlackbody", "Kindlmann" and "ExtendedKindlmann" color maps.
+* Deprecated implicit conversions from color palettes to color maps during color mapping.
+* Split color-related documentation into separate "Color" and "Color Mapping" sections of the user guide.
+* Improved debugging output when a regression test fails.
+* Many code coverage improvements.
+
 Toyplot 0.10.0 - January 12, 2016
 ---------------------------------
 
@@ -188,4 +302,4 @@ Toyplot 0.2.0 - September 2, 2014
 Toyplot 0.1.0 - August 25, 2014
 -------------------------------
 
-* Initial Release
+a Initial Release

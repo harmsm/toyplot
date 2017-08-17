@@ -50,7 +50,7 @@ Writing Regression Tests
 
 .. note::
 
-  Toyplot has been gradually transitioning from `nose <https://nose.readthedocs.org/en/latest/>`_
+  Toyplot has been gradually transitioning from `nose <https://nose.readthedocs.io/en/latest/>`_
   to `behave <http://pythonhosted.org/behave>`_ for implementing regression tests.  New tests should
   be added to the `features` directory using behave.  The following outlines how the old tests
   were written, and will remain as a reference until they are all replaced.
@@ -61,7 +61,7 @@ Many of the tests function by comparing the SVG representation of a
 :class:`toyplot.canvas.Canvas` against a reference stored in `tests/reference`.  These
 tests all end with a call to `assert_canvas_matches(canvas, "test-name")`,
 which compares the canvas to the file `tests/reference/test-name.svg`.  The
-first time to you run a new test that uses :func:`assert_canvas_matches`, it
+first time to you run a new test that uses `assert_canvas_matches()`, it
 will generate and store the new reference file, then fail, prompting you to
 examine the reference file to ensure that it's correct.  The next time you run
 the test, it will function normally, comparing the canvas against the reference

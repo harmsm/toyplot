@@ -4,12 +4,16 @@
 
 from __future__ import division
 
-import arrow
 import datetime
+
 import numpy
+try:
+    import arrow
+except: # pragma: no cover
+    pass
+
 import toyplot.broadcast
 import toyplot.compatibility
-
 
 class TickLocator(object):
 
@@ -40,8 +44,7 @@ class Null(TickLocator):
         return [], [], []
 
 
-class Basic(TickLocator):
-
+class Uniform(TickLocator):
     """Generate N evenly spaced ticks that include the minimum and maximum values of a domain.
 
     Parameters
@@ -107,6 +110,7 @@ class Explicit(TickLocator):
             labels=None,
             titles=None,
             format="{:g}"):
+
         if locations is not None and labels is not None:
             locations = numpy.array(locations).astype("float64")
             labels = numpy.array(labels).astype("unicode")
@@ -120,7 +124,7 @@ class Explicit(TickLocator):
             locations = numpy.arange(len(labels))
         else:
             raise ValueError("Must supply locations, labels, or both.") # pragma: no cover
-        titles = toyplot.broadcast.object(titles, len(locations))
+        titles = toyplot.broadcast.pyobject(titles, len(locations))
 
         self._locations = locations
         self._labels = labels
@@ -185,10 +189,10 @@ class Extended(TickLocator):
     """
 
     def __init__(self, count=5, steps=None, weights=None, only_inside=False, format="{0:.{digits}f}"):
+
         self._count = count
         self._steps = steps if steps is not None else [1, 5, 2, 2.5, 4, 3]
-        self._weights = weigths if weights is not None else [
-            0.25, 0.2, 0.5, 0.05]
+        self._weights = weights if weights is not None else [0.25, 0.2, 0.5, 0.05]
         self._only_inside = only_inside
         self._format = format
 
@@ -209,17 +213,17 @@ class Extended(TickLocator):
           Titles for each tick location.  Typically, backends render titles as tooltips.
         """
         def coverage(dmin, dmax, lmin, lmax):
-            range = dmax - dmin
+            range_ = dmax - dmin
             return 1 - 0.5 * (numpy.power(dmax - lmax,
                                           2) + numpy.power(dmin - lmin,
-                                                           2)) / numpy.power(0.1 * range,
+                                                           2)) / numpy.power(0.1 * range_,
                                                                              2)
 
         def coverage_max(dmin, dmax, span):
-            range = dmax - dmin
-            if span > range:
-                half = (span - range) / 2.0
-                return 1 - numpy.power(half, 2) / numpy.power(0.1 * range, 2)
+            range_ = dmax - dmin
+            if span > range_:
+                half = (span - range_) / 2.0
+                return 1 - numpy.power(half, 2) / numpy.power(0.1 * range_, 2)
             else:
                 return 1
 
@@ -340,6 +344,7 @@ class Heckbert(TickLocator):
     """
 
     def __init__(self, count=5, format="{0:.{digits}f}"):
+
         self._count = count
         self._format = format
 
@@ -467,6 +472,7 @@ class Log(TickLocator):
     """
 
     def __init__(self, base=10, format="{base}<sup> {exponent}</sup>"):
+
         self._base = base
         self._format = format
 
@@ -661,10 +667,10 @@ class Timestamp(TickLocator):
         "minutes", "second", and "seconds".
     timezone: string, optional
         Specifies a local timezone to be used for label generation.  Defaults
-        to "utc".  Supports any timezone code allowed by :class:`arrow.Arrow`.
+        to "utc".  Supports any timezone code allowed by :class:`arrow.arrow.Arrow`.
     format: string, optional
         Format string used to generate labels from tick locations.  The
-        formatted value will be a :class:`arrow.Arrow` object, so any of the
+        formatted value will be a :class:`arrow.arrow.Arrow` object, so any of the
         attributes and formatting provided by https://arrow.readthedocs.org may
         be used in the format.  For example, to display the full day of the
         week, month, day of the month without zero padding, and year, you could
@@ -674,6 +680,7 @@ class Timestamp(TickLocator):
     """
 
     def __init__(self, count=None, interval=None, timezone="utc", format=None):
+        # pylint: disable=redefined-variable-type
         if interval is not None:
             if isinstance(interval, toyplot.compatibility.string_type):
                 interval = (1, interval)
@@ -751,4 +758,3 @@ class Timestamp(TickLocator):
         labels = [label_format.format(arrow.get(location).to(self._timezone)) for location in locations]
         titles = numpy.repeat(None, len(labels))
         return locations, labels, titles
-

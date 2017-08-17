@@ -8,7 +8,7 @@ from __future__ import absolute_import
 from __future__ import division
 
 
-import toyplot
+import toyplot.require
 import toyplot.reportlab.png as implementation
 
 
@@ -36,15 +36,15 @@ def render(canvas, fobj=None, width=None, height=None, scale=None):
 
     Returns
     -------
-    png: PNG image data, or `None`
-      PNG representation of `canvas`, or `None` if the caller specifies the
-      `fobj` parameter.
+    png: :class:`bytes` containing PNG image data, or `None`
+      Returns `None` if the caller specifies the `fobj` parameter, returns the PNG image data otherwise.
 
     Notes
     -----
     The output PNG is rendered using :func:`toyplot.reportlab.png.render()`.
     This is subject to change.
     """
+    canvas = toyplot.require.instance(canvas, toyplot.canvas.Canvas)
     return implementation.render(canvas, fobj, width, height, scale)
 
 
@@ -68,7 +68,7 @@ def render_frames(canvas, width=None, height=None, scale=None):
 
     Returns
     -------
-    frames: Python generator expression that returns each PNG image in the sequence.
+    frames: Sequence of :class:`bytes` objects containing PNG image data.
       The caller must iterate over the returned frames and is responsible for all
       subsequent processing, including disk I/O, video compression, etc.
 
@@ -82,5 +82,5 @@ def render_frames(canvas, width=None, height=None, scale=None):
     >>> for frame, png in enumerate(toyplot.png.render_frames(canvas)):
     ...   open("frame-%s.png" % frame, "wb").write(png)
     """
+    canvas = toyplot.require.instance(canvas, toyplot.canvas.Canvas)
     return implementation.render_frames(canvas, width, height, scale)
-

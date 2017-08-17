@@ -7,10 +7,72 @@ from __future__ import division
 import collections
 import itertools
 import numbers
+import sys
+import xml.etree.ElementTree as xml
+
 import numpy
+try:
+    import pandas
+except: # pragma: no cover
+    pass
+
 import toyplot.color
 import toyplot.compatibility
-import xml.etree.ElementTree as xml
+
+
+def minimax(items):
+    """Compute the minimum and maximum of an arbitrary collection of scalar- or array-like items.
+
+    The `items` parameter must be an iterable containing any combination of
+    `None`, scalars, numpy arrays, or numpy masked arrays.  None, NaN, masked
+    values, and empty arrays are all handled correctly.  Returns `(None, None)`
+    if the inputs don't contain any usable values.
+
+    Returns
+    -------
+    min: minimum value of the input arrays, or None.
+    max: maximum value of the input arrays, or None.
+    """
+    group_min = None
+    group_max = None
+
+    for item in items:
+        item_min = None
+        item_max = None
+        if isinstance(item, toyplot.data.Table):
+            raise ValueError("toyplot.data.Table is not allowed.") # pragma: no cover
+        elif isinstance(item, numpy.ma.MaskedArray):
+            pass
+        elif isinstance(item, numpy.ndarray):
+            item = numpy.ma.array(item)
+        elif item is None:
+            item = numpy.ma.array([])
+        else:
+            item = numpy.ma.array([item])
+
+        # Ignore null values
+        selection = numpy.ma.getmaskarray(item)
+        # Ignore NaN values
+        if issubclass(item.dtype.type, numpy.number):
+            selection = numpy.logical_or(selection, numpy.isnan(item).data)
+        selection = numpy.logical_not(selection)
+        if numpy.count_nonzero(selection):
+            item_min = item[selection].min()
+            item_max = item[selection].max()
+
+        if group_min is None:
+            group_min = item_min
+        else:
+            if item_min is not None:
+                group_min = min(group_min, item_min)
+
+        if group_max is None:
+            group_max = item_max
+        else:
+            if item_max is not None:
+                group_max = max(group_max, item_max)
+
+    return group_min, group_max
 
 
 def contiguous(a):
@@ -39,57 +101,98 @@ class Table(object):
         * None (the default) - creates an empty table (a table without any columns).
         * :class:`toyplot.data.Table` - creates a copy of the given table.
         * :class:`collections.OrderedDict` - creates a column for each key-value pair in the input, in the same order.  Each value must be implicitly convertable to a numpy masked array, and every value must contain the same number of items.
-        * :class:`numpy.lib.npyio.NpzFile` - creates a column for each key-value pair in the given file, in the same order.  Each array in the input file must contain the same number of items.
-        * :class:`dict` / :class:`collections.Mapping` - creates a column for each key-value pair in the input, sorted by key in lexicographical order.  Each value must be implicitly convertable to a numpy masked array, and every value must contain the same number of items.
-        * :class:`list` / :class:`collections.Sequence` - creates a column for each key-value tuple in the input sequence, in the same order.  Each value must be implicitly convertable to a numpy masked array, and every value must contain the same number of items.
+        * object returned when loading a `.npz` file with :func:`numpy.load` - creates a column for each key-value pair in the given file, in the same order.  Each array in the input file must contain the same number of items.
+        * :class:`dict` / :class:`collections.abc.Mapping` - creates a column for each key-value pair in the input, sorted by key in lexicographical order.  Each value must be implicitly convertable to a numpy masked array, and every value must contain the same number of items.
+        * :class:`list` / :class:`collections.abc.Sequence` - creates a column for each key-value tuple in the input sequence, in the same order.  Each value must be implicitly convertable to a numpy masked array, and every value must contain the same number of items.
         * :class:`numpy.ndarray` - creates a column for each column in a numpy matrix (2D array).  The order of the columns is maintained, and each column is assigned a unique name.
         * :class:`pandas.DataFrame` - creates a column for each column in a `Pandas <http://pandas.pydata.org>`_ data frame.  The order of the columns is maintained.
+
+    index: bool or string, optional
+        Controls whether to convert a `Pandas <http://pandas.pydata.org>`_ data
+        frame index to columns in the resulting table.  Use index=False (the
+        default) to leave the data frame index out of the table.  Use
+        index=True to include the index in the table, using default column
+        names (hierarchical indices will be stored in the table using multiple
+        columns).  Use index="format string" to include the index and control
+        how the index column names are generated.  The given format string can
+        use positional `{}` / `{0}` or keyword `{index}` arguments to
+        incorporate a zero-based index id into the column names.
     """
 
-    def __init__(self, data=None):
+    def __init__(self, data=None, index=False):
         self._columns = collections.OrderedDict()
         self._metadata = collections.defaultdict(dict)
 
         if data is not None:
+            keys = None
+            values = None
+
             # Input data for which an explicit column ordering is known.
             if isinstance(data, (
                     collections.OrderedDict,
                     toyplot.data.Table,
                     numpy.lib.npyio.NpzFile,
                 )):
-                for key in data.keys():
-                    self[key] = data[key]
-                return
+                keys = [key for key in data.keys()]
+                values = [data[key] for key in keys]
             # Input data for which an explicit column ordering is not known.
-            if isinstance(data, (dict, collections.Mapping)):
-                for key in sorted(data.keys()):
-                    self[key] = data[key]
-                return
+            elif isinstance(data, (dict, collections.Mapping)):
+                keys = [key for key in sorted(data.keys())]
+                values = [data[key] for key in keys]
             # Input data based on sequences.
-            if isinstance(data, (list, collections.Sequence)):
-                for key, values in data:
-                    self[key] = values
-                return
+            elif isinstance(data, (list, collections.Sequence)):
+                keys = [key for key, value in data]
+                values = [value for key, value in data]
             # Input data based on numpy arrays.
-            if isinstance(data, numpy.ndarray):
-                if data.ndim == 2:
-                    for column_index in numpy.arange(data.shape[1]):
-                        self["C%s" % column_index] = data[:, column_index]
-                else:
+            elif isinstance(data, numpy.ndarray):
+                if data.ndim != 2:
                     raise ValueError(
                         "Only two-dimensional arrays are allowed.")
-                return
+                keys = [str(i) for i in numpy.arange(data.shape[1])]
+                values = [data[:, i] for i in numpy.arange(data.shape[1])]
             # Input data based on Pandas data structures.
-            try:
-                import pandas
-                if isinstance(data, pandas.DataFrame):
-                    for key in data.keys():
-                        self[key] = data[key]
-                    return
-            except: # pragma: no cover
-                pass
+            elif "pandas" in sys.modules and isinstance(data, pandas.DataFrame):
+                keys = [str(data.ix[:, i].name) for i in range(data.shape[1])]
+                values = [data.ix[:, i] for i in range(data.shape[1])]
 
-            raise ValueError("Unsupported data type: %s" % type(data))
+                if index:
+                    key_format = "index{}" if index == True else index
+                    keys = [key_format.format(i, index=i) for i in range(data.index.nlevels)] + keys
+                    values = [data.index.get_level_values(i) for i in range(data.index.nlevels)] + values
+            else:
+                raise ValueError("Can't create a toyplot.data.Table from an instance of %s" % type(data))
+
+            # Get the set of unique keys, so we can see if there are any duplicates.
+            keys = numpy.array(keys, dtype="object")
+            key_counter = collections.Counter(keys)
+            key_dictionary = numpy.array(list(key_counter.keys()))
+            key_counts = numpy.array(list(key_counter.values()))
+
+            if numpy.any(key_counts > 1):
+                toyplot.log.warning("Altering duplicate column names to make them unique.")
+
+            # "Reserve" all of the keys that aren't duplicated.
+            reserved_keys = set([key for key, count in zip(key_dictionary, key_counts) if count == 1])
+            # Now, iterate through the keys that do contain duplicates, altering them to make them unique,
+            # while ensuring that the unique versions don't conflict with reserved keys.
+            for key, count in zip(key_dictionary, key_counts):
+                if count == 1:
+                    continue
+
+                suffix = 1
+                for i in numpy.flatnonzero(keys == key):
+                    if key not in reserved_keys:
+                        reserved_keys.add(key)
+                        continue
+                    while "%s-%s" % (key, suffix) in reserved_keys:
+                        suffix += 1
+                    keys[i] = "%s-%s" % (key, suffix)
+                    reserved_keys.add(keys[i])
+
+            # Store the data.
+            for key, value in zip(keys, values):
+                self[key] = value
+
 
     def __getitem__(self, index):
         column = None
@@ -101,20 +204,18 @@ class Table(object):
         if isinstance(index, toyplot.compatibility.string_type):
             column = index
             column_slice = slice(None, None, None)
+        # table["a", 10], table["a", 10:20], table["a", [10, 12, 18]], etc.
         elif isinstance(index, tuple) and isinstance(index[0], toyplot.compatibility.string_type):
             column = index[0]
-            # table["a", 10]
-            if isinstance(index[1], numbers.Integral):
-                column_slice = slice(index[1], index[1] + 1)
-            # table["a", 10:20], table["a", [10, 12, 18]], etc.
-            else:
-                column_slice = index[1]
+            column_slice = index[1]
 
         if column is not None and column_slice is not None:
             return self._columns[column][column_slice]
 
         row_slice = None
         columns = None
+
+        # pylint: disable=redefined-variable-type
 
         # table[10]
         if isinstance(index, numbers.Integral):
@@ -151,25 +252,35 @@ class Table(object):
             return Table([(column, self._columns[column][row_slice]) for column in columns])
 
 
-    def __setitem__(self, key, value):
-        if not isinstance(key, toyplot.compatibility.string_type):
-            raise ValueError("Column name '%s' must be a string." % key)
-        key = toyplot.compatibility.unicode_type(key)
-        value = numpy.ma.array(value)
-        if value.ndim != 1:
-            raise ValueError("Only 1D arrays are allowed.")
-        for column in self._columns.values():
-            if column.shape != value.shape:
-                raise ValueError(
-                    "Expected %s values, received %s." %
-                    (column.shape[0], value.shape[0]))
-        self._columns[key] = value
+    def __setitem__(self, index, value):
+        if isinstance(index, toyplot.compatibility.string_type):
+            value = numpy.ma.array(value)
+            if value.ndim != 1:
+                raise ValueError("Can't assign %s-dimensional array to the '%s' column." % (value.ndim, index))
+            for column in self._columns.values():
+                if column.shape != value.shape:
+                    raise ValueError("Expected %s values, received %s." % (column.shape[0], value.shape[0]))
+            column = toyplot.compatibility.unicode_type(index)
+            self._columns[column] = value
+            return
+
+        if isinstance(index, tuple):
+            if isinstance(index[0], toyplot.compatibility.string_type) and isinstance(index[1], (int, slice)):
+                column, column_slice = index
+                self._columns[column][column_slice] = value
+                return
+
+        raise ValueError("Unsupported key for assignment: %s" % (index,))
 
     def __delitem__(self, key):
         return self._columns.__delitem__(key)
 
     def __len__(self):
         return list(self._columns.values())[0].shape[0] if len(self._columns) else 0
+
+    def __iter__(self):
+        for row in numpy.arange(self.__len__()):
+            yield tuple([column[row] for column in self._columns.values()])
 
     def _repr_html_(self):
         root_xml = xml.Element(
@@ -189,7 +300,7 @@ class Table(object):
                 style="text-align:left;border:none;padding-right:1em;").text = toyplot.compatibility.unicode_type(name)
 
         iterators = [iter(column) for column in self._columns.values()]
-        for row_index in numpy.arange(len(self)):
+        for _ in numpy.arange(len(self)):
             for index, iterator in enumerate(iterators):
                 value = next(iterator)
                 if index == 0:
@@ -204,11 +315,12 @@ class Table(object):
 
     @property
     def shape(self):
-        """Return the shape (number of rows and columns) of the table.
+        """The table shape (number of rows and columns).
 
         Returns
         -------
-        shape: (number of rows, number of columns) tuple.
+        shape: tuple
+            (number of rows, number of columns) tuple.
         """
         return (
             list(self._columns.values())[0].shape[0] if len(self._columns) else 0,
@@ -216,11 +328,12 @@ class Table(object):
         )
 
     def items(self):
-        """Return the table names and columns, in column order.
+        """Return column names and columns, in column order.
 
         Returns
         -------
-        items: sequence of (name, column) tuples.
+        items: list
+            Sequence of (name, column) tuples.
         """
         return self._columns.items()
 
@@ -229,7 +342,7 @@ class Table(object):
 
         Returns
         -------
-        keys: sequence of string column names.
+        keys: sequence of :class:`str` column names.
         """
         return self._columns.keys()
 
@@ -238,23 +351,9 @@ class Table(object):
 
         Returns
         -------
-        values: sequence of numpy.ndarray columns.
+        values: sequence of :class:`numpy.ndarray` columns.
         """
         return self._columns.values()
-
-    def columns(self, keys): # pragma: no cover
-        """Return a subset of the table's columns.
-
-        Parameters
-        ----------
-        keys: sequence of string column names.
-
-        Returns
-        -------
-        table: :class:`toyplot.data.Table` containing the requested columns.
-        """
-        toyplot.log.warning("toyplot.data.Table.columns() is deprecated, use the [] operator instead.")
-        return Table([(key, self._columns[key]) for key in keys])
 
     def metadata(self, column):
         """Return metadata for one of the table's columns.
@@ -266,27 +365,11 @@ class Table(object):
 
         Returns
         -------
-        metadata: dict containing key-value pairs.
+        metadata: :class:`dict` containing key-value pairs.
         """
         if column not in self._columns:
             raise ValueError("Unknown column name '%s'" % column)
         return self._metadata[column]
-
-    def rows(self, index): # pragma: no cover
-        """Return a subset of the table's rows.
-
-        Parameters
-        ----------
-        index: integer row index, or a slice.
-
-        Returns
-        -------
-        table: :class:`toyplot.data.Table` containing the requested rows.
-        """
-        toyplot.log.warning("toyplot.data.Table.rows() is deprecated, use the [] operator instead.")
-        if isinstance(index, numbers.Integral):
-            index = slice(index, index + 1)
-        return Table([(key, self._columns[key][index]) for key in self._columns.keys()])
 
     def matrix(self):
         """Convert the table to a matrix (2D numpy array).
@@ -298,7 +381,8 @@ class Table(object):
 
         Returns
         -------
-        matrix: :class:`numpy.ma.array` with two dimensions.
+        matrix: :class:`numpy.ma.MaskedArray`
+            The returned array will have two dimensions.
         """
         return numpy.ma.column_stack(list(self._columns.values()))
 
@@ -311,7 +395,8 @@ def read_csv(fobj, convert=False):
     fobj: file-like object or string, required
         The file to read.  Use a string filepath, an open file, or a file-like object.
     convert: boolean, optional
-        If True, convert column types from string to float where possible.
+        By default, the columns in a table will contain strings.  If True,
+        convert column types to integers and floats where possible.
 
     Returns
     -------
@@ -334,9 +419,11 @@ def read_csv(fobj, convert=False):
     if convert:
         for name in result.keys():
             try:
-                result[name] = result[name].astype("float64")
+                result[name] = result[name].astype("int")
             except:
-                pass
+                try:
+                    result[name] = result[name].astype("float")
+                except:
+                    pass
 
     return result
-

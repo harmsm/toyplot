@@ -2,7 +2,7 @@ Feature: Table axes
     Scenario Outline: Table axes API
         Given a default canvas
         And a sample toyplot.data.Table
-        And an instance of toyplot.axes.Table
+        And an instance of toyplot.coordinates.Table
         Then the table can be rendered <phrase>
         And the visualization should match the <reference> reference image
 
@@ -37,7 +37,7 @@ Feature: Table axes
     Scenario: Render table without header
         Given a default canvas
         And a sample toyplot.data.Table
-        Then an instance of toyplot.axes.Table can be rendered without a header
+        Then an instance of toyplot.coordinates.Table can be rendered without a header
         And the visualization should match the table-without-header reference image
 
     Scenario: Render table using convenience API
@@ -49,14 +49,71 @@ Feature: Table axes
     Scenario: Render table containing null values
         Given a default canvas
         And a sample toyplot.data.Table containing null values
-        And an instance of toyplot.axes.Table
+        And an instance of toyplot.coordinates.Table
         Then the visualization should match the table-nulls reference image
 
     Scenario Outline: Render table without data
         Given a default canvas
-        And an instance of toyplot.axes.Table with <dimensions>
+        And an instance of toyplot.coordinates.Table with <dimensions>
         Then the visualization should match the <reference> reference image
 
         Examples:
             | dimensions | reference |
             | 4 rows and 3 columns | table-four-rows-three-columns |
+
+    Scenario Outline: Table merging
+        Given a default canvas
+        And an instance of toyplot.coordinates.Table with every region enabled
+        And every grid line is enabled
+        And every region is colored
+        And <region> <selection> is merged
+        Then the visualization should match the <reference> reference image
+
+        Examples:
+            | region   | selection | reference                 |
+            | cells    | 0,2,0,2   | table-merge-cells-0-2-0-2 |
+            | cells    | 2,4,2,4   | table-merge-cells-2-4-2-4 |
+            | cells    | 6,8,6,8   | table-merge-cells-6-8-6-8 |
+            | top-left | 0,3,0,3   | table-merge-top-left-0-3-0-3 |
+
+
+    Scenario Outline: Table deletion
+        Given a default canvas
+        And an instance of toyplot.coordinates.Table with every region enabled
+        And every grid line is enabled
+        And <selection> is deleted
+        And every region is colored
+        Then the visualization should match the <reference> reference image
+
+        Examples:
+            | selection | reference |
+            | the first row | table-delete-first-row |
+            | a middle row | table-delete-middle-row |
+            | the last row | table-delete-last-row |
+            | the first column | table-delete-first-column |
+            | a middle column | table-delete-middle-column |
+            | the last column | table-delete-last-column |
+
+    Scenario Outline: Table insertion
+        Given a default canvas
+        And an instance of toyplot.coordinates.Table with every region enabled
+        And every grid line is enabled
+        And every region is colored
+        And a <region> <celltype> is inserted <position> <selection>
+        Then the visualization should match the <reference> reference image
+
+        Examples:
+            | region | celltype | position  | selection | reference                        |
+            | top    | row      | before    | 0         | table-insert-top-row-before-0    |
+            | top    | row      | after     | 2         | table-insert-top-row-after-2     |
+            | body   | row      | before    | 0         | table-insert-body-row-before-0   |
+            | body   | row      | after     | 2         | table-insert-body-row-after-2    |
+            | bottom | row      | before    | 0         | table-insert-bottom-row-before-0   |
+            | bottom | row      | after     | 2         | table-insert-bottom-row-after-2    |
+
+            | left   | column      | before    | 0         | table-insert-left-column-before-0    |
+            | left   | column      | after     | 2         | table-insert-left-column-after-2     |
+            | body   | column      | before    | 0         | table-insert-body-column-before-0   |
+            | body   | column      | after     | 2         | table-insert-body-column-after-2    |
+            | right  | column      | before    | 0         | table-insert-right-column-before-0   |
+            | right  | column      | after     | 2         | table-insert-right-column-after-2    |

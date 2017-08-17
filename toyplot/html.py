@@ -2,370 +2,78 @@
 # DE-AC04-94AL85000 with Sandia Corporation, the U.S. Government retains certain
 # rights in this software.
 
-from __future__ import division
+# pylint: disable=function-redefined
 
-from multipledispatch import dispatch
+from __future__ import division, absolute_import
+
+import base64
 import collections
 import copy
+import functools
+import io
 import itertools
 import json
-import numbers
-import numpy
 import string
-import toyplot.axes
+import uuid
+import xml.etree.ElementTree as xml
+
+from multipledispatch import dispatch
+import numpy
+
+import toyplot.coordinates
 import toyplot.canvas
 import toyplot.color
 import toyplot.compatibility
 import toyplot.mark
-import uuid
-import xml.etree.ElementTree as xml
+import toyplot.marker
 
-try:
-    import HTMLParser
-except: # pragma: no cover
-    import html.parser as HTMLParser
+
+_namespace = dict()
+
+#: Decorator for registering custom rendering code.
+#:
+#: This is only of use when creating your own custom Toyplot marks.  It is
+#: not intended for end-users.
+#:
+#: Example
+#: -------
+#: To register your own rendering function::
+#:
+#:     @toyplot.html.dispatch(toyplot.coordinates.Cartesian, MyCustomMark, toyplot.html.RenderContext)
+#:     def _render(axes, mark, context):
+#:         # Rendering implementation here
+dispatch = functools.partial(dispatch, namespace=_namespace)
+
 
 class _NumpyJSONEncoder(json.JSONEncoder):
-
+    # pylint: disable=method-hidden
     def default(self, obj): # pragma: no cover
         if isinstance(obj, numpy.generic):
             return numpy.asscalar(obj)
         return json.JSONEncoder.default(self, obj)
 
 
-_export_data_tables = string.Template("""
-(function()
-{
-  var data_tables = $data_tables;
+class RenderContext(object):
+    """Stores context data during rendering.
 
-  function save_csv(data_table)
-  {
-    var uri = "data:text/csv;charset=utf-8,";
-    uri += data_table.names.join(",") + "\\n";
-    for(var i = 0; i != data_table.data[0].length; ++i)
-    {
-      for(var j = 0; j != data_table.data.length; ++j)
-      {
-        if(j)
-          uri += ",";
-        uri += data_table.data[j][i];
-      }
-      uri += "\\n";
-    }
-    uri = encodeURI(uri);
-
-    var link = document.createElement("a");
-    if(typeof link.download != "undefined")
-    {
-      link.href = uri;
-      link.style = "visibility:hidden";
-      link.download = data_table.filename + ".csv";
-
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
-    else
-    {
-      window.open(uri);
-    }
-  }
-
-  function open_popup(data_table)
-  {
-    return function(e)
-    {
-      var popup = document.querySelector("#$root_id .toyplot-mark-popup");
-      popup.querySelector(".toyplot-mark-popup-title").innerHTML = data_table.title;
-      popup.querySelector(".toyplot-mark-popup-save-csv").onclick = function() { popup.style.visibility = "hidden"; save_csv(data_table); }
-      popup.style.left = (e.clientX - 50) + "px";
-      popup.style.top = (e.clientY - 20) + "px";
-      popup.style.visibility = "visible";
-      e.stopPropagation();
-      e.preventDefault();
-    }
-
-  }
-
-  for(var i = 0; i != data_tables.length; ++i)
-  {
-    var data_table = data_tables[i];
-    var event_target = document.querySelector("#" + data_table.id);
-    event_target.oncontextmenu = open_popup(data_table);
-  }
-})();
-""")
-
-_show_mouse_coordinates = string.Template("""
-(function()
-{
-  var axes = $cartesian_axes;
-
-  function sign(x)
-  {
-    return x < 0 ? -1 : x > 0 ? 1 : 0;
-  }
-
-  function _mix(a, b, amount)
-  {
-    return ((1.0 - amount) * a) + (amount * b);
-  }
-
-  function _log(x, base)
-  {
-    return Math.log(Math.abs(x)) / Math.log(base);
-  }
-
-  function _in_range(a, x, b)
-  {
-    var left = Math.min(a, b);
-    var right = Math.max(a, b);
-    return left <= x && x <= right;
-  }
-
-  function to_domain(projection, range)
-  {
-    for(var i = 0; i != projection.length; ++i)
-    {
-      var segment = projection[i];
-      if(_in_range(segment.range.bounds.min, range, segment.range.bounds.max))
-      {
-        if(segment.scale == "linear")
-        {
-          var amount = (range - segment.range.min) / (segment.range.max - segment.range.min);
-          return _mix(segment.domain.min, segment.domain.max, amount)
-        }
-        else if(segment.scale[0] == "log")
-        {
-          var amount = (range - segment.range.min) / (segment.range.max - segment.range.min);
-          var base = segment.scale[1];
-          return sign(segment.domain.min) * Math.pow(base, _mix(_log(segment.domain.min, base), _log(segment.domain.max, base), amount));
-        }
-      }
-    }
-  }
-
-  // Compute mouse coordinates relative to a DOM object, with thanks to d3js.org, where this code originated.
-  function d3_mousePoint(container, e)
-  {
-    if (e.changedTouches) e = e.changedTouches[0];
-    var svg = container.ownerSVGElement || container;
-    if (svg.createSVGPoint) {
-      var point = svg.createSVGPoint();
-      point.x = e.clientX, point.y = e.clientY;
-      point = point.matrixTransform(container.getScreenCTM().inverse());
-      return [point.x, point.y];
-    }
-    var rect = container.getBoundingClientRect();
-    return [e.clientX - rect.left - container.clientLeft, e.clientY - rect.top - container.clientTop];
-  };
-
-  function display_coordinates(e)
-  {
-    var dom_axes = e.currentTarget.parentElement;
-    var data = axes[dom_axes.id];
-
-    point = d3_mousePoint(e.target, e);
-    var x = Number(to_domain(data["x"], point[0])).toFixed(2);
-    var y = Number(to_domain(data["y"], point[1])).toFixed(2);
-
-    var coordinates = dom_axes.querySelectorAll(".toyplot-coordinates");
-    for(var i = 0; i != coordinates.length; ++i)
-    {
-      coordinates[i].style.visibility = "visible";
-      coordinates[i].querySelector("text").textContent = "x=" + x + " y=" + y;
-    }
-  }
-
-  function clear_coordinates(e)
-  {
-    var dom_axes = e.currentTarget.parentElement;
-    var coordinates = dom_axes.querySelectorAll(".toyplot-coordinates");
-    for(var i = 0; i != coordinates.length; ++i)
-      coordinates[i].style.visibility = "hidden";
-  }
-
-  for(var axes_id in axes)
-  {
-    var event_target = document.querySelector("#" + axes_id + " .toyplot-coordinate-events");
-    event_target.onmousemove = display_coordinates;
-    event_target.onmouseout = clear_coordinates;
-  }
-})();
-""")
-
-_animation_controls = string.Template("""
-(function()
-{
-  var root_id = "$root_id";
-  var frame_durations = $frame_durations;
-  var state_changes = $state_changes;
-
-  var current_frame = null;
-  var timeout = null;
-
-  function on_set_frame()
-  {
-    if(timeout !== null)
-      window.clearTimeout(timeout);
-    timeout = null;
-    set_current_frame(document.getElementById(root_id + "-current-frame").valueAsNumber);
-    for(var frame = 0; frame <= current_frame; ++frame)
-      render_changes(frame);
-  }
-
-  function on_frame_rewind()
-  {
-    if(timeout !== null)
-      window.clearTimeout(timeout);
-    set_current_frame((current_frame - 1 + frame_durations.length) % frame_durations.length);
-    for(var frame = 0; frame <= current_frame; ++frame)
-      render_changes(frame);
-  }
-
-  function on_rewind()
-  {
-    render_changes(0);
-    set_current_frame(0);
-  }
-
-  function on_play_reverse()
-  {
-    if(timeout !== null)
-      window.clearTimeout(timeout);
-    timeout = window.setTimeout(play_reverse, frame_durations[(current_frame - 1 + frame_durations.length) % frame_durations.length] * 1000);
-  }
-
-  function on_stop()
-  {
-    if(timeout !== null)
-      window.clearTimeout(timeout);
-    timeout = null;
-  }
-
-  function on_play_forward()
-  {
-    if(timeout !== null)
-      window.clearTimeout(timeout);
-    timeout = window.setTimeout(play_forward, frame_durations[current_frame] * 1000);
-  }
-
-  function on_fast_forward()
-  {
-    for(var frame = 0; frame != frame_durations.length; ++frame)
-      render_changes(frame);
-    set_current_frame(frame_durations.length - 1);
-  }
-
-  function on_frame_advance()
-  {
-    if(timeout !== null)
-      window.clearTimeout(timeout);
-    set_current_frame((current_frame + 1) % frame_durations.length);
-    render_changes(current_frame);
-  }
-
-  function set_current_frame(frame)
-  {
-    current_frame = frame;
-    document.getElementById(root_id + "-current-frame").value = frame;
-  }
-
-  function play_reverse()
-  {
-    set_current_frame((current_frame - 1 + frame_durations.length) % frame_durations.length);
-    for(var frame = 0; frame <= current_frame; ++frame)
-      render_changes(frame);
-    timeout = window.setTimeout(play_reverse, frame_durations[(current_frame - 1 + frame_durations.length) % frame_durations.length] * 1000);
-  }
-
-  function play_forward()
-  {
-    set_current_frame((current_frame + 1) % frame_durations.length);
-    render_changes(current_frame);
-    timeout = window.setTimeout(play_forward, frame_durations[current_frame] * 1000);
-  }
-
-  var item_cache = {};
-  function get_item(id)
-  {
-    if(!(id in item_cache))
-      item_cache[id] = document.getElementById(id);
-    return item_cache[id];
-  }
-
-  function render_changes(frame)
-  {
-    var changes = state_changes[frame];
-    for(var type in changes)
-    {
-      var type_changes = changes[type]
-      if(type == "set-mark-style")
-      {
-        for(var i = 0; i != type_changes.length; ++i)
-        {
-          var mark_style = type_changes[i];
-          var mark = get_item(mark_style[0]);
-          for(var key in mark_style[1])
-            mark.style.setProperty(key, mark_style[1][key]);
-        }
-      }
-      else if(type == "set-datum-style")
-      {
-        for(var i = 0; i != type_changes.length; ++i)
-        {
-          var datum_style = type_changes[i];
-          var datum = get_item(datum_style[0]).querySelectorAll(".toyplot-Series")[datum_style[1]].querySelectorAll(".toyplot-Datum")[datum_style[2]];
-          for(var key in datum_style[3])
-            datum.style.setProperty(key, datum_style[3][key]);
-        }
-      }
-      else if(type == "set-datum-text")
-      {
-        for(var i = 0; i != type_changes.length; ++i)
-        {
-          var datum_text = type_changes[i];
-          var datum = get_item(datum_text[0]).querySelectorAll(".toyplot-Series")[datum_text[1]].querySelectorAll(".toyplot-Datum")[datum_text[2]];
-          datum.textContent = datum_text[3];
-        }
-      }
-    }
-  }
-
-  set_current_frame(0);
-  render_changes(current_frame);
-
-  document.getElementById(root_id + "-current-frame").oninput = on_set_frame;
-  document.getElementById(root_id + "-rewind").onclick = on_rewind;
-  document.getElementById(root_id + "-reverse-play").onclick = on_play_reverse;
-  document.getElementById(root_id + "-frame-rewind").onclick = on_frame_rewind;
-  document.getElementById(root_id + "-stop").onclick = on_stop;
-  document.getElementById(root_id + "-frame-advance").onclick = on_frame_advance;
-  document.getElementById(root_id + "-forward-play").onclick = on_play_forward;
-  document.getElementById(root_id + "-fast-forward").onclick = on_fast_forward;
-
-})();
-""")
-
-
-class _RenderContext(object):
-    def __init__(self):
-        self.root = None
+    This is only of use when creating custom Toyplot marks.  It is not intended
+    for end-users.
+    """
+    def __init__(self, root):
+        self._animation = collections.defaultdict(lambda: collections.defaultdict(list))
         self._id_cache = dict()
-        self._data_tables = list()
-        self._cartesian_axes = dict()
-        self.rendered = set()
+        self._parent = None
+        self._rendered = set()
+        self._root = root
+        self._javascript_modules = dict()
+        self._javascript_calls = list()
 
-    def add_cartesian_axes(self, axes):
-        self._cartesian_axes[self.get_id(axes)] = axes
 
-    def add_data_table(self, mark, table, title, filename):
-        self._data_tables.append({
-            "mark": mark,
-            "title": title,
-            "table": table,
-            "filename": filename,
-            })
+    def already_rendered(self, renderable):
+        if renderable in self._rendered:
+            return True
+        self._rendered.add(renderable)
+        return False
 
     def get_id(self, obj):
         python_id = id(obj)
@@ -373,11 +81,90 @@ class _RenderContext(object):
             self._id_cache[python_id] = "t" + uuid.uuid4().hex
         return self._id_cache[python_id]
 
-    def copy(self, **kwargs):
+    def copy(self, parent):
         result = copy.copy(self)
-        for name in kwargs:
-            setattr(result, name, kwargs[name])
+        result._parent = parent
         return result
+
+    def define(self, name, dependencies=None, factory=None, value=None):
+        """Define a Javascript module that can be embedded in the output markup.
+
+        The module will only be embedded in the output if it is listed as a
+        dependency of another module, or code specified using :meth:`require`.
+
+        You must specify either `factory` or `value`.
+
+        Parameters
+        ----------
+        name: string, required
+            Module name.  Any string is valid, but alphanumerics separated with
+            slashes are recommended. Multiple calls to `define` with the same
+            name argument will be silently ignored.
+        dependencies: sequence of strings, optional
+            Names of modules that are dependencies of this module.
+        factory: string, optional
+            Javascript code that will construct the module, which must be a
+            function that takes the modules listed in `dependencies`, in-order,
+            as arguments, and returns the initialized module.
+        value: Python object, optional
+            Arbitrary value for this module, which must be compatible with
+            :func:`json.dumps`.
+        """
+        if name in self._javascript_modules:
+            return
+
+        if dependencies is None:
+            dependencies = []
+
+        if factory is None and value is None:
+            raise ValueError("You must specify either factory or value.")
+        if factory is not None and value is not None:
+            raise ValueError("You must specify either factory or value.")
+        if value is not None and dependencies:
+            raise ValueError("Dependencies can only be specified when defining a factory, not a value.")
+
+        self._javascript_modules[name] = (dependencies, factory, value)
+
+    def require(self, dependencies=None, arguments=None, code=None):
+        """Embed Javascript code and its dependencies into the output markup.
+
+        The given code will be unconditionally embedded in the output markup,
+        along with any modules listed as dependencies (plus their dependencies,
+        and-so-on).
+
+        Parameters
+        ----------
+        dependencies: sequence of strings, optional
+            Names of modules that are required by this code.
+        arguments: sequence of Python objects, optional
+            Additional arguments to be passed to the Javascript code, which
+            must be compatible with :func:`json.dumps`.
+        code: string, required
+            Javascript code to be embedded, which must be a function that
+            accepts the modules listed in `requirements` in-order, followed by
+            the values listed in `arguments` in-order, as arguments.
+        """
+        if dependencies is None:
+            dependencies = []
+        if arguments is None:
+            arguments = []
+        if code is None:
+            raise ValueError("You must specify a Javascript function using the code argument.")
+        self._javascript_calls.append((dependencies, arguments, code))
+
+    @property
+    def animation(self):
+        return self._animation
+
+    @property
+    def parent(self):
+        """Current DOM node.  Typical rendering code will append HTML content to this node."""
+        return self._parent
+
+    @property
+    def root(self):
+        """Top-level DOM node."""
+        return self._root
 
 
 def apply_changes(html, changes):
@@ -408,8 +195,8 @@ def apply_changes(html, changes):
                 datum_xml.text = text
 
 
-def render(canvas, fobj=None, animation=False):
-    """Render the HTML representation of a canvas.
+def render(canvas, fobj=None, animation=False, style=None):
+    """Convert a canvas to its HTML DOM representation.
 
     Generates HTML markup with an embedded SVG representation of the canvas, plus
     JavaScript code for interactivity.  If the canvas contains animation, the
@@ -429,9 +216,12 @@ def render(canvas, fobj=None, animation=False):
       If `True`, return a representation of the changes to be made to the HTML
       tree for animation.
 
+    style: dict, optional
+      Dictionary of CSS styles that will be applied to the top-level output <div>.
+
     Returns
     -------
-    html: xml.etree.ElementTree.Element or `None`
+    html: :class:`xml.etree.ElementTree.Element` or `None`
       HTML representation of `canvas`, as a DOM tree, or `None` if the caller
       specifies the `fobj` parameter.
 
@@ -449,260 +239,71 @@ def render(canvas, fobj=None, animation=False):
     supply the <html>, <body> etc. if the result is intended as a standalone
     HTML document.
     """
+    canvas = toyplot.require.instance(canvas, toyplot.canvas.Canvas)
     canvas.autorender(False)
 
-    # Create the SVG representation.
-    context = _RenderContext()
-    svg = xml.Element(
-        "svg",
-        xmlns="http://www.w3.org/2000/svg",
-        attrib={"xmlns:toyplot": "http://www.sandia.gov/toyplot"},
-        width="%rpx" % canvas.width,
-        height="%rpx" % canvas.height,
-        viewBox="0 0 %r %r" % (canvas.width, canvas.height),
-        preserveAspectRatio="xMidYMid meet",
-        style=_css_style(canvas._style),
-        id=context.get_id(canvas))
-    for child in canvas._children:
-        _render(canvas, child, context.copy(root=svg))
-
-    # Collect animation data.
-    svg_animation = collections.defaultdict(
-        lambda: collections.defaultdict(list))
-    for time, time_changes in list(canvas._animation.items())[:-1]:
-        # Ensure we have an entry for every time, even if there aren't any
-        # changes.
-        svg_animation[time]
-        for type, type_changes in time_changes.items():
-            for change in type_changes:
-                svg_animation[time][type].append(
-                    [context.get_id(change[0])] + list(change[1:]))
-
     # Create the top-level HTML element.
-    root = xml.Element(
+    root_xml = xml.Element(
         "div",
-        align="center",
-        attrib={
-            "class": "toyplot"},
-        id="t" +
-        uuid.uuid4().hex)
-    root.append(svg)
-
-    # Add HTML controls.
-    controls = xml.SubElement(
-        root,
-        "div",
-        attrib={"class": "toyplot-controls"},
+        attrib={"class": "toyplot"},
+        id="t" + uuid.uuid4().hex,
         )
-    mark_popup = xml.SubElement(
-        controls,
-        "ul",
-        attrib={"class": "toyplot-mark-popup"},
-        onmouseleave="this.style.visibility='hidden'",
-        style=_css_style({
-            "background": "rgba(0%,0%,0%,0.75)",
-            "border": "0",
-            "border-radius": "6px",
-            "color": "white",
-            "cursor": "default",
-            "list-style": "none",
-            "margin": "0",
-            "padding": "5px",
-            "position": "fixed",
-            "visibility": "hidden",
-        }))
-    xml.SubElement(
-        mark_popup,
-        "li",
-        attrib={
-            "class": "toyplot-mark-popup-title"},
-        style="color:lightgray;cursor:default;padding:5px;list-style:none;margin:0;")
-    xml.SubElement(
-        mark_popup,
-        "li",
-        attrib={
-            "class": "toyplot-mark-popup-save-csv"},
-        style="border-radius:3px;padding:5px;list-style:none;margin:0;",
-        onmouseover="this.style.color='steelblue';this.style.background='white'",
-        onmouseout="this.style.color='white';this.style.background='steelblue'").text = "Save as .csv"
+    if style is not None:
+        root_xml.set("style", toyplot.style.to_css(style))
 
-    # Allow users to export embedded table data.
-    if context._data_tables:
-        data_tables = list()
-        for data_table in context._data_tables:
-            mark = data_table["mark"]
-            title = data_table["title"]
-            table = data_table["table"]
-            filename = data_table["filename"] if data_table["filename"] else "toyplot"
+    # Setup a render context
+    context = RenderContext(root=root_xml)
 
-            names = []
-            data = []
-            for name, column in table.items():
-                if "toyplot:exportable" in table.metadata(
-                        name) and table.metadata(name)["toyplot:exportable"]:
-                    if column.dtype == toyplot.color.dtype:
-                        raise ValueError("Color column table export isn't supported.") # pragma: no cover
-#                        for suffix, channel in zip(
-#                                [":red", ":green", ":blue", ":alpha"], ["r", "g", "b", "a"]):
-#                            names.append(name + suffix)
-#                            data.append(column[channel].tolist())
-                    else:
-                        names.append(name)
-                        data.append(column.tolist())
-            if names:
-                data_tables.append(
-                    {"id": context.get_id(mark), "filename": filename, "title": title, "names": names, "data": data})
+    # Register a Javascript module to keep track of the root id
+    context.define("toyplot/root/id", value=root_xml.get("id"))
+    # Register a Javascript module to keep track of the root
+    context.define("toyplot/root", ["toyplot/root/id"], factory="""function(root_id)
+    {
+        return document.querySelector("#" + root_id);
+    }""")
 
-        xml.SubElement(controls, "script").text = _export_data_tables.substitute(root_id=root.get("id"), data_tables=json.dumps(data_tables))
+    # Render the canvas.
+    _render(canvas, context.copy(parent=root_xml)) # pylint: disable=no-value-for-parameter
 
-    # Provide interactive mouse coordinates.
-    def _flip_infinities(value):
-        if numpy.isinf(value):
-            return -value
-        return value
-
-    if context._cartesian_axes:
-        cartesian_axes = dict()
-        for key, axes in context._cartesian_axes.items():
-            cartesian_axes[key] = dict()
-            cartesian_axes[key]["x"] = list()
-            for segment in axes._x_projection._segments:
-                cartesian_axes[key]["x"].append(
-                    {
-                        "scale": segment.scale,
-                        "domain": {
-                            "min": segment.domain.min,
-                            "max": segment.domain.max,
-                            "bounds": {
-                                "min": segment.domain.bounds.min,
-                                "max": segment.domain.bounds.max}},
-                        "range": {
-                            "min": segment.range.min,
-                            "max": segment.range.max,
-                            "bounds": {
-                                "min": segment.range.bounds.min,
-                                "max": segment.range.bounds.max}}})
-            cartesian_axes[key]["y"] = list()
-            for segment in axes._y_projection._segments:
-                cartesian_axes[key]["y"].append(
-                    {
-                        "scale": segment.scale,
-                        "domain": {
-                            "min": segment.domain.min,
-                            "max": segment.domain.max,
-                            "bounds": {
-                                "min": segment.domain.bounds.min,
-                                "max": segment.domain.bounds.max}},
-                        "range": {
-                            "min": segment.range.min,
-                            "max": segment.range.max,
-                            "bounds": {
-                                "min": _flip_infinities(segment.range.bounds.min),
-                                "max": _flip_infinities(segment.range.bounds.max)}}})
-
-        xml.SubElement(controls, "script").text = _show_mouse_coordinates.substitute(
-            root_id=root.get("id"),
-            cartesian_axes=json.dumps(cartesian_axes, cls=_NumpyJSONEncoder, sort_keys=True))
-
-    # Provide VCR controls.
-    if len(svg_animation) > 1:
-        times = numpy.array(sorted(svg_animation.keys()))
-        durations = times[1:] - times[:-1]
-        changes = [change for time, change in sorted(svg_animation.items())]
-
-        vcr_controls = xml.SubElement(
-            controls, "div", attrib={"class": "toyplot-vcr-controls"})
-        xml.SubElement(
-            vcr_controls,
-            "input",
-            title="Frame",
-            type="range",
-            min="0",
-            max=str(
-                len(times) -
-                2),
-            step="1",
-            value="0",
-            id="%s-current-frame" %
-            root.get("id"))
-        xml.SubElement(
-            vcr_controls,
-            "button",
-            title="Rewind",
-            style="width:40px;height:24px",
-            id="%s-rewind" % root.get("id")).append(
-                xml.XML(
-                    """<svg width="20" height="20"><polygon points="10,5 0,10 10,15" stroke="none" fill="{near_black}"/><polygon points="20,5 10,10 20,15" stroke="none" fill="{near_black}"/></svg>""".format(
-                        near_black=toyplot.color.near_black)))
-        xml.SubElement(
-            vcr_controls,
-            "button",
-            title="Reverse Play",
-            style="width:40px;height:24px",
-            id="%s-reverse-play" % root.get("id")).append(
-                xml.XML(
-                    """<svg width="20" height="20"><polygon points="15,5 5,10 15,15" stroke="none" fill="{near_black}"/></svg>""".format(
-                        near_black=toyplot.color.near_black)))
-        xml.SubElement(
-            vcr_controls,
-            "button",
-            title="Frame Rewind",
-            style="width:40px;height:24px",
-            id="%s-frame-rewind" % root.get("id")).append(
-                xml.XML(
-                    """<svg width="20" height="20"><polygon points="15,5 5,10 15,15" stroke="none" fill="{near_black}"/><rect x="17" y="5" width="2" height="10" stroke="none" fill="{near_black}"/></svg>""".format(
-                        near_black=toyplot.color.near_black)))
-        xml.SubElement(
-            vcr_controls,
-            "button",
-            title="Stop",
-            style="width:40px;height:24px",
-            id="%s-stop" % root.get("id")).append(
-                xml.XML(
-                    """<svg width="20" height="20"><rect x="5" y="5" width="10" height="10" stroke="none" fill="{near_black}"/></svg>""".format(
-                        near_black=toyplot.color.near_black)))
-        xml.SubElement(
-            vcr_controls,
-            "button",
-            title="Frame Advance",
-            style="width:40px;height:24px",
-            id="%s-frame-advance" % root.get("id")).append(
-                xml.XML(
-                    """<svg width="20" height="20"><polygon points="5,5 15,10 5,15" stroke="none" fill="{near_black}"/><rect x="1" y="5" width="2" height="10" stroke="none" fill="{near_black}"/></svg>""".format(
-                        near_black=toyplot.color.near_black)))
-        xml.SubElement(
-            vcr_controls,
-            "button",
-            title="Play",
-            style="width:40px;height:24px",
-            id="%s-forward-play" % root.get("id")).append(
-                xml.XML(
-                    """<svg width="20" height="20"><polygon points="5,5 15,10 5,15" stroke="none" fill="{near_black}"/></svg>""".format(
-                        near_black=toyplot.color.near_black)))
-        xml.SubElement(
-            vcr_controls,
-            "button",
-            title="Fast Forward",
-            style="width:40px;height:24px",
-            id="%s-fast-forward" % root.get("id")).append(
-                xml.XML(
-                    """<svg width="20" height="20"><polygon points="0,5 10,10 0,15" stroke="none" fill="{near_black}"/><polygon points="10,5 20,10 10,15" stroke="none" fill="{near_black}"/></svg>""".format(
-                        near_black=toyplot.color.near_black)))
-
-        xml.SubElement(controls, "script").text = _animation_controls.substitute(
-            root_id=root.get("id"),
-            frame_durations=json.dumps(durations.tolist()),
-            state_changes=json.dumps(changes, cls=_NumpyJSONEncoder))
-
+    # Return / write the results.
     if isinstance(fobj, toyplot.compatibility.string_type):
-        with open(fobj, "wb") as file:
-            file.write(xml.tostring(root, method="html"))
+        with open(fobj, "wb") as stream:
+            stream.write(xml.tostring(root_xml, method="html"))
     elif fobj is not None:
-        fobj.write(xml.tostring(root, method="html"))
+        fobj.write(xml.tostring(root_xml, method="html"))
     else:
         if animation:
-            return root, svg_animation
-        return root
+            return root_xml, context.animation
+        return root_xml
+
+
+def tostring(canvas, style=None):
+    """Convert a canvas to its HTML string representation.
+
+    Generates HTML markup with an embedded SVG representation of the canvas, plus
+    JavaScript code for interactivity.  If the canvas contains animation, the
+    markup will include an HTML user interface to control playback.
+
+    Parameters
+    ----------
+    canvas: :class:`toyplot.canvas.Canvas`
+      The canvas to be rendered.
+
+    style: dict, optional
+      Dictionary of CSS styles that will be applied to the top-level output <div>.
+
+    Returns
+    -------
+    html: string
+      HTML representation of `canvas` as a string.
+
+    Notes
+    -----
+    The output HTML is a fragment wrapped in a <div>, suitable for embedding in
+    a larger document.  It is the caller's responsibility to supply the <html>,
+    <body> etc. if the result is intended as a standalone HTML document.
+    """
+    return toyplot.compatibility.unicode_type(xml.tostring(render(canvas=canvas, style=style), encoding="utf-8", method="html"), encoding="utf-8")
 
 
 def _color_fixup(styles):
@@ -753,99 +354,16 @@ def _flat_contiguous(a):
     return result
 
 
-class _HTMLParser(HTMLParser.HTMLParser):
-    def __init__(self, element, font_size):
-        HTMLParser.HTMLParser.__init__(self)
-        self._element = element
-        self._font_size = font_size
-        self._root_node = xml.Element("root")
-        self._current_node = self._root_node
-        self._parent_map = {self._root_node: self._root_node}
-
-    def push_node(self, tag, **kwargs):
-        node = xml.SubElement(self._current_node, tag, **kwargs)
-        self._parent_map[node] = self._current_node
-        self._current_node = node
-
-    def pop_node(self):
-        while self._current_node.tag == "br":
-            self._current_node = self._parent_map[self._current_node]
-        while True:
-            self._current_node = self._parent_map[self._current_node]
-            if self._current_node.tag != "br":
-                break
-
-    def walk_tree(self, node, attributes, style, stack_state, global_state):
-        if node.tag == "text":
-            attributes = copy.copy(attributes)
-            style = copy.copy(style)
-            style["dominant-baseline"] = "inherit"
-            x = global_state.pop("x", None)
-            if x is not None:
-                attributes["x"] = x
-            new_y = global_state["line-y"] + stack_state["dy"]
-            if new_y != global_state["current-y"]:
-                attributes["dy"] = new_y - global_state["current-y"]
-                global_state["current-y"] = new_y
-            tspan = xml.SubElement(self._element, "tspan")
-            for key, value in attributes.items():
-                tspan.set(key, str(value))
-            tspan.set("style", _css_style(style))
-            tspan.text = node.text
-        else:
-            attributes = copy.copy(attributes)
-            style = copy.copy(style)
-            stack_state = copy.copy(stack_state)
-            if node.tag in ["b", "strong"]:
-                style["font-weight"] = "bold"
-            elif node.tag == "br":
-                font_size = stack_state["font-size"]
-                global_state["x"] = 0
-                global_state["line-y"] += font_size * 1.2
-            elif node.tag == "code":
-                style["font-family"] = "monospace"
-            elif node.tag in ["em", "i"]:
-                style["font-style"] = "italic"
-            elif node.tag == "small":
-                font_size = stack_state["font-size"]
-                stack_state["font-size"] = font_size * 0.8
-                style["font-size"] = "%spx" % (font_size * 0.8)
-            elif node.tag == "sub":
-                font_size = stack_state["font-size"]
-                stack_state["font-size"] = font_size * 0.7
-                style["font-size"] = "%spx" % (font_size * 0.7)
-                stack_state["dy"] += font_size * 0.2
-            elif node.tag == "sup":
-                font_size = stack_state["font-size"]
-                stack_state["font-size"] = font_size * 0.7
-                style["font-size"] = "%spx" % (font_size * 0.7)
-                stack_state["dy"] -= font_size * 0.3
-            for child in node:
-                self.walk_tree(child, attributes, style, stack_state, global_state)
-
-    def handle_starttag(self, tag, attrs):
-        if tag == "br":
-            self.push_node("br")
-        elif tag in ["b", "code", "em", "i", "small", "strong", "sub", "sup"]:
-            self.push_node(tag)
-        else:
-            toyplot.log.warning("Ignoring unknown <%s> tag." % tag) # pragma: no cover
-
-    def handle_endtag(self, tag):
-        if tag in ["br"]:
-            toyplot.log.warning("%s must not have an end tag." % tag) # pragma: no cover
-        elif tag in ["b", "code", "em", "i", "small", "strong", "sub", "sup"]:
-            self.pop_node()
-        else:
-            toyplot.log.warning("Ignoring unknown </%s> tag." % tag) # pragma: no cover
-
-    def handle_data(self, text):
-        xml.SubElement(self._current_node, "text").text = text
-
-    def close(self):
-        HTMLParser.HTMLParser.close(self)
-        self.walk_tree(self._root_node, attributes={}, style={}, stack_state={"dy":0,"font-size":self._font_size}, global_state={"line-y":0, "current-y":0})
-
+def _walk_tree(node):
+    yield ("start", node.tag, node.attrib)
+    if node.text:
+        yield ("text", node.text)
+    for child in node:
+        for item in _walk_tree(child):
+            yield item
+    yield ("end", node.tag)
+    if node.tail:
+        yield ("text", node.tail)
 
 def _draw_text(
         root,
@@ -855,427 +373,1232 @@ def _draw_text(
         style=None,
         angle=None,
         title=None,
-        attributes={},
-        ):
+        attributes=None,
+    ):
 
     if not text:
         return
 
-    style = copy.copy(style)
+    style = toyplot.style.combine({"font-family": "helvetica"}, style)
 
-    font_size = toyplot.units.convert(style["font-size"], target="px", default="px")
-    style["dominant-baseline"] = style.pop("alignment-baseline", "middle")
+    if attributes is None:
+        attributes = {}
 
-    baseline_shift = -toyplot.units.convert(style.pop("baseline-shift", 0), target="px", default="px", reference=font_size)
-    anchor_shift = toyplot.units.convert(style.pop("-toyplot-anchor-shift", 0), target="px", default="px", reference=font_size)
+    fonts = toyplot.font.ReportlabLibrary()
+    layout = text if isinstance(text, toyplot.text.Layout) else toyplot.text.layout(text, style, fonts)
 
-    transform = "translate(%r,%r)" % (x, y)
+    transform = ""
+    if x or y:
+        transform += "translate(%r,%r)" % (x, y)
     if angle:
         transform += "rotate(%r)" % (-angle)
-    if baseline_shift or anchor_shift:
-        transform += "translate(%r,%r)" % (anchor_shift, baseline_shift)
 
-    text_xml = xml.SubElement(
+    group = xml.SubElement(
         root,
-        "text",
-        transform=transform,
-        style=_css_style(style),
+        "g",
         attrib=attributes,
         )
+    if transform:
+        group.set("transform", transform)
+
     if title is not None:
-        xml.SubElement(text_xml, "title").text = str(title)
+        xml.SubElement(group, "title").text = str(title)
 
-    parser = _HTMLParser(text_xml, font_size)
-    parser.feed(text)
-    parser.close()
+    if layout.style.get("-toyplot-text-layout-visibility", None) == "visible":
+        xml.SubElement(
+            group,
+            "rect",
+            x=str(layout.left),
+            y=str(layout.top),
+            width=str(layout.width),
+            height=str(layout.height),
+            stroke="red",
+            fill="none",
+            opacity="0.5",
+            )
+        xml.SubElement(
+            group,
+            "circle",
+            x="0",
+            y="0",
+            r="3",
+            stroke="none",
+            fill="red",
+            opacity="0.5",
+            )
 
+    hyperlink = []
+    for line in layout.children:
+        if line.style.get("-toyplot-text-layout-line-visibility", None) == "visible":
+            xml.SubElement(
+                group,
+                "rect",
+                x=str(line.left),
+                y=str(line.top),
+                width=str(line.width),
+                height=str(line.height),
+                stroke="green",
+                fill="none",
+                opacity="0.5",
+                )
+            xml.SubElement(
+                group,
+                "line",
+                x1=str(line.left),
+                y1=str(line.baseline),
+                x2=str(line.right),
+                y2=str(line.baseline),
+                stroke="green",
+                fill="none",
+                opacity="0.5",
+                )
+        for box in line.children:
+            if isinstance(box, toyplot.text.TextBox):
+                xml.SubElement(
+                    group,
+                    "text",
+                    x=str(box.left),
+                    y=str(box.baseline),
+                    style=toyplot.style.to_css(box.style),
+                    ).text = box.text
+                if box.style.get("-toyplot-text-layout-box-visibility", None) == "visible":
+                    xml.SubElement(
+                        group,
+                        "rect",
+                        x=str(box.left),
+                        y=str(box.top),
+                        width=str(box.width),
+                        height=str(box.height),
+                        stroke="blue",
+                        fill="none",
+                        opacity="0.5",
+                        )
+                    xml.SubElement(
+                        group,
+                        "line",
+                        x1=str(box.left),
+                        y1=str(box.baseline),
+                        x2=str(box.right),
+                        y2=str(box.baseline),
+                        stroke="blue",
+                        fill="none",
+                        opacity="0.5",
+                        )
+
+            elif isinstance(box, toyplot.text.MarkerBox):
+                if box.marker:
+                    _draw_marker(
+                        group,
+                        cx=(box.left + box.right) * 0.5,
+                        cy=(box.top + box.bottom) * 0.5,
+                        marker=toyplot.marker.create(size=box.height) + box.marker,
+                        )
+                if box.style.get("-toyplot-text-layout-box-visibility", None) == "visible":
+                    xml.SubElement(
+                        group,
+                        "rect",
+                        x=str(box.left),
+                        y=str(box.top),
+                        width=str(box.width),
+                        height=str(box.height),
+                        stroke="blue",
+                        fill="none",
+                        opacity="0.5",
+                        )
+                    xml.SubElement(
+                        group,
+                        "line",
+                        x1=str(box.left),
+                        y1=str(box.baseline),
+                        x2=str(box.right),
+                        y2=str(box.baseline),
+                        stroke="blue",
+                        fill="none",
+                        opacity="0.5",
+                        )
+
+            elif isinstance(box, toyplot.text.PushHyperlink):
+                hyperlink.append(group)
+                group = xml.SubElement(group, "a")
+                group.set("xlink:href", box.href)
+            elif isinstance(box, toyplot.text.PopHyperlink):
+                group = hyperlink.pop()
+
+
+def _draw_bar(parent_xml, size, angle=0):
+    markup = xml.SubElement(
+        parent_xml,
+        "line",
+        y1=repr(-size / 2),
+        y2=repr(size / 2),
+        )
+    if angle:
+        markup.set("transform", "rotate(%r)" % (-angle,))
+
+
+def _draw_rect(parent_xml, size, width=1, height=1, angle=0):
+    markup = xml.SubElement(
+        parent_xml,
+        "rect",
+        x=repr(-size / 2 * width),
+        y=repr(-size / 2 * height),
+        width=repr(size * width),
+        height=repr(size * height),
+        )
+    if angle:
+        markup.set("transform", "rotate(%r)" % (-angle,))
+
+
+def _draw_triangle(parent_xml, size, angle=0):
+    markup = xml.SubElement(
+        parent_xml,
+        "polygon",
+        points=" ".join(["%r,%r" % (xp, yp) for xp, yp in [
+           (-size / 2, size / 2),
+           (0, -size / 2),
+           (size / 2, size / 2),
+           ]]),
+        )
+    if angle:
+        markup.set("transform", "rotate(%r)" % (-angle,))
+
+
+def _draw_circle(parent_xml, size):
+    xml.SubElement(
+        parent_xml,
+        "circle",
+        r=repr(size / 2),
+        )
 
 def _draw_marker(
         root,
-        cx,
-        cy,
-        size,
         marker,
-        marker_style=None,
-        label_style=None,
+        cx=None,
+        cy=None,
         extra_class=None,
-        title=None):
-    if marker is None:
-        return
-    if isinstance(marker, toyplot.compatibility.string_type):
-        marker = {"shape": marker}
-    shape = marker.get("shape", None)
-    shape_angle = marker.get("angle", 0)
-    shape_style = marker.get("mstyle", None)
-    shape_label = marker.get("label", None)
-    shape_label_style = marker.get("lstyle", None)
+        title=None,
+        transform=None,
+        ):
 
-    if shape in _draw_marker.variations:
-        variation = _draw_marker.variations[shape]
-        shape = variation[0]
-        shape_angle += variation[1]
-
-    attrib = _css_attrib(marker_style, shape_style)
+    attrib = _css_attrib(marker.mstyle)
     if extra_class is not None:
         attrib["class"] = extra_class
     marker_xml = xml.SubElement(root, "g", attrib=attrib)
     if title is not None:
         xml.SubElement(marker_xml, "title").text = str(title)
-    if shape == "|":
-        xml.SubElement(marker_xml,
-                       "line",
-                       transform="rotate(%r, %r, %r)" % (-shape_angle,
-                                                         cx,
-                                                         cy),
-                       x1=repr(cx),
-                       x2=repr(cx),
-                       y1=repr(cy - (size / 2)),
-                       y2=repr(cy + (size / 2)))
-    elif shape == "+":
-        xml.SubElement(marker_xml,
-                       "line",
-                       transform="rotate(%r, %r, %r)" % (-shape_angle,
-                                                         cx,
-                                                         cy),
-                       x1=repr(cx),
-                       x2=repr(cx),
-                       y1=repr(cy - (size / 2)),
-                       y2=repr(cy + (size / 2)))
-        xml.SubElement(marker_xml,
-                       "line",
-                       transform="rotate(%r, %r, %r)" % (-shape_angle,
-                                                         cx,
-                                                         cy),
-                       x1=repr(cx - (size / 2)),
-                       x2=repr(cx + (size / 2)),
-                       y1=repr(cy),
-                       y2=repr(cy))
-    elif shape == "*":
-        xml.SubElement(marker_xml,
-                       "line",
-                       transform="rotate(%r, %r, %r)" % (-shape_angle,
-                                                         cx,
-                                                         cy),
-                       x1=repr(cx),
-                       x2=repr(cx),
-                       y1=repr(cy - (size / 2)),
-                       y2=repr(cy + (size / 2)))
-        xml.SubElement(marker_xml,
-                       "line",
-                       transform="rotate(%r, %r, %r)" % (-shape_angle + 60,
-                                                         cx,
-                                                         cy),
-                       x1=repr(cx),
-                       x2=repr(cx),
-                       y1=repr(cy - (size / 2)),
-                       y2=repr(cy + (size / 2)))
-        xml.SubElement(marker_xml,
-                       "line",
-                       transform="rotate(%r, %r, %r)" % (-shape_angle - 60,
-                                                         cx,
-                                                         cy),
-                       x1=repr(cx),
-                       x2=repr(cx),
-                       y1=repr(cy - (size / 2)),
-                       y2=repr(cy + (size / 2)))
-    elif shape == "^":
-        xml.SubElement(marker_xml,
-                       "polygon",
-                       transform="rotate(%r, %r, %r)" % (-shape_angle,
-                                                         cx,
-                                                         cy),
-                       points=" ".join(["%r,%r" % (xp,
-                                                   yp) for xp,
-                                        yp in [(cx - (size / 2),
-                                                cy + (size / 2)),
-                                               (cx,
-                                                cy - (size / 2)),
-                                               (cx + (size / 2),
-                                                cy + (size / 2))]]))
-    elif shape == "s":
-        xml.SubElement(marker_xml,
-                       "rect",
-                       transform="rotate(%r, %r, %r)" % (-shape_angle,
-                                                         cx,
-                                                         cy),
-                       x=repr(cx - (size / 2)),
-                       y=repr(cy - (size / 2)),
-                       width=repr(size),
-                       height=repr(size))
-    elif shape == "o":
-        xml.SubElement(
-            marker_xml, "circle", cx=repr(cx), cy=repr(cy), r=repr(size / 2))
-    elif shape == "oo":
-        xml.SubElement(
-            marker_xml, "circle", cx=repr(cx), cy=repr(cy), r=repr(size / 2))
-        xml.SubElement(
-            marker_xml, "circle", cx=repr(cx), cy=repr(cy), r=repr(size / 4))
-    elif shape == "o|":
-        xml.SubElement(
-            marker_xml, "circle", cx=repr(cx), cy=repr(cy), r=repr(size / 2))
-        xml.SubElement(marker_xml,
-                       "line",
-                       transform="rotate(%r, %r, %r)" % (-shape_angle,
-                                                         cx,
-                                                         cy),
-                       x1=repr(cx),
-                       x2=repr(cx),
-                       y1=repr(cy - (size / 2)),
-                       y2=repr(cy + (size / 2)))
-    elif shape == "o+":
-        xml.SubElement(
-            marker_xml, "circle", cx=repr(cx), cy=repr(cy), r=repr(size / 2))
-        xml.SubElement(marker_xml,
-                       "line",
-                       transform="rotate(%r, %r, %r)" % (-shape_angle,
-                                                         cx,
-                                                         cy),
-                       x1=repr(cx),
-                       x2=repr(cx),
-                       y1=repr(cy - (size / 2)),
-                       y2=repr(cy + (size / 2)))
-        xml.SubElement(marker_xml,
-                       "line",
-                       transform="rotate(%r, %r, %r)" % (-shape_angle,
-                                                         cx,
-                                                         cy),
-                       x1=repr(cx - (size / 2)),
-                       x2=repr(cx + (size / 2)),
-                       y1=repr(cy),
-                       y2=repr(cy))
-    elif shape == "o*":
-        xml.SubElement(
-            marker_xml, "circle", cx=repr(cx), cy=repr(cy), r=repr(size / 2))
-        xml.SubElement(marker_xml,
-                       "line",
-                       transform="rotate(%r, %r, %r)" % (-shape_angle,
-                                                         cx,
-                                                         cy),
-                       x1=repr(cx),
-                       x2=repr(cx),
-                       y1=repr(cy - (size / 2)),
-                       y2=repr(cy + (size / 2)))
-        xml.SubElement(marker_xml,
-                       "line",
-                       transform="rotate(%r, %r, %r)" % (-shape_angle + 60,
-                                                         cx,
-                                                         cy),
-                       x1=repr(cx),
-                       x2=repr(cx),
-                       y1=repr(cy - (size / 2)),
-                       y2=repr(cy + (size / 2)))
-        xml.SubElement(marker_xml,
-                       "line",
-                       transform="rotate(%r, %r, %r)" % (-shape_angle - 60,
-                                                         cx,
-                                                         cy),
-                       x1=repr(cx),
-                       x2=repr(cx),
-                       y1=repr(cy - (size / 2)),
-                       y2=repr(cy + (size / 2)))
 
-    if shape_label: # Not technically necessary, but we should avoid computing the style for every marker if we don't have to.
+    if transform is None:
+        transform = "translate(%r, %r)" % (cx, cy)
+        if marker.angle:
+            transform += " rotate(%r)" % (-marker.angle,)
+    marker_xml.set("transform", transform)
+
+    if marker.shape == "|":
+        _draw_bar(marker_xml, marker.size)
+    elif marker.shape == "/":
+        _draw_bar(marker_xml, marker.size, angle=-45)
+    elif marker.shape == "-":
+        _draw_bar(marker_xml, marker.size, angle=90)
+    elif marker.shape == "\\":
+        _draw_bar(marker_xml, marker.size, angle=45)
+    elif marker.shape == "+":
+        _draw_bar(marker_xml, marker.size)
+        _draw_bar(marker_xml, marker.size, angle=90)
+    elif marker.shape == "x":
+        _draw_bar(marker_xml, marker.size, angle=-45)
+        _draw_bar(marker_xml, marker.size, angle=45)
+    elif marker.shape == "*":
+        _draw_bar(marker_xml, marker.size)
+        _draw_bar(marker_xml, marker.size, angle=-60)
+        _draw_bar(marker_xml, marker.size, angle=60)
+    elif marker.shape == "^":
+        _draw_triangle(marker_xml, marker.size)
+    elif marker.shape == ">":
+        _draw_triangle(marker_xml, marker.size, angle=-90)
+    elif marker.shape == "v":
+        _draw_triangle(marker_xml, marker.size, angle=180)
+    elif marker.shape == "<":
+        _draw_triangle(marker_xml, marker.size, angle=90)
+    elif marker.shape == "s":
+        _draw_rect(marker_xml, marker.size)
+    elif marker.shape == "d":
+        _draw_rect(marker_xml, marker.size, angle=45)
+    elif marker.shape and marker.shape[0] == "r":
+        width, height = marker.shape[1:].split("x")
+        _draw_rect(marker_xml, marker.size, width=float(width), height=float(height))
+    elif marker.shape == "o":
+        _draw_circle(marker_xml, marker.size)
+    elif marker.shape == "oo":
+        _draw_circle(marker_xml, marker.size)
+        _draw_circle(marker_xml, marker.size / 2)
+    elif marker.shape == "o|":
+        _draw_circle(marker_xml, marker.size)
+        _draw_bar(marker_xml, marker.size)
+    elif marker.shape == "o/":
+        _draw_circle(marker_xml, marker.size)
+        _draw_bar(marker_xml, marker.size, -45)
+    elif marker.shape == "o-":
+        _draw_circle(marker_xml, marker.size)
+        _draw_bar(marker_xml, marker.size, 90)
+    elif marker.shape == "o\\":
+        _draw_circle(marker_xml, marker.size)
+        _draw_bar(marker_xml, marker.size, 45)
+    elif marker.shape == "o+":
+        _draw_circle(marker_xml, marker.size)
+        _draw_bar(marker_xml, marker.size)
+        _draw_bar(marker_xml, marker.size, 90)
+    elif marker.shape == "ox":
+        _draw_circle(marker_xml, marker.size)
+        _draw_bar(marker_xml, marker.size, -45)
+        _draw_bar(marker_xml, marker.size, 45)
+    elif marker.shape == "o*":
+        _draw_circle(marker_xml, marker.size)
+        _draw_bar(marker_xml, marker.size)
+        _draw_bar(marker_xml, marker.size, -60)
+        _draw_bar(marker_xml, marker.size, 60)
+
+    if marker.label: # Never compute a text layout unless we have to.
         _draw_text(
             root=marker_xml,
-            text=shape_label,
-            x=cx,
-            y=cy,
-            style = toyplot.style.combine(
+            text=marker.label,
+            style=toyplot.style.combine(
                 {
-                    "stroke": "none",
+                    "-toyplot-vertical-align": "middle",
                     "fill": toyplot.color.near_black,
+                    "font-size": "%rpx" % (marker.size * 0.75),
+                    "stroke": "none",
                     "text-anchor": "middle",
-                    "alignment-baseline": "middle",
-                    "font-size": "%rpx" % (size * 0.75),
                 },
-                label_style,
-                shape_label_style),
+                marker.lstyle),
             )
     return marker_xml
 
-_draw_marker.variations = {"-": ("|", 90), "x": ("+", 45), "v": ("^", 180), "<": (
-    "^", -90), ">": ("^", 90), "d": ("s", 45), "o-": ("o|", 90), "ox": ("o+", 45)}
 
-
-def _rotated_frame(x1, y1, x2, y2, offset):
+def _axis_transform(x1, y1, x2, y2, offset, return_length=False):
     p = numpy.row_stack(((x1, y1), (x2, y2)))
     basis = p[1] - p[0]
     length = numpy.linalg.norm(basis)
     theta = numpy.rad2deg(numpy.arctan2(basis[1], basis[0]))
-    transform="translate(%s,%s) rotate(%s) translate(0,%s)" % (p[0][0], p[0][1], theta, offset)
-    return transform, length
+    transform = str()
+    if p[0][0] or p[0][1]:
+        transform += "translate(%s,%s)" % (p[0][0], p[0][1])
+    if theta:
+        transform += "rotate(%s)" % theta
+    if offset:
+        transform += "translate(0,%s)" % offset
+    if return_length:
+        return transform, length
+    return transform
 
 
-@dispatch(toyplot.canvas.Canvas, toyplot.axes.Axis, _RenderContext)
-def _render(canvas, axis, context):
-    if axis in context.rendered:
+@dispatch(toyplot.canvas.Canvas, RenderContext)
+def _render(canvas, context):
+    # Create the root SVG element.
+    svg_xml = xml.SubElement(
+        context.parent,
+        "svg",
+        xmlns="http://www.w3.org/2000/svg",
+        attrib={
+            "class": "toyplot-canvas-Canvas",
+            "xmlns:toyplot": "http://www.sandia.gov/toyplot",
+            "xmlns:xlink": "http://www.w3.org/1999/xlink",
+            },
+        width="%rpx" % canvas.width,
+        height="%rpx" % canvas.height,
+        viewBox="0 0 %r %r" % (canvas.width, canvas.height),
+        preserveAspectRatio="xMidYMid meet",
+        style=_css_style(canvas._style),
+        id=context.get_id(canvas))
+
+    # Render everything on the canvas.
+    for child in canvas._children:
+        _render(canvas, child._finalize(), context.copy(parent=svg_xml))
+
+    # Create a container for any Javascript code.
+    javascript_xml = xml.SubElement(
+        context.parent,
+        "div",
+        attrib={"class": "toyplot-behavior"},
+        )
+
+    # Register a Javascript module to keep track of the canvas id.
+    context.define("toyplot/canvas/id", value=context.get_id(canvas))
+    # Register a Javascript module to keep track of the canvas.
+    context.define("toyplot/canvas", ["toyplot/canvas/id"], factory="""function(canvas_id)
+    {
+        return document.querySelector("#" + canvas_id);
+    }""")
+
+    # Register a Javascript module for storing table data.
+    context.define("toyplot/tables", factory="""function()
+    {
+        var tables = [];
+
+        var module = {};
+
+        module.set = function(owner, key, names, columns)
+        {
+            tables.push({owner: owner, key: key, names: names, columns: columns});
+        }
+
+        module.get = function(owner, key)
+        {
+            for(var i = 0; i != tables.length; ++i)
+            {
+                var table = tables[i];
+                if(table.owner != owner)
+                    continue;
+                if(table.key != key)
+                    continue;
+                return {names: table.names, columns: table.columns};
+            }
+        }
+
+        module.get_csv = function(owner, key)
+        {
+            var table = module.get(owner, key);
+            if(table != undefined)
+            {
+                var csv = "";
+                csv += table.names.join(",") + "\\n";
+                for(var i = 0; i != table.columns[0].length; ++i)
+                {
+                  for(var j = 0; j != table.columns.length; ++j)
+                  {
+                    if(j)
+                      csv += ",";
+                    csv += table.columns[j][i];
+                  }
+                  csv += "\\n";
+                }
+                return csv;
+            }
+        }
+
+        return module;
+    }""")
+
+    # Register a Javascript module for saving data from the browser.
+    context.define("toyplot/io", factory="""function()
+    {
+        var module = {};
+        module.save_file = function(mime_type, charset, data, filename)
+        {
+            var uri = "data:" + mime_type + ";charset=" + charset + "," + data;
+            uri = encodeURI(uri);
+
+            var link = document.createElement("a");
+            if(typeof link.download != "undefined")
+            {
+              link.href = uri;
+              link.style = "visibility:hidden";
+              link.download = filename;
+
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+            }
+            else
+            {
+              window.open(uri);
+            }
+        };
+        return module;
+    }""")
+
+    # Register a Javascript module to provide a popup context menu.
+    context.define("toyplot/menus/context", ["toyplot/root", "toyplot/canvas"], factory="""function(root, canvas)
+    {
+        var wrapper = document.createElement("div");
+        wrapper.innerHTML = "<ul class='toyplot-context-menu' style='background:#eee; border:1px solid #b8b8b8; border-radius:5px; box-shadow: 0px 0px 8px rgba(0%,0%,0%,0.25); margin:0; padding:3px 0; position:fixed; visibility:hidden;'></ul>"
+        var menu = wrapper.firstChild;
+
+        root.appendChild(menu);
+
+        var items = [];
+
+        var ignore_mouseup = null;
+        function open_menu(e)
+        {
+            var show_menu = false;
+            for(var index=0; index != items.length; ++index)
+            {
+                var item = items[index];
+                if(item.show(e))
+                {
+                    item.item.style.display = "block";
+                    show_menu = true;
+                }
+                else
+                {
+                    item.item.style.display = "none";
+                }
+            }
+
+            if(show_menu)
+            {
+                ignore_mouseup = true;
+                menu.style.left = (e.clientX + 1) + "px";
+                menu.style.top = (e.clientY - 5) + "px";
+                menu.style.visibility = "visible";
+                e.stopPropagation();
+                e.preventDefault();
+            }
+        }
+
+        function close_menu()
+        {
+            menu.style.visibility = "hidden";
+        }
+
+        function contextmenu(e)
+        {
+            open_menu(e);
+        }
+
+        function mousemove(e)
+        {
+            ignore_mouseup = false;
+        }
+
+        function mouseup(e)
+        {
+            if(ignore_mouseup)
+            {
+                ignore_mouseup = false;
+                return;
+            }
+            close_menu();
+        }
+
+        function keydown(e)
+        {
+            if(e.key == "Escape" || e.key == "Esc" || e.keyCode == 27)
+            {
+                close_menu();
+            }
+        }
+
+        canvas.addEventListener("contextmenu", contextmenu);
+        canvas.addEventListener("mousemove", mousemove);
+        document.addEventListener("mouseup", mouseup);
+        document.addEventListener("keydown", keydown);
+
+        var module = {};
+        module.add_item = function(label, show, activate)
+        {
+            var wrapper = document.createElement("div");
+            wrapper.innerHTML = "<li class='toyplot-context-menu-item' style='background:#eee; color:#333; padding:2px 20px; list-style:none; margin:0; text-align:left;'>" + label + "</li>"
+            var item = wrapper.firstChild;
+
+            items.push({item: item, show: show});
+
+            function mouseover()
+            {
+                this.style.background = "steelblue";
+                this.style.color = "white";
+            }
+
+            function mouseout()
+            {
+                this.style.background = "#eee";
+                this.style.color = "#333";
+            }
+
+            function choose_item(e)
+            {
+                close_menu();
+                activate();
+
+                e.stopPropagation();
+                e.preventDefault();
+            }
+
+            item.addEventListener("mouseover", mouseover);
+            item.addEventListener("mouseout", mouseout);
+            item.addEventListener("mouseup", choose_item);
+            item.addEventListener("contextmenu", choose_item);
+
+            menu.appendChild(item);
+        };
+        return module;
+    }""")
+
+    # Embed Javascript code and dependencies in the container.
+    _render_javascript(context.copy(parent=javascript_xml))
+    _render(canvas._animation, context.copy(parent=javascript_xml)) # pylint: disable=no-value-for-parameter
+
+
+def _render_javascript(context):
+    # Convert module dependencies into an adjacency list.
+    adjacency_list = collections.defaultdict(list)
+    for name, (requirements, factory, value) in context._javascript_modules.items():
+        for requirement in requirements:
+            adjacency_list[name].append(requirement)
+
+    # Identify required modules and sort them into topological order.
+    modules = []
+    visited = {}
+    def search(name, visited, modules):
+        visited[name] = True
+        for neighbor in adjacency_list[name]:
+            if not visited.get(neighbor, False):
+                search(neighbor, visited, modules)
+        modules.append((name, context._javascript_modules[name]))
+    for requirements, arguments, code in context._javascript_calls:
+        for requirement in requirements:
+            if not visited.get(requirement, False):
+                search(requirement, visited, modules)
+
+    # Generate the code.
+    script = """(function()
+{
+var modules={};
+"""
+
+    # Initialize required modules.
+    for name, (requirements, factory, value) in modules:
+        script += """modules["%s"] = """ % name
+
+        if factory is not None:
+            script += "("
+            script += factory
+            script += ")("
+            argument_list = ["""modules["%s"]""" % requirement for requirement in requirements]
+            script += ",".join(argument_list)
+            script += ");\n"
+        if value is not None:
+            script += json.dumps(value, cls=_NumpyJSONEncoder, sort_keys=True)
+            script += ";\n"
+
+    # Make all calls.
+    for requirements, arguments, code in context._javascript_calls:
+        script += """("""
+        script += code
+        script += """)("""
+        argument_list = ["""modules["%s"]""" % requirement for requirement in requirements]
+        argument_list += [json.dumps(argument, cls=_NumpyJSONEncoder, sort_keys=True) for argument in arguments]
+        script += ",".join(argument_list)
+        script += """);\n"""
+
+    script += """})();"""
+
+    # Create the DOM elements.
+    xml.SubElement(context.parent, "script").text = script
+
+
+def _render_table(owner, key, label, table, filename, context):
+    if isinstance(owner, toyplot.mark.Mark) and owner.annotation:
         return
-    context.rendered.add(axis)
+    if isinstance(owner, toyplot.coordinates.Table) and owner.annotation:
+        return
 
-    if axis.show:
-        p = numpy.row_stack(((context.x1, context.y1), (context.x2, context.y2)))
-        basis = p[1] - p[0]
-        length = numpy.linalg.norm(basis)
-        theta = numpy.rad2deg(numpy.arctan2(basis[1], basis[0]))
+    names = []
+    columns = []
 
-        project = axis.projection(range_min=0.0, range_max=length)
+    if isinstance(table, toyplot.data.Table):
+        for name, column in table.items():
+            if "toyplot:exportable" in table.metadata(name) and table.metadata(name)["toyplot:exportable"]:
+                if column.dtype == toyplot.color.dtype:
+                    raise ValueError("Color column table export isn't supported.") # pragma: no cover
+                else:
+                    names.append(name)
+                    columns.append(column.tolist())
+    else: # Assume numpy matrix
+        for column in table.T:
+            names.append(column[0])
+            columns.append(column[1:].tolist())
 
-        axis_xml = xml.SubElement(
-            context.root,
-            "g",
-            id=context.get_id(axis),
-            transform="translate(%s,%s) rotate(%s) translate(%s,%s)" % (p[0][0], p[0][1], theta, 0, context.offset),
-            attrib={"class": "toyplot-axes-Axis"},
+    if not (names and columns):
+        return
+
+    owner_id = context.get_id(owner)
+    if filename is None:
+        filename = "toyplot"
+
+    context.require(
+        dependencies=["toyplot/tables", "toyplot/menus/context", "toyplot/io"],
+        arguments=[owner_id, key, label, names, columns, filename],
+        code="""function(tables, context_menu, io, owner_id, key, label, names, columns, filename)
+        {
+            tables.set(owner_id, key, names, columns);
+
+            var owner = document.querySelector("#" + owner_id);
+            function show_item(e)
+            {
+                return owner.contains(e.target);
+            }
+
+            function choose_item()
+            {
+                io.save_file("text/csv", "utf-8", tables.get_csv(owner_id, key), filename + ".csv");
+            }
+
+            context_menu.add_item("Save " + label + " as CSV", show_item, choose_item);
+        }""",
+    )
+
+
+@dispatch(toyplot.canvas.Canvas._AnimationFrames, RenderContext)
+def _render(frames, context):
+    # Collect animation data.
+    for time, time_changes in list(frames.items())[:-1]:
+        # Ensure we have an entry for every time, even if there aren't any
+        # changes.
+        context.animation[time]
+        for frame_type, type_changes in time_changes.items():
+            for change in type_changes:
+                context.animation[time][frame_type].append(
+                    [context.get_id(change[0])] + list(change[1:]))
+
+    if len(context.animation) < 2:
+        return
+
+    times = numpy.array(sorted(context.animation.keys()))
+    durations = times[1:] - times[:-1]
+    changes = [change for time, change in sorted(context.animation.items())]
+
+    context.parent.append(xml.XML(
+        """<div class="toyplot-vcr-controls">
+            <input class="toyplot-current-frame" title="Frame" type="range" min="0" max="{frames}" step="1" value="0"/>
+            <button class="toyplot-rewind" title="Rewind" style="width:40px;height:24px">
+                <svg width="20" height="20">
+                    <polygon points="10,5 0,10 10,15" stroke="none" fill="{near_black}"/>
+                    <polygon points="20,5 10,10 20,15" stroke="none" fill="{near_black}"/>
+                </svg>
+            </button>
+            <button class="toyplot-reverse-play" title="Reverse Play" style="width:40px;height:24px">
+                <svg width="20" height="20">
+                    <polygon points="15,5 5,10 15,15" stroke="none" fill="{near_black}"/>
+                </svg>
+            </button>
+            <button class="toyplot-frame-rewind" title="Frame Rewind" style="width:40px;height:24px">
+                <svg width="20" height="20">
+                    <polygon points="15,5 5,10 15,15" stroke="none" fill="{near_black}"/>
+                    <rect x="17" y="5" width="2" height="10" stroke="none" fill="{near_black}"/>
+                </svg>
+            </button>
+            <button class="toyplot-stop" title="Stop" style="width:40px;height:24px">
+                <svg width="20" height="20">
+                    <rect x="5" y="5" width="10" height="10" stroke="none" fill="{near_black}"/>
+                </svg>
+            </button>
+            <button class="toyplot-frame-advance" title="Frame Advance" style="width:40px;height:24px">
+                <svg width="20" height="20">
+                    <polygon points="5,5 15,10 5,15" stroke="none" fill="{near_black}"/>
+                    <rect x="1" y="5" width="2" height="10" stroke="none" fill="{near_black}"/>
+                </svg>
+            </button>
+            <button class="toyplot-forward-play" title="Play" style="width:40px;height:24px">
+                <svg width="20" height="20">
+                    <polygon points="5,5 15,10 5,15" stroke="none" fill="{near_black}"/>
+                </svg>
+            </button>
+            <button class="toyplot-fast-forward" title="Fast Forward" style="width:40px;height:24px">
+                <svg width="20" height="20">
+                    <polygon points="0,5 10,10 0,15" stroke="none" fill="{near_black}"/>
+                    <polygon points="10,5 20,10 10,15" stroke="none" fill="{near_black}"/>
+                </svg>
+            </button>
+        </div>""".format(
+            frames=len(times) - 2,
+            near_black=toyplot.color.near_black,
+            )))
+
+    xml.SubElement(context.parent, "script").text = string.Template("""
+        (function()
+        {
+          var root_id = "$root_id";
+          var frame_durations = $frame_durations;
+          var state_changes = $state_changes;
+
+          var current_frame = null;
+          var timeout = null;
+
+          function set_timeout(value)
+          {
+            if(timeout !== null)
+              window.clearTimeout(timeout);
+            timeout = value;
+          }
+
+          function set_current_frame(frame)
+          {
+            current_frame = frame;
+            document.querySelector("#" + root_id + " .toyplot-current-frame").value = frame;
+          }
+
+          function play_reverse()
+          {
+            set_current_frame((current_frame - 1 + frame_durations.length) % frame_durations.length);
+            render_changes(0, current_frame+1)
+            set_timeout(window.setTimeout(play_reverse, frame_durations[(current_frame - 1 + frame_durations.length) % frame_durations.length] * 1000));
+          }
+
+          function play_forward()
+          {
+            set_current_frame((current_frame + 1) % frame_durations.length);
+            render_changes(current_frame, current_frame+1);
+            set_timeout(window.setTimeout(play_forward, frame_durations[current_frame] * 1000));
+          }
+
+          var item_cache = {};
+          function get_item(id)
+          {
+            if(!(id in item_cache))
+              item_cache[id] = document.getElementById(id);
+            return item_cache[id];
+          }
+
+          function render_changes(begin, end)
+          {
+            for(var frame = begin; frame != end; ++frame)
+            {
+                var changes = state_changes[frame];
+                for(var type in changes)
+                {
+                  var type_changes = changes[type]
+                  if(type == "set-mark-style")
+                  {
+                    for(var i = 0; i != type_changes.length; ++i)
+                    {
+                      var mark_style = type_changes[i];
+                      var mark = get_item(mark_style[0]);
+                      for(var key in mark_style[1])
+                        mark.style.setProperty(key, mark_style[1][key]);
+                    }
+                  }
+                  else if(type == "set-datum-style")
+                  {
+                    for(var i = 0; i != type_changes.length; ++i)
+                    {
+                      var datum_style = type_changes[i];
+                      var datum = get_item(datum_style[0]).querySelectorAll(".toyplot-Series")[datum_style[1]].querySelectorAll(".toyplot-Datum")[datum_style[2]];
+                      for(var key in datum_style[3])
+                        datum.style.setProperty(key, datum_style[3][key]);
+                    }
+                  }
+                }
+            }
+          }
+
+          function on_set_frame()
+          {
+            set_timeout(null);
+            set_current_frame(document.querySelector("#" + root_id + " .toyplot-current-frame").valueAsNumber);
+            render_changes(0, current_frame+1);
+          }
+
+          function on_frame_rewind()
+          {
+            set_timeout(null);
+            set_current_frame((current_frame - 1 + frame_durations.length) % frame_durations.length);
+            render_changes(0, current_frame+1);
+          }
+
+          function on_rewind()
+          {
+            set_current_frame(0);
+            render_changes(0, current_frame+1);
+          }
+
+          function on_play_reverse()
+          {
+            set_timeout(window.setTimeout(play_reverse, frame_durations[(current_frame - 1 + frame_durations.length) % frame_durations.length] * 1000));
+          }
+
+          function on_stop()
+          {
+            set_timeout(null);
+          }
+
+          function on_play_forward()
+          {
+            set_timeout(window.setTimeout(play_forward, frame_durations[current_frame] * 1000));
+          }
+
+          function on_fast_forward()
+          {
+            set_timeout(null);
+            set_current_frame(frame_durations.length - 1);
+            render_changes(0, current_frame + 1)
+          }
+
+          function on_frame_advance()
+          {
+            set_timeout(null);
+            set_current_frame((current_frame + 1) % frame_durations.length);
+            render_changes(current_frame, current_frame+1);
+          }
+
+          set_current_frame(0);
+          render_changes(0, current_frame+1);
+
+          document.querySelector("#" + root_id + " .toyplot-current-frame").oninput = on_set_frame;
+          document.querySelector("#" + root_id + " .toyplot-rewind").onclick = on_rewind;
+          document.querySelector("#" + root_id + " .toyplot-reverse-play").onclick = on_play_reverse;
+          document.querySelector("#" + root_id + " .toyplot-frame-rewind").onclick = on_frame_rewind;
+          document.querySelector("#" + root_id + " .toyplot-stop").onclick = on_stop;
+          document.querySelector("#" + root_id + " .toyplot-frame-advance").onclick = on_frame_advance;
+          document.querySelector("#" + root_id + " .toyplot-forward-play").onclick = on_play_forward;
+          document.querySelector("#" + root_id + " .toyplot-fast-forward").onclick = on_fast_forward;
+        })();
+        """).substitute(
+            root_id=context.root.get("id"),
+            frame_durations=json.dumps(durations.tolist()),
+            state_changes=json.dumps(changes, cls=_NumpyJSONEncoder),
             )
 
-        if axis.spine.show:
-            x1 = 0
-            x2 = length
-            if axis._data_min is not None and axis._data_max is not None:
-                x1 = max(
-                    x1, project(axis._data_min))
-                x2 = min(
-                    x2, project(axis._data_max))
-            xml.SubElement(
-                axis_xml,
-                "line",
-                x1=repr(x1),
-                y1=repr(0),
-                x2=repr(x2),
-                y2=repr(0),
-                style=_css_style(
-                    axis.spine._style))
 
-            if axis.ticks._show:
-                y1 = -context.ticks_above if axis.ticks.above is None else -axis.ticks.above
-                y2 = context.ticks_below if axis.ticks.below is None else axis.ticks.below
+@dispatch(toyplot.canvas.Canvas, toyplot.coordinates.Axis, RenderContext)
+def _render(canvas, axis, context):
+    if context.already_rendered(axis):
+        return
 
-                ticks_group = xml.SubElement(axis_xml, "g")
-                for location, tick_style in zip(
-                        axis._tick_locations,
-                        axis.ticks.tick.styles(axis._tick_locations),
-                    ):
-                    x = project(location)
-                    xml.SubElement(
-                        ticks_group,
-                        "line",
-                        x1=repr(x),
-                        y1=repr(y1),
-                        x2=repr(x),
-                        y2=repr(y2),
-                        style=_css_style(
-                            axis.ticks._style,
-                            tick_style))
+    if not axis.show:
+        return
 
-        if axis.ticks.labels.show:
+    transform, length = _axis_transform(axis._x1, axis._y1, axis._x2, axis._y2, offset=axis._offset, return_length=True)
 
-            location = context.ticks_labels_location
-            if axis.ticks.labels.location is not None:
-                location = axis.ticks.labels.location
+    axis_xml = xml.SubElement(
+        context.parent,
+        "g",
+        id=context.get_id(axis),
+        transform=transform,
+        attrib={"class": "toyplot-coordinates-Axis"},
+        )
 
-            offset = 6
-            if axis.ticks.labels.offset is not None:
-                offset = axis.ticks.labels.offset
+    if axis.spine.show:
+        x1 = 0
+        x2 = length
+        if axis.domain.show and axis._data_min is not None and axis._data_max is not None:
+            x1 = max(
+                x1, axis.projection(axis._data_min))
+            x2 = min(
+                x2, axis.projection(axis._data_max))
+        xml.SubElement(
+            axis_xml,
+            "line",
+            x1=repr(x1),
+            y1=repr(0),
+            x2=repr(x2),
+            y2=repr(0),
+            style=_css_style(
+                axis.spine._style))
 
-            if axis.ticks.labels.angle:
-                alignment_baseline = "central"
-
-                if location == "above":
-                    text_anchor = "start" if axis.ticks.labels.angle > 0 else "end"
-                elif location == "below":
-                    text_anchor = "end" if axis.ticks.labels.angle > 0 else "start"
-            else:
-                alignment_baseline = "alphabetic" if location == "above" else "hanging"
-                text_anchor = "middle"
-
-            y = offset if location == "below" else -offset
+        if axis.ticks.show:
+            y1 = axis._ticks_near if axis._tick_location == "below" else -axis._ticks_near
+            y2 = -axis._ticks_far if axis._tick_location == "below" else axis._ticks_far
 
             ticks_group = xml.SubElement(axis_xml, "g")
-            for location, label, title, label_style in zip(
+            for location, tick_style in zip(
                     axis._tick_locations,
-                    axis._tick_labels,
-                    axis._tick_titles,
-                    axis.ticks.labels.label.styles(axis._tick_locations),
+                    axis.ticks.tick.styles(axis._tick_locations),
                 ):
-                x = project(location)
+                x = axis.projection(location)
+                xml.SubElement(
+                    ticks_group,
+                    "line",
+                    x1=repr(x),
+                    y1=repr(y1),
+                    x2=repr(x),
+                    y2=repr(y2),
+                    style=_css_style(
+                        axis.ticks._style,
+                        tick_style))
 
-                style=toyplot.style.combine(
-                    {
-                        "alignment-baseline": alignment_baseline,
-                        "text-anchor": text_anchor,
-                    },
-                    axis.ticks.labels.style,
-                    label_style,
-                )
+    if axis.ticks.labels.show:
+        location = axis._tick_labels_location
 
-                _draw_text(
-                    root=ticks_group,
-                    text=label,
-                    x=x,
-                    y=y,
-                    style=style,
-                    angle=axis.ticks.labels.angle,
-                    title=title,
-                    )
+        if axis.ticks.labels.angle:
+            vertical_align = "middle"
 
-        _draw_text(
-            root=axis_xml,
-            text=axis.label.text,
-            x=length * 0.5,
-            y=0,
-            style=toyplot.style.combine({"baseline-shift": context.label_baseline_shift}, axis.label.style),
+            if location == "above":
+                text_anchor = "start" if axis.ticks.labels.angle > 0 else "end"
+            elif location == "below":
+                text_anchor = "end" if axis.ticks.labels.angle > 0 else "start"
+        else:
+            vertical_align = "last-baseline" if location == "above" else "top"
+            text_anchor = "middle"
+
+        y = axis._tick_labels_offset if location == "below" else -axis._tick_labels_offset
+
+        ticks_group = xml.SubElement(axis_xml, "g")
+        for location, label, title, label_style in zip(
+                axis._tick_locations,
+                axis._tick_labels,
+                axis._tick_titles,
+                axis.ticks.labels.label.styles(axis._tick_locations),
+            ):
+            x = axis.projection(location)
+
+            style = toyplot.style.combine(
+                {
+                    "-toyplot-vertical-align": vertical_align,
+                    "text-anchor": text_anchor,
+                },
+                axis.ticks.labels.style,
+                label_style,
             )
 
+            _draw_text(
+                root=ticks_group,
+                text=label,
+                x=x,
+                y=y,
+                style=style,
+                angle=axis.ticks.labels.angle,
+                title=title,
+                )
 
-@dispatch(toyplot.canvas.Canvas, toyplot.axes.NumberLine, _RenderContext)
+    location = axis._label_location
+    vertical_align = "last-baseline" if location == "above" else "top"
+    text_anchor = "middle"
+    y = axis._label_offset if location == "below" else -axis._label_offset
+
+    _draw_text(
+        root=axis_xml,
+        text=axis.label.text,
+        x=length * 0.5,
+        y=y,
+        style=toyplot.style.combine(
+            {
+                "-toyplot-vertical-align": vertical_align,
+                "text-anchor": text_anchor,
+            },
+            axis.label.style,
+        ),
+        )
+
+    if axis.interactive.coordinates.show:
+        coordinates_xml = xml.SubElement(
+            axis_xml, "g",
+            attrib={"class": "toyplot-coordinates-Axis-coordinates"},
+            style=_css_style({"visibility": "hidden"}),
+            transform="",
+            )
+
+        if axis.interactive.coordinates.tick.show:
+            y1 = axis._tick_labels_offset if axis._interactive_coordinates_location == "below" else -axis._tick_labels_offset
+            y1 *= 0.5
+            y2 = -axis._tick_labels_offset if axis._interactive_coordinates_location == "below" else axis._tick_labels_offset
+            y2 *= 0.75
+            xml.SubElement(
+                coordinates_xml, "line",
+                x1="0",
+                x2="0",
+                y1=repr(y1),
+                y2=repr(y2),
+                style=_css_style(axis.interactive.coordinates.tick.style),
+                )
+
+        if axis.interactive.coordinates.label.show:
+            y = axis._tick_labels_offset if axis._interactive_coordinates_location == "below" else -axis._tick_labels_offset
+            alignment_baseline = "hanging" if axis._interactive_coordinates_location == "below" else "alphabetic"
+            xml.SubElement(
+                coordinates_xml, "text",
+                x="0",
+                y=repr(y),
+                style=_css_style(toyplot.style.combine(
+                    {"alignment-baseline": alignment_baseline},
+                    axis.interactive.coordinates.label.style,
+                    )),
+                )
+
+    context.define("toyplot.coordinates.Axis", ["toyplot/canvas"], """
+        function(canvas)
+        {
+            function sign(x)
+            {
+                return x < 0 ? -1 : x > 0 ? 1 : 0;
+            }
+
+            function mix(a, b, amount)
+            {
+                return ((1.0 - amount) * a) + (amount * b);
+            }
+
+            function log(x, base)
+            {
+                return Math.log(Math.abs(x)) / Math.log(base);
+            }
+
+            function in_range(a, x, b)
+            {
+                var left = Math.min(a, b);
+                var right = Math.max(a, b);
+                return left <= x && x <= right;
+            }
+
+            function inside(range, projection)
+            {
+                for(var i = 0; i != projection.length; ++i)
+                {
+                    var segment = projection[i];
+                    if(in_range(segment.range.min, range, segment.range.max))
+                        return true;
+                }
+                return false;
+            }
+
+            function to_domain(range, projection)
+            {
+                for(var i = 0; i != projection.length; ++i)
+                {
+                    var segment = projection[i];
+                    if(in_range(segment.range.bounds.min, range, segment.range.bounds.max))
+                    {
+                        if(segment.scale == "linear")
+                        {
+                            var amount = (range - segment.range.min) / (segment.range.max - segment.range.min);
+                            return mix(segment.domain.min, segment.domain.max, amount)
+                        }
+                        else if(segment.scale[0] == "log")
+                        {
+                            var amount = (range - segment.range.min) / (segment.range.max - segment.range.min);
+                            var base = segment.scale[1];
+                            return sign(segment.domain.min) * Math.pow(base, mix(log(segment.domain.min, base), log(segment.domain.max, base), amount));
+                        }
+                    }
+                }
+            }
+
+            var axes = {};
+
+            function display_coordinates(e)
+            {
+                var current = canvas.createSVGPoint();
+                current.x = e.clientX;
+                current.y = e.clientY;
+
+                for(var axis_id in axes)
+                {
+                    var axis = document.querySelector("#" + axis_id);
+                    var coordinates = axis.querySelector(".toyplot-coordinates-Axis-coordinates");
+                    if(coordinates)
+                    {
+                        var projection = axes[axis_id];
+                        var local = current.matrixTransform(axis.getScreenCTM().inverse());
+                        if(inside(local.x, projection))
+                        {
+                            var domain = to_domain(local.x, projection);
+                            coordinates.style.visibility = "visible";
+                            coordinates.setAttribute("transform", "translate(" + local.x + ")");
+                            var text = coordinates.querySelector("text");
+                            text.textContent = domain.toFixed(2);
+                        }
+                        else
+                        {
+                            coordinates.style.visibility= "hidden";
+                        }
+                    }
+                }
+            }
+
+            canvas.addEventListener("click", display_coordinates);
+
+            var module = {};
+            module.show_coordinates = function(axis_id, projection)
+            {
+                axes[axis_id] = projection;
+            }
+
+            return module;
+        }""",
+        )
+
+    projection = []
+    for segment in axis.projection._segments:
+        projection.append({
+            "scale": segment.scale,
+            "domain":
+            {
+                "min": segment.domain.min,
+                "max": segment.domain.max,
+                "bounds":
+                {
+                    "min": segment.domain.bounds.min,
+                    "max": segment.domain.bounds.max,
+                },
+            },
+            "range":
+            {
+                "min": segment.range.min,
+                "max": segment.range.max,
+                "bounds":
+                {
+                    "min": segment.range.bounds.min,
+                    "max": segment.range.bounds.max,
+                },
+            },
+        })
+
+    context.require(
+        dependencies=["toyplot.coordinates.Axis"],
+        arguments=[context.get_id(axis), projection],
+        code="""function(axis, axis_id, projection)
+        {
+            axis.show_coordinates(axis_id, projection);
+        }""",
+    )
+
+
+@dispatch(toyplot.canvas.Canvas, toyplot.coordinates.Numberline, RenderContext)
 def _render(canvas, numberline, context):
-    numberline._finalize()
+    numberline_xml = xml.SubElement(context.parent, "g", id=context.get_id(
+        numberline), attrib={"class": "toyplot-coordinates-Numberline"})
 
-    numberline_xml = xml.SubElement(context.root, "g", id=context.get_id(
-        numberline), attrib={"class": "toyplot-axes-NumberLine"})
+    clip_xml = xml.SubElement(
+        numberline_xml,
+        "clipPath",
+        id="t" + uuid.uuid4().hex,
+        )
+
+    transform, length = _axis_transform(numberline._x1, numberline._y1, numberline._x2, numberline._y2, offset=0, return_length=True)
+
+    height = numberline.axis._offset
+    if numberline._child_offset:
+        height += numpy.amax(list(numberline._child_offset.values()))
+
+    xml.SubElement(
+        clip_xml,
+        "rect",
+        x=repr(0),
+        y=repr(-height),
+        width=repr(length),
+        height=repr(height + numberline.axis._offset),
+        )
 
     children_xml = xml.SubElement(
         numberline_xml,
         "g",
-        attrib={"class": "toyplot-coordinate-events"},
-        )
-
-    for child in numberline._children:
-        _render(numberline, child, context.copy(root=children_xml))
-
-    _render(canvas, numberline.axis, context.copy(
-        root=numberline_xml,
-        x1=numberline._x1,
-        y1=numberline._y1,
-        x2=numberline._x2,
-        y2=numberline._y2,
-        offset=numberline.padding,
-        ticks_above=3,
-        ticks_below=3,
-        ticks_labels_location="below",
-        label_baseline_shift="-200%",
-        ))
-
-
-@dispatch(toyplot.axes.NumberLine, toyplot.color.CategoricalMap, _RenderContext)
-def _render(numberline, colormap, context):
-    offset = numberline._offset[colormap]
-    width = numberline._width[colormap]
-    style = numberline._style[colormap]
-
-    transform, length = _rotated_frame(numberline._x1, numberline._y1, numberline._x2, numberline._y2, -offset)
-
-    mark_xml = xml.SubElement(
-        context.root,
-        "g", id=context.get_id(colormap),
-        attrib={"class": "toyplot-color-CategoricalMap"},
+        attrib={"clip-path": "url(#%s)" % clip_xml.get("id")},
         transform=transform,
         )
 
-    projection = numberline.axis.projection(range_min=0, range_max=length)
+    for child in numberline._children:
+        _render(numberline, child._finalize(), context.copy(parent=children_xml))
+
+    _render(canvas, numberline.axis, context.copy(parent=numberline_xml))
+
+
+@dispatch(toyplot.coordinates.Numberline, toyplot.color.CategoricalMap, RenderContext)
+def _render(numberline, colormap, context):
+    offset = numberline._child_offset[colormap]
+    width = numberline._child_width[colormap]
+    style = numberline._child_style[colormap]
+
+    mark_xml = xml.SubElement(
+        context.parent,
+        "g", id=context.get_id(colormap),
+        attrib={"class": "toyplot-color-CategoricalMap"},
+        )
+    if offset:
+        mark_xml.set("transform", "translate(0,%s)" % -offset)
+
     samples = numpy.linspace(colormap.domain.min, colormap.domain.max, len(colormap._palette), endpoint=True)
-    projected = projection(samples)
-    colormap_range_min, colormap_range_max = projection([colormap.domain.min, colormap.domain.max])
+    projected = numberline.axis.projection(samples)
+    colormap_range_min, colormap_range_max = numberline.axis.projection([colormap.domain.min, colormap.domain.max])
 
     for index, (x1, x2), in enumerate(zip(projected[:-1], projected[1:])):
         color = colormap._palette[index]
@@ -1304,22 +1627,21 @@ def _render(numberline, colormap, context):
         style=_css_style(style),
         )
 
-@dispatch(toyplot.axes.NumberLine, toyplot.color.Map, _RenderContext)
+@dispatch(toyplot.coordinates.Numberline, toyplot.color.Map, RenderContext)
 def _render(numberline, colormap, context):
-    offset = numberline._offset[colormap]
-    width = numberline._width[colormap]
-    style = numberline._style[colormap]
+    offset = numberline._child_offset[colormap]
+    width = numberline._child_width[colormap]
+    style = numberline._child_style[colormap]
 
-    transform, length = _rotated_frame(numberline._x1, numberline._y1, numberline._x2, numberline._y2, -offset)
-    projection = numberline.axis.projection(range_min=0, range_max=length)
-    colormap_range_min, colormap_range_max = projection([colormap.domain.min, colormap.domain.max])
+    colormap_range_min, colormap_range_max = numberline.axis.projection([colormap.domain.min, colormap.domain.max])
 
     mark_xml = xml.SubElement(
-        context.root,
+        context.parent,
         "g", id=context.get_id(colormap),
         attrib={"class": "toyplot-color-Map"},
-        transform=transform,
         )
+    if offset:
+        mark_xml.set("transform", "translate(0, %s)" % -offset)
 
     defs_xml = xml.SubElement(
         mark_xml,
@@ -1340,7 +1662,7 @@ def _render(numberline, colormap, context):
     samples = numpy.linspace(colormap.domain.min, colormap.domain.max, 64, endpoint=True)
     for sample in samples:
         color = colormap.colors(sample)
-        psample = projection(sample)
+        psample = numberline.axis.projection(sample)
         offset = (psample - colormap_range_min) / (colormap_range_max - colormap_range_min)
         xml.SubElement(
             gradient_xml,
@@ -1368,22 +1690,23 @@ def _render(numberline, colormap, context):
         )
 
 
-@dispatch(toyplot.axes.NumberLine, toyplot.mark.Scatterplot, _RenderContext)
+@dispatch(toyplot.coordinates.Numberline, toyplot.mark.Scatterplot, RenderContext)
 def _render(numberline, mark, context):
-    transform, length = _rotated_frame(numberline._x1, numberline._y1, numberline._x2, numberline._y2, -numberline._offset[mark])
+    offset = numberline._child_offset[mark]
+
     mark_xml = xml.SubElement(
-        context.root,
+        context.parent,
         "g",
-        style=_css_style(mark._style),
         id=context.get_id(mark),
         attrib={"class": "toyplot-mark-Scatterplot"},
-        transform=transform,
         )
-    context.add_data_table(mark, mark._table, title="Scatterplot Data", filename=mark._filename)
+    if offset:
+        mark_xml.set("transform", "translate(0,%s)" % -offset)
+
+    _render_table(owner=mark, key="data", label="scatterplot data", table=mark._table, filename=mark._filename, context=context)
 
     dimension1 = numpy.ma.column_stack([mark._table[key] for key in mark._coordinates])
-    projection = numberline.axis.projection(range_min=0, range_max=length)
-    X = projection(dimension1)
+    X = numberline.axis.projection(dimension1)
     for x, marker, msize, mfill, mstroke, mopacity, mtitle in zip(
             X.T,
             [mark._table[key] for key in mark._marker],
@@ -1406,34 +1729,30 @@ def _render(numberline, mark, context):
                 mopacity[not_null],
                 mtitle[not_null],
             ):
-            dstyle = toyplot.style.combine(
-                {
-                    "fill": toyplot.color.to_css(dfill),
-                    "stroke": toyplot.color.to_css(dstroke),
-                    "opacity": dopacity,
-                },
-                mark._mstyle)
-            datum_xml = _draw_marker(
-                series_xml,
-                dx,
-                0,
-                dsize,
-                dmarker,
-                dstyle,
-                mark._mlstyle,
-                extra_class="toyplot-Datum",
-                title=dtitle,
-                )
+            if dmarker:
+                dstyle = toyplot.style.combine(
+                    {
+                        "fill": toyplot.color.to_css(dfill),
+                        "stroke": toyplot.color.to_css(dstroke),
+                        "opacity": dopacity,
+                    },
+                    mark._mstyle)
+                _draw_marker(
+                    series_xml,
+                    cx=dx,
+                    cy=0,
+                    marker=toyplot.marker.create(size=dsize, mstyle=dstyle, lstyle=mark._mlstyle) + toyplot.marker.convert(dmarker),
+                    extra_class="toyplot-Datum",
+                    title=dtitle,
+                    )
 
 
-@dispatch(toyplot.canvas.Canvas, toyplot.axes.Cartesian, _RenderContext)
+@dispatch(toyplot.canvas.Canvas, toyplot.coordinates.Cartesian, RenderContext)
 def _render(canvas, axes, context):
-    axes._finalize()
+    cartesian_xml = xml.SubElement(context.parent, "g", id=context.get_id(
+        axes), attrib={"class": "toyplot-coordinates-Cartesian"})
 
-    axes_xml = xml.SubElement(context.root, "g", id=context.get_id(
-        axes), attrib={"class": "toyplot-axes-Cartesian"})
-
-    clip_xml = xml.SubElement(axes_xml, "clipPath", id="t" + uuid.uuid4().hex)
+    clip_xml = xml.SubElement(cartesian_xml, "clipPath", id="t" + uuid.uuid4().hex)
     xml.SubElement(
         clip_xml,
         "rect",
@@ -1444,143 +1763,32 @@ def _render(canvas, axes, context):
         )
 
     children_xml = xml.SubElement(
-        axes_xml,
+        cartesian_xml,
         "g",
-        attrib={
-            "class" : "toyplot-coordinate-events",
-            "clip-path" : "url(#%s)" % clip_xml.get("id"),
-        },
-        style=_css_style({"cursor": "crosshair"}),
-        )
-
-    xml.SubElement(
-        children_xml,
-        "rect",
-        x=repr(axes._xmin_range - axes.padding),
-        y=repr(axes._ymin_range - axes.padding),
-        width=repr(axes._xmax_range - axes._xmin_range + axes.padding * 2),
-        height=repr(axes._ymax_range - axes._ymin_range + axes.padding * 2),
-        style=_css_style({"visibility": "hidden", "pointer-events": "all"}),
+        attrib={"clip-path" : "url(#%s)" % clip_xml.get("id")},
         )
 
     for child in axes._children:
-        _render(axes, child, context.copy(root=children_xml))
-
-    if axes.coordinates._show:
-        context.add_cartesian_axes(axes)
-        coordinates_xml = xml.SubElement(axes_xml, "g", style=_css_style(
-            {"visibility": "hidden"}), attrib={"class": "toyplot-coordinates"})
-        xml.SubElement(
-            coordinates_xml,
-            "rect",
-            x=repr(
-                axes.coordinates._xmin_range),
-            y=repr(
-                axes.coordinates._ymin_range),
-            width=repr(
-                axes.coordinates._xmax_range -
-                axes.coordinates._xmin_range),
-            height=repr(
-                axes.coordinates._ymax_range -
-                axes.coordinates._ymin_range),
-            style=_css_style(
-                axes.coordinates._style))
-        xml.SubElement(
-            coordinates_xml,
-            "text",
-            x=repr(
-                (axes.coordinates._xmin_range + axes.coordinates._xmax_range) * 0.5),
-            y=repr(
-                (axes.coordinates._ymin_range + axes.coordinates._ymax_range) * 0.5),
-            style=_css_style(
-                axes.coordinates.label._style))
+        _render(axes, child._finalize(), context.copy(parent=children_xml))
 
     if axes._show:
-        if axes.x.spine.position == "low":
-            x_offset = axes.padding
-            x_spine_y = axes._ymax_range
-            x_ticks_above = 5
-            x_ticks_below = 0
-            x_ticks_labels_location = "below"
-            x_label_baseline_shift = "-200%"
-        elif axes.x.spine.position == "high":
-            x_offset = -axes.padding
-            x_spine_y = axes._ymin_range
-            x_ticks_above = 0
-            x_ticks_below = 5
-            x_ticks_labels_location = "above"
-            x_label_baseline_shift = "200%"
-        else:
-            x_offset = 0
-            x_spine_y = axes._project_y(axes.x.spine.position)
-            x_ticks_above = 3
-            x_ticks_below = 3
-            x_ticks_labels_location = "below"
-            x_label_baseline_shift = "-200%"
-
-        if axes.y.spine._position == "low":
-            y_offset = -axes.padding
-            y_spine_x = axes._xmin_range
-            y_ticks_above = 0
-            y_ticks_below = 5
-            y_ticks_labels_location = "above"
-            y_label_baseline_shift = "200%"
-        elif axes.y.spine._position == "high":
-            y_offset = axes.padding
-            y_spine_x = axes._xmax_range
-            y_ticks_above = 5
-            y_ticks_below = 0
-            y_ticks_labels_location = "below"
-            y_label_baseline_shift = "-200%"
-        else:
-            y_offset = 0
-            y_spine_x = axes._project_x(axes.y.spine._position)
-            y_ticks_above = 3
-            y_ticks_below = 3
-            y_ticks_labels_location = "below"
-            y_label_baseline_shift = "200%"
-
-        _render(canvas, axes.x, context.copy(
-            root=axes_xml,
-            x1=axes._xmin_range,
-            y1=x_spine_y,
-            x2=axes._xmax_range,
-            y2=x_spine_y,
-            offset=x_offset,
-            ticks_above=x_ticks_above,
-            ticks_below=x_ticks_below,
-            ticks_labels_location=x_ticks_labels_location,
-            label_baseline_shift=x_label_baseline_shift,
-            ))
-
-        _render(canvas, axes.y, context.copy(
-            root=axes_xml,
-            x1=y_spine_x,
-            y1=axes._ymax_range,
-            x2=y_spine_x,
-            y2=axes._ymin_range,
-            offset=y_offset,
-            ticks_above=y_ticks_above,
-            ticks_below=y_ticks_below,
-            ticks_labels_location=y_ticks_labels_location,
-            label_baseline_shift=y_label_baseline_shift,
-            ))
-
+        _render(canvas, axes.x, context.copy(parent=cartesian_xml))
+        _render(canvas, axes.y, context.copy(parent=cartesian_xml))
         _draw_text(
-            root=axes_xml,
+            root=cartesian_xml,
             text=axes.label._text,
             x=(axes._xmin_range + axes._xmax_range) * 0.5,
-            y=axes._ymin_range,
+            y=axes._ymin_range - axes.label._offset,
             style=axes.label._style,
             )
 
 
-@dispatch(toyplot.canvas.Canvas, toyplot.axes.Table, _RenderContext)
+@dispatch(toyplot.canvas.Canvas, toyplot.coordinates.Table, RenderContext)
 def _render(canvas, axes, context):
-    axes._finalize()
+    axes_xml = xml.SubElement(context.parent, "g", id=context.get_id(
+        axes), attrib={"class": "toyplot-coordinates-Table"})
 
-    axes_xml = xml.SubElement(context.root, "g", id=context.get_id(
-        axes), attrib={"class": "toyplot-axes-Table"})
+    _render_table(owner=axes, key="data", label="table data", table=axes._cell_data, filename=axes._filename, context=context)
 
     # Render title
     _draw_text(
@@ -1591,103 +1799,139 @@ def _render(canvas, axes, context):
         style=axes._label._style,
         )
 
-    # Render children.
-    for child in axes._children:
-        _render(axes._parent, child, context.copy(root=axes_xml))
+    # For each unique group of cells.
+    for cell_group in numpy.unique(axes._cell_group):
+        cell_selection = (axes._cell_group == cell_group)
 
-    # Render visible cells.
-    for cell in axes._visible_cells:
-        if cell._bstyle is not None:
-            cell_xml = xml.SubElement(
-                axes_xml,
-                "rect",
-                x=repr(
-                    cell.left),
-                y=repr(
-                    cell.top),
-                width=repr(
-                    cell.right -
-                    cell.left),
-                height=repr(
-                    cell.bottom -
-                    cell.top),
-                style=_css_style(
-                    cell._bstyle))
-            if cell._title is not None:
-                xml.SubElement(cell_xml, "title").text = str(cell._title)
-
-        if cell._data is None:
+        # Skip hidden groups.
+        cell_show = axes._cell_show[cell_selection][0]
+        if not cell_show:
             continue
 
-        prefix, separator, suffix = cell._format.format(cell._data)
+        # Identify the closed range of rows and columns that contain the cell.
+        cell_rows, cell_columns = numpy.nonzero(cell_selection)
+        row_min = cell_rows.min()
+        row_max = cell_rows.max()
+        column_min = cell_columns.min()
+        column_max = cell_columns.max()
 
-        padding = 5
+        # Optionally render the cell background.
+        cell_style = axes._cell_style[cell_selection][0]
+        cell_link = axes._cell_link[cell_selection][0]
+        cell_title = axes._cell_title[cell_selection][0]
+        if cell_style is not None or cell_link is not None or cell_title is not None:
+            # Compute the cell boundaries.
+            cell_top = axes._cell_top[row_min]
+            cell_bottom = axes._cell_bottom[row_max]
+            cell_left = axes._cell_left[column_min]
+            cell_right = axes._cell_right[column_max]
 
-        column_left = cell.left + padding
-        column_right = cell.right - padding
-        column_center = (cell.left + cell.right) / 2
+            cell_parent_xml = axes_xml
+            if cell_link is not None:
+                cell_parent_xml = xml.SubElement(
+                    cell_parent_xml,
+                    "a",
+                    attrib={"xlink:href": cell_link},
+                    )
 
-        row_top = cell.top
-        row_bottom = cell.bottom
-        row_center = (cell.top + cell.bottom) / 2
+            cell_xml = xml.SubElement(
+                cell_parent_xml,
+                "rect",
+                x=repr(cell_left),
+                y=repr(cell_top),
+                width=repr(cell_right - cell_left),
+                height=repr(cell_bottom - cell_top),
+                style=_css_style({"fill":"transparent", "stroke":"none"}, cell_style),
+                )
 
-        y = row_center + cell._row_offset
+            if cell_title is not None:
+                xml.SubElement(cell_xml, "title").text = str(cell_title)
 
-        if cell._align == "left":
-            x = column_left + cell._column_offset
-            _draw_text(
-                root=axes_xml,
-                x=x,
-                y=y,
-                style=toyplot.style.combine(cell._style, {"text-anchor": "begin"}),
-                text=prefix + separator + suffix,
-                )
-        elif cell._align == "center":
-            x = column_center + cell._column_offset
-            _draw_text(
-                root=axes_xml,
-                x=x,
-                y=y,
-                angle=cell._angle,
-                style=toyplot.style.combine(cell._style, {"text-anchor": "middle"}),
-                text=prefix + separator + suffix,
-                )
-        elif cell._align == "right":
-            x = column_right + cell._column_offset
-            _draw_text(
-                root=axes_xml,
-                x=x,
-                y=y,
-                style=toyplot.style.combine(cell._style, {"text-anchor": "end"}),
-                text=prefix + separator + suffix,
-                )
-        elif cell._align is "separator":
-            x = column_center + cell._column_offset
-            _draw_text(
-                root=axes_xml,
-                x=x - 2,
-                y=y,
-                style=toyplot.style.combine(cell._style, {"text-anchor": "end"}),
-                text=prefix,
-                )
-            _draw_text(
-                root=axes_xml,
-                x=x,
-                y=y,
-                style=toyplot.style.combine(cell._style, {"text-anchor": "middle"}),
-                text=separator,
-                )
-            _draw_text(
-                root=axes_xml,
-                x=x + 2,
-                y=y,
-                style=toyplot.style.combine(cell._style, {"text-anchor": "begin"}),
-                text=suffix,
-                )
+        # Render the cell data.
+        cell_data = axes._cell_data[cell_selection][0]
+        if cell_data is not None:
+            # Compute the cell boundaries.
+            padding = 5
+            cell_top = axes._cell_top[row_min]
+            cell_bottom = axes._cell_bottom[row_max]
+            cell_left = axes._cell_left[column_min] + padding
+            cell_right = axes._cell_right[column_max] - padding
+
+            # Compute the text placement within the cell boundaries.
+            cell_align = axes._cell_align[cell_selection][0]
+            if cell_align is None:
+                cell_align = "left"
+            cell_angle = axes._cell_angle[cell_selection][0]
+            y = (cell_top + cell_bottom) / 2
+
+            # Format the cell data.
+            cell_format = axes._cell_format[cell_selection][0]
+            prefix, separator, suffix = cell_format.format(cell_data)
+
+            # Get the cell style.
+            cell_lstyle = axes._cell_lstyle[cell_selection][0]
+
+            # Render the cell data.
+            if cell_align == "left":
+                x = cell_left
+                _draw_text(
+                    root=axes_xml,
+                    x=x,
+                    y=y,
+                    style=toyplot.style.combine(cell_lstyle, {"text-anchor": "start"}),
+                    text=prefix + separator + suffix,
+                    )
+            elif cell_align == "center":
+                x = (cell_left + cell_right) / 2
+                _draw_text(
+                    root=axes_xml,
+                    x=x,
+                    y=y,
+                    angle=cell_angle,
+                    style=toyplot.style.combine(cell_lstyle, {"text-anchor": "middle"}),
+                    text=prefix + separator + suffix,
+                    )
+            elif cell_align == "right":
+                x = cell_right
+                _draw_text(
+                    root=axes_xml,
+                    x=x,
+                    y=y,
+                    style=toyplot.style.combine(cell_lstyle, {"text-anchor": "end"}),
+                    text=prefix + separator + suffix,
+                    )
+            elif cell_align is "separator":
+                x = (cell_left + cell_right) / 2
+                _draw_text(
+                    root=axes_xml,
+                    x=x - 2,
+                    y=y,
+                    style=toyplot.style.combine(cell_lstyle, {"text-anchor": "end"}),
+                    text=prefix,
+                    )
+                _draw_text(
+                    root=axes_xml,
+                    x=x,
+                    y=y,
+                    style=toyplot.style.combine(cell_lstyle, {"text-anchor": "middle"}),
+                    text=separator,
+                    )
+                _draw_text(
+                    root=axes_xml,
+                    x=x + 2,
+                    y=y,
+                    style=toyplot.style.combine(cell_lstyle, {"text-anchor": "start"}),
+                    text=suffix,
+                    )
+
+    # Render children.
+    for child in axes._axes:
+        _render(axes._parent, child._finalize(), context.copy(parent=axes_xml))
 
     # Render grid lines.
-    column_boundaries = axes._column_boundaries
     row_boundaries = axes._row_boundaries
+    column_boundaries = axes._column_boundaries
+
     separation = axes._separation / 2
 
     def contiguous(a):
@@ -1701,7 +1945,7 @@ def _render(canvas, axes, context):
         return result
 
     hlines = numpy.copy(axes._hlines)
-    hlines[axes._hmask] = False
+    hlines[numpy.logical_not(axes._hlines_show)] = False
     for row_index, row in enumerate(hlines):
         y = row_boundaries[row_index]
         for start, end, line_type in contiguous(row):
@@ -1744,7 +1988,7 @@ def _render(canvas, axes, context):
                         axes._gstyle))
 
     vlines = numpy.copy(axes._vlines)
-    vlines[axes._vmask] = False
+    vlines[numpy.logical_not(axes._vlines_show)] = False
     for column_index, column in enumerate(vlines.T):
         x = column_boundaries[column_index]
         for start, end, line_type in contiguous(column):
@@ -1779,7 +2023,12 @@ def _render(canvas, axes, context):
                     )
 
 
-@dispatch(toyplot.axes.Cartesian, toyplot.mark.BarBoundaries, _RenderContext)
+@dispatch(toyplot.coordinates.Cartesian, type(None), RenderContext)
+def _render(axes, mark, context):
+    pass
+
+
+@dispatch(toyplot.coordinates.Cartesian, toyplot.mark.BarBoundaries, RenderContext)
 def _render(axes, mark, context):
     left = mark._table[mark._left[0]]
     right = mark._table[mark._right[0]]
@@ -1791,27 +2040,28 @@ def _render(axes, mark, context):
         axis2 = "y"
         distance1 = "width"
         distance2 = "height"
-        left = axes._project_x(left)
-        right = axes._project_x(right)
-        boundaries = axes._project_y(boundaries)
+        left = axes.project("x", left)
+        right = axes.project("x", right)
+        boundaries = axes.project("y", boundaries)
     elif mark._coordinate_axes.tolist() == ["y", "x"]:
         axis1 = "y"
         axis2 = "x"
         distance1 = "height"
         distance2 = "width"
-        left = axes._project_y(left)
-        right = axes._project_y(right)
-        boundaries = axes._project_x(boundaries)
+        left = axes.project("y", left)
+        right = axes.project("y", right)
+        boundaries = axes.project("x", boundaries)
 
     mark_xml = xml.SubElement(
-        context.root,
+        context.parent,
         "g",
         style=_css_style(
             mark._style),
         id=context.get_id(mark),
         attrib={
             "class": "toyplot-mark-BarBoundaries"})
-    context.add_data_table(mark, mark._table, title="Bar Data", filename=mark._filename)
+
+    _render_table(owner=mark, key="data", label="bar data", table=mark._table, filename=mark._filename, context=context)
 
     for boundary1, boundary2, fill, opacity, title in zip(
             boundaries.T[:-1],
@@ -1856,7 +2106,7 @@ def _render(axes, mark, context):
                 xml.SubElement(datum_xml, "title").text = str(dtitle)
 
 
-@dispatch(toyplot.axes.Cartesian, toyplot.mark.BarMagnitudes, _RenderContext)
+@dispatch(toyplot.coordinates.Cartesian, toyplot.mark.BarMagnitudes, RenderContext)
 def _render(axes, mark, context):
     left = mark._table[mark._left[0]]
     right = mark._table[mark._right[0]]
@@ -1870,27 +2120,28 @@ def _render(axes, mark, context):
         axis2 = "y"
         distance1 = "width"
         distance2 = "height"
-        left = axes._project_x(left)
-        right = axes._project_x(right)
-        boundaries = axes._project_y(boundaries)
+        left = axes.project("x", left)
+        right = axes.project("x", right)
+        boundaries = axes.project("y", boundaries)
     elif mark._coordinate_axes.tolist() == ["y", "x"]:
         axis1 = "y"
         axis2 = "x"
         distance1 = "height"
         distance2 = "width"
-        left = axes._project_y(left)
-        right = axes._project_y(right)
-        boundaries = axes._project_x(boundaries)
+        left = axes.project("y", left)
+        right = axes.project("y", right)
+        boundaries = axes.project("x", boundaries)
 
     mark_xml = xml.SubElement(
-        context.root,
+        context.parent,
         "g",
         style=_css_style(
             mark._style),
         id=context.get_id(mark),
         attrib={
             "class": "toyplot-mark-BarMagnitudes"})
-    context.add_data_table(mark, mark._table, title="Bar Data", filename=mark._filename)
+
+    _render_table(owner=mark, key="data", label="bar data", table=mark._table, filename=mark._filename, context=context)
 
     for boundary1, boundary2, fill, opacity, title in zip(
             boundaries.T[:-1],
@@ -1928,27 +2179,28 @@ def _render(axes, mark, context):
                 xml.SubElement(datum_xml, "title").text = str(dtitle)
 
 
-@dispatch(toyplot.axes.Cartesian, toyplot.mark.FillBoundaries, _RenderContext)
+@dispatch(toyplot.coordinates.Cartesian, toyplot.mark.FillBoundaries, RenderContext)
 def _render(axes, mark, context):
     boundaries = numpy.ma.column_stack(
         [mark._table[key] for key in mark._boundaries])
 
     if mark._coordinate_axes.tolist() == ["x", "y"]:
-        position = axes._project_x(mark._table[mark._position[0]])
-        boundaries = axes._project_y(boundaries)
+        position = axes.project("x", mark._table[mark._position[0]])
+        boundaries = axes.project("y", boundaries)
     elif mark._coordinate_axes.tolist() == ["y", "x"]:
-        position = axes._project_y(mark._table[mark._position[0]])
-        boundaries = axes._project_x(boundaries)
+        position = axes.project("y", mark._table[mark._position[0]])
+        boundaries = axes.project("x", boundaries)
 
     mark_xml = xml.SubElement(
-        context.root,
+        context.parent,
         "g",
         style=_css_style(
             mark._style),
         id=context.get_id(mark),
         attrib={
             "class": "toyplot-mark-FillBoundaries"})
-    context.add_data_table(mark, mark._table, title="Fill Data", filename=mark._filename)
+
+    _render_table(owner=mark, key="data", label="fill data", table=mark._table, filename=mark._filename, context=context)
 
     for boundary1, boundary2, fill, opacity, title in zip(
             boundaries.T[:-1], boundaries.T[1:], mark._fill, mark._opacity, mark._title):
@@ -1976,7 +2228,7 @@ def _render(axes, mark, context):
                 xml.SubElement(series_xml, "title").text = str(title)
 
 
-@dispatch(toyplot.axes.Cartesian, toyplot.mark.FillMagnitudes, _RenderContext)
+@dispatch(toyplot.coordinates.Cartesian, toyplot.mark.FillMagnitudes, RenderContext)
 def _render(axes, mark, context):
     magnitudes = numpy.ma.column_stack(
         [mark._table[mark._baseline[0]]] + [mark._table[key] for key in mark._magnitudes])
@@ -1986,21 +2238,22 @@ def _render(axes, mark, context):
     segments = _flat_contiguous(not_null)
 
     if mark._coordinate_axes.tolist() == ["x", "y"]:
-        position = axes._project_x(mark._table[mark._position[0]])
-        boundaries = axes._project_y(boundaries)
+        position = axes.project("x", mark._table[mark._position[0]])
+        boundaries = axes.project("y", boundaries)
     elif mark._coordinate_axes.tolist() == ["y", "x"]:
-        position = axes._project_y(mark._table[mark._position[0]])
-        boundaries = axes._project_x(boundaries)
+        position = axes.project("y", mark._table[mark._position[0]])
+        boundaries = axes.project("x", boundaries)
 
     mark_xml = xml.SubElement(
-        context.root,
+        context.parent,
         "g",
         style=_css_style(
             mark._style),
         id=context.get_id(mark),
         attrib={
             "class": "toyplot-mark-FillMagnitudes"})
-    context.add_data_table(mark, mark._table, title="Fill Data", filename=mark._filename)
+
+    _render_table(owner=mark, key="data", label="fill data", table=mark._table, filename=mark._filename, context=context)
 
     for boundary1, boundary2, fill, opacity, title in zip(
             boundaries.T[:-1], boundaries.T[1:], mark._fill, mark._opacity, mark._title):
@@ -2021,14 +2274,14 @@ def _render(axes, mark, context):
                 xml.SubElement(series_xml, "title").text = str(title)
 
 
-@dispatch(toyplot.axes.Cartesian, toyplot.mark.AxisLines, _RenderContext)
+@dispatch(toyplot.coordinates.Cartesian, toyplot.mark.AxisLines, RenderContext)
 def _render(axes, mark, context):
     if mark._coordinate_axes[0] == "x":
         p1 = "x1"
         p2 = "x2"
         b1 = "y1"
         b2 = "y2"
-        position = axes._project_x(mark._table[mark._coordinates[0]])
+        position = axes.project("x", mark._table[mark._coordinates[0]])
         boundary1 = axes._ymin_range
         boundary2 = axes._ymax_range
     elif mark._coordinate_axes[0] == "y":
@@ -2036,11 +2289,11 @@ def _render(axes, mark, context):
         p2 = "y2"
         b1 = "x1"
         b2 = "x2"
-        position = axes._project_y(mark._table[mark._coordinates[0]])
+        position = axes.project("y", mark._table[mark._coordinates[0]])
         boundary1 = axes._xmin_range
         boundary2 = axes._xmax_range
     mark_xml = xml.SubElement(
-        context.root,
+        context.parent,
         "g",
         style=_css_style(
             mark._style),
@@ -2073,157 +2326,133 @@ def _render(axes, mark, context):
             xml.SubElement(datum_xml, "title").text = str(dtitle)
 
 
-@dispatch((toyplot.canvas.Canvas, toyplot.axes.Cartesian), toyplot.mark.Legend, _RenderContext)
-def _render(canvas, legend, context):
-    x = legend._xmin
-    y = legend._ymin
-    width = legend._xmax - legend._xmin
-    height = legend._ymax - legend._ymin
-    xml.SubElement(
-        context.root,
-        "rect",
-        x=repr(x),
-        y=repr(y),
-        width=repr(width),
-        height=repr(height),
-        style=_css_style(legend._style),
-        id=context.get_id(legend),
-        attrib={"class": "toyplot-mark-Legend"},
-        )
-
-    mark_count = len(legend._marks)
-    if mark_count:
-        mark_gutter = legend._gutter
-        mark_height = (
-            height - (legend._gutter * (mark_count + 1))) / mark_count
-
-        for i, item in enumerate(legend._marks):
-            mark_x = x + mark_gutter
-            mark_y = y + ((i + 1) * mark_gutter) + (i * mark_height)
-            mark_width = mark_height
-
-            mark_style = {}
-            if isinstance(item, tuple) and len(item) == 2:
-                mark_label, mark = item
-            elif isinstance(item, tuple) and len(item) == 3:
-                mark_label, mark, mark_style = item
-
-            if mark == "line":
-                xml.SubElement(
-                    context.root,
-                    "line",
-                    x1=repr(mark_x),
-                    y1=repr(mark_y + mark_height),
-                    x2=repr(mark_x + mark_width),
-                    y2=repr(mark_y),
-                    style=_css_style(mark_style),
-                    )
-            elif mark == "rect":
-                xml.SubElement(
-                    context.root,
-                    "rect",
-                    x=repr(mark_x),
-                    y=repr(mark_y),
-                    width=repr(mark_width),
-                    height=repr(mark_height),
-                    style=_css_style({"stroke": "none"}, mark_style),
-                    )
-            elif isinstance(mark, toyplot.mark.Plot):
-                dstyle = toyplot.style.combine(
-                    {"stroke": toyplot.color.to_css(mark._stroke[0])}, mark._style)
-                xml.SubElement(
-                    context.root,
-                    "line",
-                    x1=repr(mark_x),
-                    y1=repr(mark_y + mark_height),
-                    x2=repr(mark_x + mark_width),
-                    y2=repr(mark_y),
-                    style=_css_style(dstyle, mark_style))
-            elif isinstance(mark, toyplot.mark.Scatterplot):
-                dstyle = toyplot.style.combine(
-                    {
-                        "fill": toyplot.color.to_css(mark._table[mark._mfill[0]][0]),
-                        "stroke": toyplot.color.to_css(mark._table[mark._mstroke[0]][0]),
-                        "opacity": mark._table[mark._mopacity[0]][0],
-                    },
-                    mark_style)
-                _draw_marker(
-                    context.root,
-                    mark_x + (mark_width / 2),
-                    mark_y + (mark_height / 2),
-                    min(mark_width, mark_height),
-                    mark._table[mark._marker[0]][0],
-                    dstyle,
-                    {},
-                    )
-                pass
-            elif isinstance(mark, (toyplot.mark.BarBoundaries, toyplot.mark.BarMagnitudes, toyplot.mark.FillBoundaries, toyplot.mark.FillMagnitudes)):
-                dstyle = toyplot.style.combine({"fill": toyplot.color.to_css(
-                    mark._fill[0]), "opacity": mark._opacity[0]}, mark._style)
-                xml.SubElement(
-                    context.root,
-                    "rect",
-                    x=repr(mark_x),
-                    y=repr(mark_y),
-                    width=repr(mark_width),
-                    height=repr(mark_height),
-                    style=_css_style(dstyle, mark_style),
-                    )
-            else:
-                computed_style = toyplot.style.combine(
-                    {"stroke": toyplot.color.near_black, "fill": "none"}, mark_style)
-                _draw_marker(
-                    context.root,
-                    mark_x + (mark_width / 2),
-                    mark_y + (mark_height / 2),
-                    min(mark_width, mark_height),
-                    mark,
-                    computed_style,
-                    {},
-                    )
-
-            _draw_text(
-                root=context.root,
-                text=mark_label,
-                x=x + mark_width + (2 * mark_gutter),
-                y=y + ((i + 1) * mark_gutter) +  (i * mark_height) + (mark_height / 2),
-                style=legend._lstyle,
-                )
-
-
-@dispatch(toyplot.axes.Cartesian, toyplot.mark.Graph, _RenderContext)
+@dispatch(toyplot.coordinates.Cartesian, toyplot.mark.Graph, RenderContext)
 def _render(axes, mark, context): # pragma: no cover
-    # Project edge coordinates
+    # Project edge coordinates.
     for i in range(2):
         if mark._coordinate_axes[i] == "x":
-            x = axes._project_x(mark._ecoordinates.T[i])
+            edge_x = axes.project("x", mark._ecoordinates.T[i])
         elif mark._coordinate_axes[i] == "y":
-            y = axes._project_y(mark._ecoordinates.T[i])
+            edge_y = axes.project("y", mark._ecoordinates.T[i])
+    edge_coordinates = numpy.column_stack((edge_x, edge_y))
 
-    mark_xml = xml.SubElement(context.root, "g", id=context.get_id(mark), attrib={"class": "toyplot-mark-Graph"})
-    #context.add_data_table(mark, mark._vtable, title="Graph Vertex Data", filename=mark._vertex_filename)
-    #context.add_data_table(mark, mark._etable, title="Graph Edge Data", filename=mark._edge_filename)
+    # Project vertex coordinates.
+    for i in range(2):
+        if mark._coordinate_axes[i] == "x":
+            vertex_x = axes.project("x", mark._vtable[mark._vcoordinates[i]])
+        elif mark._coordinate_axes[i] == "y":
+            vertex_y = axes.project("y", mark._vtable[mark._vcoordinates[i]])
 
-    coordinate_index = 0
-    edge_xml = xml.SubElement(mark_xml, "g", attrib={"class": "toyplot-Edges"})
-    for esource, etarget, eshape, ecolor, ewidth, eopacity in zip(
-            mark._etable[mark._esource[0]],
-            mark._etable[mark._etarget[0]],
-            mark._etable[mark._eshape[0]],
+    # Create final vertex markers.
+    vertex_markers = []
+    for vmarker, vsize, vcolor, vopacity in zip(
+            mark._vtable[mark._vmarker[0]],
+            mark._vtable[mark._vsize[0]],
+            mark._vtable[mark._vcolor[0]],
+            mark._vtable[mark._vopacity[0]],
+        ):
+        if vmarker:
+            vstyle = toyplot.style.combine(
+                {
+                    "fill": toyplot.color.to_css(vcolor),
+                    "stroke": toyplot.color.to_css(vcolor),
+                    "opacity": vopacity,
+                },
+                mark._vstyle)
+            vertex_marker = toyplot.marker.create(size=vsize, mstyle=vstyle, lstyle=mark._vlstyle) + toyplot.marker.convert(vmarker)
+            vertex_markers.append(vertex_marker)
+        else:
+            vertex_markers.append(None)
+
+    # Create final edge styles.
+    edge_styles = []
+    for ecolor, ewidth, eopacity in zip(
             mark._etable[mark._ecolor[0]],
             mark._etable[mark._ewidth[0]],
             mark._etable[mark._eopacity[0]],
         ):
-        estyle = toyplot.style.combine(
-            {
-                "fill": "none",
-                "stroke": toyplot.color.to_css(ecolor),
-                "stroke-width": ewidth,
-                "stroke-opacity": eopacity,
-            },
-            mark._estyle)
+        edge_styles.append(
+            toyplot.style.combine(
+                {
+                    "fill": "none",
+                    "stroke": toyplot.color.to_css(ecolor),
+                    "stroke-width": ewidth,
+                    "stroke-opacity": eopacity,
+                },
+                mark._estyle,
+            )
+        )
+
+    edge_marker_styles = []
+    for ecolor, estyle in zip(
+            mark._etable[mark._ecolor[0]],
+            edge_styles,
+            ):
+        edge_marker_styles.append(toyplot.style.combine(estyle, {"fill": toyplot.color.to_css(ecolor)}))
+
+    # Identify ranges of edge coordinates for each edge.
+    index = 0
+    edge_start = []
+    edge_end = []
+    for eshape in mark._etable[mark._eshape[0]]:
+        edge_start.append(index)
+        for segment in eshape:
+            if segment == "M":
+                count = 1
+            elif segment == "L":
+                count = 1
+            elif segment == "Q":
+                count = 2
+            elif segment == "C":
+                count = 3
+            index += count
+        edge_end.append(index)
+
+    # Adjust edge coordinates so edges don't overlap vertex markers.
+    for esource, etarget, start, end in zip(
+            mark._etable[mark._esource[0]],
+            mark._etable[mark._etarget[0]],
+            edge_start,
+            edge_end,
+        ):
+
+        # Skip loop edges.
+        if esource == etarget:
+            continue
+
+        source_vertex_marker = vertex_markers[esource]
+        target_vertex_marker = vertex_markers[etarget]
+
+        if source_vertex_marker:
+            dp = source_vertex_marker.intersect(edge_coordinates[start + 1] - edge_coordinates[start])
+            edge_coordinates[start] += dp
+
+        if target_vertex_marker:
+            dp = target_vertex_marker.intersect(edge_coordinates[end - 2] - edge_coordinates[end - 1])
+            edge_coordinates[end - 1] += dp
+
+    # Render the graph.
+    mark_xml = xml.SubElement(context.parent, "g", id=context.get_id(mark), attrib={"class": "toyplot-mark-Graph"})
+    _render_table(owner=mark, key="vertex_data", label="graph vertex data", table=mark._vtable, filename=mark._vfilename, context=context)
+    _render_table(owner=mark, key="edge_data", label="graph edge data", table=mark._etable, filename=mark._efilename, context=context)
+
+    # Render edges.
+    edge_xml = xml.SubElement(mark_xml, "g", attrib={"class": "toyplot-Edges"})
+    for esource, etarget, eshape, estyle, hmarker, mmarker, mposition, tmarker, start, end in zip(
+            mark._etable[mark._esource[0]],
+            mark._etable[mark._etarget[0]],
+            mark._etable[mark._eshape[0]],
+            edge_styles,
+            mark._etable[mark._hmarker[0]],
+            mark._etable[mark._mmarker[0]],
+            mark._etable[mark._mposition[0]],
+            mark._etable[mark._tmarker[0]],
+            edge_start,
+            edge_end,
+        ):
 
         path = []
+        index = 0
         for segment in eshape:
             if segment == "M":
                 count = 1
@@ -2234,10 +2463,10 @@ def _render(axes, mark, context): # pragma: no cover
             elif segment == "C":
                 count = 3
             path.append(segment)
-            for i in range(count):
-                path.append(str(x[coordinate_index]))
-                path.append(str(y[coordinate_index]))
-                coordinate_index += 1
+            for _ in range(count):
+                path.append(str(edge_coordinates[start + index][0]))
+                path.append(str(edge_coordinates[start + index][1]))
+                index += 1
 
         xml.SubElement(
             edge_xml,
@@ -2246,46 +2475,136 @@ def _render(axes, mark, context): # pragma: no cover
             style=_css_style(estyle),
             )
 
-    # Project vertex coordinates
-    for i in range(2):
-        if mark._coordinate_axes[i] == "x":
-            x = axes._project_x(mark._vtable[mark._vcoordinates[i]])
-        elif mark._coordinate_axes[i] == "y":
-            y = axes._project_y(mark._vtable[mark._vcoordinates[i]])
+    # Render edge head markers.
+    marker_xml = xml.SubElement(edge_xml, "g", attrib={"class": "toyplot-HeadMarkers"})
+    for marker, mstyle, estart, eend in zip(
+            mark._etable[mark._hmarker[0]],
+            edge_marker_styles,
+            edge_start,
+            edge_end,
+        ):
+        if marker:
+            # Create the marker with defaults.
+            marker = toyplot.marker.create(size=10, mstyle=mstyle) + toyplot.marker.convert(marker)
 
+            # Compute the marker angle using the first edge segment.
+            edge_angle = -numpy.rad2deg(numpy.arctan2(
+                edge_coordinates[estart+1][1] - edge_coordinates[estart][1],
+                edge_coordinates[estart+1][0] - edge_coordinates[estart][0],
+                ))
+
+            transform = "translate(%r, %r)" % (edge_coordinates[estart][0], edge_coordinates[estart][1])
+            if edge_angle:
+                transform += " rotate(%r)" % (-edge_angle,)
+            transform += " translate(%r, 0)" % (marker.size / 2,)
+            if marker.angle is not None:
+                if isinstance(marker.angle, toyplot.compatibility.string_type) and marker.angle[0:1] == "r":
+                    angle = float(marker.angle[1:])
+                else:
+                    angle = -edge_angle + float(marker.angle)
+                transform += " rotate(%r)" % (-angle,)
+
+
+            _draw_marker(
+                marker_xml,
+                marker=marker,
+                transform=transform,
+                )
+
+    # Render edge middle markers.
+    marker_xml = xml.SubElement(edge_xml, "g", attrib={"class": "toyplot-MiddleMarkers"})
+    for mstyle, marker, mposition, start, end in zip(
+            edge_marker_styles,
+            mark._etable[mark._mmarker[0]],
+            mark._etable[mark._mposition[0]],
+            edge_start,
+            edge_end,
+        ):
+        if marker:
+            # Create the marker with defaults.
+            marker = toyplot.marker.create(size=10, mstyle=mstyle) + toyplot.marker.convert(marker)
+
+            # Place the marker within the first edge segment.
+            x, y = edge_coordinates[start] * (1 - mposition) + edge_coordinates[start+1] * mposition
+
+            # Compute the marker angle using the first edge segment.
+            angle = -numpy.rad2deg(numpy.arctan2(
+                edge_coordinates[start+1][1] - edge_coordinates[start][1],
+                edge_coordinates[start+1][0] - edge_coordinates[start][0],
+                ))
+            if marker.angle is not None:
+                if isinstance(marker.angle, toyplot.compatibility.string_type) and marker.angle[0:1] == "r":
+                    angle += float(marker.angle[1:])
+                else:
+                    angle = float(marker.angle)
+
+            marker = marker + toyplot.marker.create(angle=angle)
+
+            _draw_marker(
+                marker_xml,
+                cx=x,
+                cy=y,
+                marker=marker,
+                )
+
+    # Render edge tail markers.
+    marker_xml = xml.SubElement(edge_xml, "g", attrib={"class": "toyplot-TailMarkers"})
+    for mstyle, marker, start, end in zip(
+            edge_marker_styles,
+            mark._etable[mark._tmarker[0]],
+            edge_start,
+            edge_end,
+        ):
+        if marker:
+            # Create the marker with defaults.
+            marker = toyplot.marker.create(size=10, mstyle=mstyle, lstyle={}) + toyplot.marker.convert(marker)
+
+            # Compute the marker angle using the last edge segment.
+            edge_angle = -numpy.rad2deg(numpy.arctan2(
+                edge_coordinates[end-1][1] - edge_coordinates[end-2][1],
+                edge_coordinates[end-1][0] - edge_coordinates[end-2][0],
+                ))
+
+            transform = "translate(%r, %r)" % (edge_coordinates[end-1][0], edge_coordinates[end-1][1])
+            if edge_angle:
+                transform += " rotate(%r)" % (-edge_angle,)
+            transform += " translate(%r, 0)" % (-marker.size / 2,)
+            if marker.angle is not None:
+                if isinstance(marker.angle, toyplot.compatibility.string_type) and marker.angle[0:1] == "r":
+                    angle = float(marker.angle[1:])
+                else:
+                    angle = -edge_angle + float(marker.angle)
+                transform += " rotate(%r)" % (-angle,)
+
+
+            _draw_marker(
+                marker_xml,
+                marker=marker,
+                transform=transform,
+                )
+
+    # Render vertex markers
     vertex_xml = xml.SubElement(mark_xml, "g", attrib={"class": "toyplot-Vertices"})
-    for vx, vy, vmarker, vsize, vcolor, vopacity, vtitle in zip(
-            x,
-            y,
-            mark._vtable[mark._vmarker[0]],
-            mark._vtable[mark._vsize[0]],
-            mark._vtable[mark._vcolor[0]],
-            mark._vtable[mark._vopacity[0]],
+    for vx, vy, vmarker, vtitle in zip(
+            vertex_x,
+            vertex_y,
+            vertex_markers,
             mark._vtable[mark._vtitle[0]],
         ):
-        vstyle = toyplot.style.combine(
-            {
-                "fill": toyplot.color.to_css(vcolor),
-                "stroke": toyplot.color.to_css(vcolor),
-                "opacity": vopacity,
-            },
-            mark._vstyle)
-        _draw_marker(
-            vertex_xml,
-            vx,
-            vy,
-            vsize,
-            vmarker,
-            vstyle,
-            mark._vlstyle,
-            extra_class="toyplot-Datum",
-            title=vtitle,
-            )
+        if vmarker:
+            _draw_marker(
+                vertex_xml,
+                cx=vx,
+                cy=vy,
+                marker=vmarker,
+                extra_class="toyplot-Datum",
+                title=vtitle,
+                )
 
     # Render vertex labels
     if mark._vlshow:
         vlabel_xml = xml.SubElement(mark_xml, "g", attrib={"class": "toyplot-Labels"})
-        for dx, dy, dtext in zip(x, y, mark._vtable[mark._vlabel[0]]):
+        for dx, dy, dtext in zip(vertex_x, vertex_y, mark._vtable[mark._vlabel[0]]):
             _draw_text(
                 root=vlabel_xml,
                 text=toyplot.compatibility.unicode_type(dtext),
@@ -2296,26 +2615,27 @@ def _render(axes, mark, context): # pragma: no cover
                 )
 
 
-@dispatch(toyplot.axes.Cartesian, toyplot.mark.Plot, _RenderContext)
+@dispatch(toyplot.coordinates.Cartesian, toyplot.mark.Plot, RenderContext)
 def _render(axes, mark, context):
     position = mark._table[mark._coordinates[0]]
     series = numpy.ma.column_stack([mark._table[key] for key in mark._series])
 
     if mark._coordinate_axes[0] == "x":
-        position = axes._project_x(position)
-        series = axes._project_y(series)
+        position = axes.project("x", position)
+        series = axes.project("y", series)
     elif mark._coordinate_axes[0] == "y":
-        position = axes._project_y(position)
-        series = axes._project_x(series)
+        position = axes.project("y", position)
+        series = axes.project("x", series)
 
     mark_xml = xml.SubElement(
-        context.root,
+        context.parent,
         "g",
         style=_css_style(toyplot.style.combine({"fill":"none"}, mark._style)),
         id=context.get_id(mark),
         attrib={
             "class": "toyplot-mark-Plot"})
-    context.add_data_table(mark, mark._table, title="Plot Data", filename=mark._filename)
+
+    _render_table(owner=mark, key="data", label="plot data", table=mark._table, filename=mark._filename, context=context)
 
     for series, stroke, stroke_width, stroke_opacity, stroke_title, marker, msize, mfill, mstroke, mopacity, mtitle in zip(
             series.T,
@@ -2373,46 +2693,45 @@ def _render(axes, mark, context):
                 mopacity[not_null],
                 mtitle[not_null],
             ):
-            dstyle = toyplot.style.combine(
-                {
-                    "fill": toyplot.color.to_css(dfill),
-                    "stroke": toyplot.color.to_css(dstroke),
-                    "opacity": dopacity},
-                mark._mstyle)
-            datum_xml = _draw_marker(
-                series_xml,
-                dx,
-                dy,
-                dsize,
-                dmarker,
-                dstyle,
-                mark._mlstyle,
-                extra_class="toyplot-Datum",
-                title=dtitle,
-                )
+            if dmarker:
+                dstyle = toyplot.style.combine(
+                    {
+                        "fill": toyplot.color.to_css(dfill),
+                        "stroke": toyplot.color.to_css(dstroke),
+                        "opacity": dopacity},
+                    mark._mstyle)
+                _draw_marker(
+                    series_xml,
+                    cx=dx,
+                    cy=dy,
+                    marker=toyplot.marker.create(size=dsize, mstyle=dstyle, lstyle=mark._mlstyle) + toyplot.marker.convert(dmarker),
+                    extra_class="toyplot-Datum",
+                    title=dtitle,
+                    )
 
 
-@dispatch(toyplot.axes.Cartesian, toyplot.mark.Rect, _RenderContext)
+@dispatch(toyplot.coordinates.Cartesian, toyplot.mark.Rect, RenderContext)
 def _render(axes, mark, context):
     if mark._coordinate_axes.tolist() == ["x", "y"]:
-        x1 = axes._project_x(mark._table[mark._left[0]])
-        x2 = axes._project_x(mark._table[mark._right[0]])
-        y1 = axes._project_y(mark._table[mark._top[0]])
-        y2 = axes._project_y(mark._table[mark._bottom[0]])
+        x1 = axes.project("x", mark._table[mark._left[0]])
+        x2 = axes.project("x", mark._table[mark._right[0]])
+        y1 = axes.project("y", mark._table[mark._top[0]])
+        y2 = axes.project("y", mark._table[mark._bottom[0]])
     elif mark._coordinate_axes.tolist() == ["y", "x"]:
-        x1 = axes._project_x(mark._table[mark._top[0]])
-        x2 = axes._project_x(mark._table[mark._bottom[0]])
-        y1 = axes._project_y(mark._table[mark._left[0]])
-        y2 = axes._project_y(mark._table[mark._right[0]])
+        x1 = axes.project("x", mark._table[mark._top[0]])
+        x2 = axes.project("x", mark._table[mark._bottom[0]])
+        y1 = axes.project("y", mark._table[mark._left[0]])
+        y2 = axes.project("y", mark._table[mark._right[0]])
     mark_xml = xml.SubElement(
-        context.root,
+        context.parent,
         "g",
         style=_css_style(
             mark._style),
         id=context.get_id(mark),
         attrib={
             "class": "toyplot-mark-Rect"})
-    context.add_data_table(mark, mark._table, title="Rect Data", filename=mark._filename)
+
+    _render_table(owner=mark, key="data", label="rect data", table=mark._table, filename=mark._filename, context=context)
 
     series_xml = xml.SubElement(
         mark_xml, "g", attrib={"class": "toyplot-Series"})
@@ -2441,26 +2760,26 @@ def _render(axes, mark, context):
             xml.SubElement(datum_xml, "title").text = str(dtitle)
 
 
-@dispatch(toyplot.axes.Cartesian, toyplot.mark.Scatterplot, _RenderContext)
+@dispatch(toyplot.coordinates.Cartesian, toyplot.mark.Scatterplot, RenderContext)
 def _render(axes, mark, context):
     dimension1 = numpy.ma.column_stack([mark._table[key] for key in mark._coordinates[0::2]])
     dimension2 = numpy.ma.column_stack([mark._table[key] for key in mark._coordinates[1::2]])
 
     if mark._coordinate_axes[0] == "x":
-        X = axes._project_x(dimension1)
-        Y = axes._project_y(dimension2)
+        X = axes.project("x", dimension1)
+        Y = axes.project("y", dimension2)
     elif mark._coordinate_axes[0] == "y":
-        X = axes._project_x(dimension2)
-        Y = axes._project_y(dimension1)
+        X = axes.project("x", dimension2)
+        Y = axes.project("y", dimension1)
 
     mark_xml = xml.SubElement(
-        context.root,
+        context.parent,
         "g",
-        style=_css_style(mark._style),
         id=context.get_id(mark),
         attrib={"class": "toyplot-mark-Scatterplot"},
         )
-    context.add_data_table(mark, mark._table, title="Scatterplot Data", filename=mark._filename)
+
+    _render_table(owner=mark, key="data", label="scatterplot", table=mark._table, filename=mark._filename, context=context)
 
     for x, y, marker, msize, mfill, mstroke, mopacity, mtitle in zip(
             X.T,
@@ -2487,44 +2806,42 @@ def _render(axes, mark, context):
                 mopacity[not_null],
                 mtitle[not_null],
             ):
-            dstyle = toyplot.style.combine(
-                {
-                    "fill": toyplot.color.to_css(dfill),
-                    "stroke": toyplot.color.to_css(dstroke),
-                    "opacity": dopacity,
-                },
-                mark._mstyle)
-            datum_xml = _draw_marker(
-                series_xml,
-                dx,
-                dy,
-                dsize,
-                dmarker,
-                dstyle,
-                mark._mlstyle,
-                extra_class="toyplot-Datum",
-                title=dtitle,
-                )
+            if dmarker:
+                dstyle = toyplot.style.combine(
+                    {
+                        "fill": toyplot.color.to_css(dfill),
+                        "stroke": toyplot.color.to_css(dstroke),
+                        "opacity": dopacity,
+                    },
+                    mark._mstyle)
+                _draw_marker(
+                    series_xml,
+                    cx=dx,
+                    cy=dy,
+                    marker=toyplot.marker.create(size=dsize, mstyle=dstyle, lstyle=mark._mlstyle) + toyplot.marker.convert(dmarker),
+                    extra_class="toyplot-Datum",
+                    title=dtitle,
+                    )
 
 
-@dispatch((toyplot.canvas.Canvas, toyplot.axes.Cartesian), toyplot.mark.Text, _RenderContext)
+@dispatch((toyplot.canvas.Canvas, toyplot.coordinates.Cartesian), toyplot.mark.Text, RenderContext)
 def _render(parent, mark, context):
     x = mark._table[mark._coordinates[numpy.where(mark._coordinate_axes == "x")[0][0]]]
     y = mark._table[mark._coordinates[numpy.where(mark._coordinate_axes == "y")[0][0]]]
 
-    if isinstance(parent, toyplot.axes.Cartesian):
-        x = parent._project_x(x)
-        y = parent._project_y(y)
+    if isinstance(parent, toyplot.coordinates.Cartesian):
+        x = parent.project("x", x)
+        y = parent.project("y", y)
 
     mark_xml = xml.SubElement(
-        context.root,
+        context.parent,
         "g",
-        style=_css_style(
-            mark._style),
         id=context.get_id(mark),
-        attrib={
-            "class": "toyplot-mark-Text"})
-    context.add_data_table(mark, mark._table, title="Text Data", filename=mark._filename)
+        attrib={"class": "toyplot-mark-Text"},
+        )
+
+    _render_table(owner=mark, key="data", label="text data", table=mark._table, filename=mark._filename, context=context)
+
     series_xml = xml.SubElement(
         mark_xml, "g", attrib={"class": "toyplot-Series"})
     for dx, dy, dtext, dangle, dfill, dopacity, dtitle in zip(
@@ -2548,3 +2865,24 @@ def _render(parent, mark, context):
             title=dtitle,
             )
 
+
+@dispatch((toyplot.canvas.Canvas), toyplot.mark.Image, RenderContext)
+def _render(parent, mark, context):
+    encoded = base64.standard_b64encode(mark.to_png()).decode("ascii")
+
+    mark_xml = xml.SubElement(
+        context.parent,
+        "g",
+        id=context.get_id(mark),
+        attrib={"class": "toyplot-mark-Image"},
+        )
+
+    xml.SubElement(
+        mark_xml,
+        "image",
+        x=repr(mark._xmin_range),
+        y=repr(mark._ymin_range),
+        width=repr(mark._xmax_range - mark._xmin_range),
+        height=repr(mark._ymax_range - mark._ymin_range),
+        attrib={"xlink:href": "data:image/png;base64," + encoded},
+        )
